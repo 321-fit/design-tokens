@@ -1,0 +1,47 @@
+{
+  "font": {
+    "family": { "value": "Rubik" },
+    "heading1": {
+      "size": { "value": 22 },
+      "weight": { "value": 400 },
+      "lineHeight": { "value": 1.2 },
+      "letterSpacing": { "value": 0 }
+    },
+    "heading2": {
+      "size": { "value": 20 },
+      "weight": { "value": 500 },
+      "lineHeight": { "value": 1.25 },
+      "letterSpacing": { "value": 0 }
+    },
+    "button1": {
+      "size": { "value": 18 },
+      "weight": { "value": 500 },
+      "lineHeight": { "value": 1.3 },
+      "letterSpacing": { "value": 0 }
+    },
+    "button2": {
+      "size": { "value": 16 },
+      "weight": { "value": 500 },
+      "lineHeight": { "value": 1.35 },
+      "letterSpacing": { "value": 0 }
+    },
+    "body1": {
+      "size": { "value": 16 },
+      "weight": { "value": 400 },
+      "lineHeight": { "value": 1.35 },
+      "letterSpacing": { "value": 0 }
+    },
+    "body2": {
+      "size": { "value": 14 },
+      "weight": { "value": 400 },
+      "lineHeight": { "value": 1.35 },
+      "letterSpacing": { "value": 0 }
+    },
+    "caption": {
+      "size": { "value": 12 },
+      "weight": { "value": 400 },
+      "lineHeight": { "value": 1.4 },
+      "letterSpacing": { "value": 0 }
+    }
+  }
+}

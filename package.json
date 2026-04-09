@@ -1,0 +1,12 @@
+{
+  "name": "@321-fit/design-tokens",
+  "version": "1.0.0",
+  "description": "321Fit design tokens — single source of truth for colors, typography, spacing across iOS, Android, and web",
+  "scripts": {
+    "build": "style-dictionary build --config style-dictionary.config.js",
+    "clean": "rm -rf build/ios build/android build/css build/tokens.json"
+  },
+  "devDependencies": {
+    "style-dictionary": "^3.7.2"
+  }
+}

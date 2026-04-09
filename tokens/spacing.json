@@ -1,0 +1,26 @@
+{
+  "spacing": {
+    "0": { "value": 0 },
+    "1": { "value": 4 },
+    "2": { "value": 8 },
+    "3": { "value": 12 },
+    "4": { "value": 16 },
+    "5": { "value": 20 },
+    "6": { "value": 24 },
+    "7": { "value": 32 },
+    "8": { "value": 40 },
+    "9": { "value": 48 }
+  },
+  "radius": {
+    "xs": { "value": 4 },
+    "sm": { "value": 8 },
+    "md": { "value": 12 },
+    "lg": { "value": 16 },
+    "full": { "value": 9999 }
+  },
+  "effect": {
+    "blur": {
+      "glass": { "value": 8 }
+    }
+  }
+}
