@@ -1,0 +1,63 @@
+{
+  "component": {
+    "button": {
+      "height": { "value": 56 },
+      "radius": { "value": 99 },
+      "fontSize": { "value": 18 },
+      "paddingX": { "value": 32 }
+    },
+    "input": {
+      "height": { "value": 56 },
+      "radius": { "value": 12 },
+      "fontSize": { "value": 16 },
+      "paddingX": { "value": 12 }
+    },
+    "avatar": {
+      "sm": { "value": 32 },
+      "md": { "value": 48 },
+      "lg": { "value": 80 },
+      "radius": { "value": 60 }
+    },
+    "navbar": {
+      "height": { "value": 56 },
+      "itemSize": { "value": 56 },
+      "radius": { "value": 9999 },
+      "blur": { "value": 12 }
+    },
+    "card": {
+      "padding": { "value": 16 },
+      "radius": { "value": 16 },
+      "titleFontSize": { "value": 18 }
+    },
+    "badge": {
+      "paddingX": { "value": 10 },
+      "paddingY": { "value": 3 },
+      "radius": { "value": 6 },
+      "fontSize": { "value": 12 }
+    },
+    "otp": {
+      "width": { "value": 40 },
+      "height": { "value": 56 },
+      "radius": { "value": 12 },
+      "gap": { "value": 4 }
+    },
+    "sportChip": {
+      "radius": { "value": 99 },
+      "fontSize": { "value": 16 },
+      "iconSize": { "value": 24 }
+    },
+    "sportTile": {
+      "padding": { "value": 16 },
+      "radius": { "value": 16 }
+    },
+    "selectionChip": {
+      "height": { "value": 48 },
+      "radius": { "value": 12 }
+    },
+    "bottomSheet": {
+      "radius": { "value": 16 },
+      "handleWidth": { "value": 36 },
+      "handleHeight": { "value": 4 }
+    }
+  }
+}

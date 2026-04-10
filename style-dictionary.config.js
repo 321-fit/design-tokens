@@ -25,7 +25,8 @@ module.exports = {
           filter: (token) =>
             token.attributes.category === 'spacing' ||
             token.attributes.category === 'radius' ||
-            token.attributes.category === 'effect',
+            token.attributes.category === 'effect' ||
+            token.attributes.category === 'component',
         },
       ],
     },
