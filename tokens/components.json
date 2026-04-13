@@ -177,6 +177,225 @@
       "handleHeight": {
         "value": 4
       }
+    },
+    "ticketCard": {
+      "padding": {
+        "value": 16
+      },
+      "radius": {
+        "value": 16
+      }
+    },
+    "spotsBar": {
+      "height": {
+        "value": 6
+      },
+      "barRadius": {
+        "value": 3
+      },
+      "containerPadding": {
+        "value": 12
+      },
+      "containerRadius": {
+        "value": 12
+      }
+    },
+    "participantRow": {
+      "avatarSize": {
+        "value": 48
+      },
+      "padding": {
+        "value": 12
+      },
+      "gap": {
+        "value": 12
+      },
+      "removeButtonSize": {
+        "value": 28
+      },
+      "checkboxSize": {
+        "value": 28
+      }
+    },
+    "stepper": {
+      "height": {
+        "value": 48
+      },
+      "buttonWidth": {
+        "value": 48
+      },
+      "radius": {
+        "value": 12
+      },
+      "fontSize": {
+        "value": 18
+      }
+    },
+    "settingsCard": {
+      "padding": {
+        "value": 12
+      },
+      "radius": {
+        "value": 16
+      },
+      "iconSize": {
+        "value": 24
+      },
+      "chevronSize": {
+        "value": 16
+      },
+      "titleFontSize": {
+        "value": 16
+      },
+      "subtitleFontSize": {
+        "value": 14
+      }
+    },
+    "calendarEvent": {
+      "radius": {
+        "value": 12
+      },
+      "padding": {
+        "value": 8
+      },
+      "borderWidth": {
+        "value": 3
+      },
+      "badgeFontSize": {
+        "value": 10
+      },
+      "badgeRadius": {
+        "value": 6
+      }
+    },
+    "toast": {
+      "radius": {
+        "value": 12
+      },
+      "padding": {
+        "value": 12
+      },
+      "fontSize": {
+        "value": 13
+      },
+      "iconSize": {
+        "value": 16
+      },
+      "position": {
+        "value": "top-60px"
+      }
+    },
+    "snackbar": {
+      "radius": {
+        "value": 9999
+      },
+      "padding": {
+        "value": 10
+      },
+      "fontSize": {
+        "value": 13
+      },
+      "position": {
+        "value": "bottom-100px"
+      },
+      "dotSize": {
+        "value": 6
+      }
+    },
+    "passwordInput": {
+      "height": {
+        "value": 56
+      },
+      "radius": {
+        "value": 12
+      },
+      "eyeIconSize": {
+        "value": 18
+      }
+    },
+    "emptyState": {
+      "iconSize": {
+        "value": 40
+      },
+      "titleFontSize": {
+        "value": 16
+      },
+      "bodyFontSize": {
+        "value": 14
+      },
+      "padding": {
+        "value": 32
+      }
+    },
+    "starRating": {
+      "starSize": {
+        "value": 36
+      },
+      "gap": {
+        "value": 10
+      }
+    },
+    "wheelPicker": {
+      "radius": {
+        "value": 12
+      },
+      "padding": {
+        "value": 16
+      },
+      "itemFontSize": {
+        "value": 18
+      },
+      "labelFontSize": {
+        "value": 12
+      }
+    },
+    "dayChip": {
+      "width": {
+        "value": 50
+      },
+      "height": {
+        "value": 62
+      },
+      "radius": {
+        "value": 16
+      },
+      "nameFontSize": {
+        "value": 10
+      },
+      "numFontSize": {
+        "value": 16
+      }
+    },
+    "calSelectRow": {
+      "padding": {
+        "value": 10
+      },
+      "radius": {
+        "value": 8
+      },
+      "dotSize": {
+        "value": 10
+      },
+      "checkSize": {
+        "value": 22
+      },
+      "checkRadius": {
+        "value": 6
+      }
+    },
+    "timePickerSlot": {
+      "padding": {
+        "value": 12
+      },
+      "radius": {
+        "value": 8
+      },
+      "fontSize": {
+        "value": 16
+      },
+      "minuteChipHeight": {
+        "value": 44
+      }
     }
   }
 }

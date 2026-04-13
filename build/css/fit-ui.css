@@ -1179,3 +1179,10 @@
 .fit-light .fit-participants-card { background: var(--fit-white); }
 .fit-light .fit-spots { background: var(--fit-gray-100); }
 .fit-light .fit-spots-fill { background: var(--fit-gray-200); }
+
+/* Detail participants wrapper */
+.detail-participants { padding: 0 var(--fit-sp-5); }
+
+/* SVG icon sizes */
+svg.i { width: 16px; height: 16px; vertical-align: middle; }
+svg.i-sm { width: 14px; height: 14px; vertical-align: middle; margin-right: 4px; }
