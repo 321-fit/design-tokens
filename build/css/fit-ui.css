@@ -110,7 +110,7 @@
    THEME: LIGHT (Athlete) — apply class .fit-light
    ============================================================ */
 .fit-light {
-  --fit-screen-bg: var(--fit-white);
+  --fit-screen-bg: #F7F7F8;
   --fit-surface-low: var(--fit-gray-100);
   --fit-surface: var(--fit-white);
   --fit-surface-high: var(--fit-white);
@@ -1115,3 +1115,67 @@
    ============================================================ */
 .fit-input-group.error .fit-input { border: 1px solid var(--fit-red-400); }
 .fit-input-group.error .fit-input-label { color: var(--fit-red-400); }
+
+/* ============================================================
+   PASSWORD INPUT (with eye toggle inside)
+   ============================================================ */
+.fit-input-password {
+  display: flex; align-items: center; padding-right: 0;
+}
+.fit-input-password [contenteditable] {
+  flex: 1; outline: none; cursor: text;
+  font-size: 16px; font-family: var(--fit-font);
+  color: var(--fit-text-primary);
+  -webkit-text-security: disc;
+}
+.fit-input-password .fit-eye-toggle {
+  background: none; border: none; cursor: pointer;
+  padding: 8px 12px; color: var(--fit-text-tertiary);
+  flex-shrink: 0; display: flex; align-items: center;
+}
+.fit-input-password .fit-eye-toggle svg { width: 18px; height: 18px; }
+
+/* Light theme settings cards */
+.fit-light .set-card { background: var(--fit-white); }
+.fit-light .set-title { color: var(--fit-text-primary); }
+.fit-light .set-sub { color: var(--fit-text-secondary); }
+.fit-light .set-icon { color: var(--fit-text-primary); }
+.fit-light .set-chev { color: var(--fit-text-tertiary); }
+
+/* ============================================================
+   INPUT STATES (from Figma audit)
+   ============================================================ */
+/* Default — already in .fit-input base styles */
+
+/* Focus */
+.fit-dark .fit-input:focus,
+.fit-dark .fit-input.focus { border: 1px solid #5B6269; }
+.fit-light .fit-input:focus,
+.fit-light .fit-input.focus { border: 1px solid #ACB1B6; }
+
+/* Error */
+.fit-input.error,
+.fit-input-group.error .fit-input { border: 1px solid #F05C5B !important; }
+.fit-input-group.error .fit-input-label { color: #F05C5B !important; }
+.fit-input-error-text { font-size: 12px; color: #F05C5B; margin-top: 4px; }
+
+/* Disabled */
+.fit-input.disabled,
+.fit-input[disabled] { opacity: 0.6; pointer-events: none; }
+.fit-dark .fit-input-group.disabled .fit-input-label { color: #979EA5; }
+.fit-light .fit-input-group.disabled .fit-input-label { color: #ACB1B6; }
+
+/* Filled text colors */
+.fit-dark .fit-input .filled-text { color: #F7F7F8; }
+.fit-light .fit-input .filled-text { color: #1F2123; }
+
+/* Placeholder colors */
+.fit-dark .fit-input::placeholder { color: #757E87; }
+.fit-light .fit-input::placeholder { color: #979EA5; }
+
+/* Light theme cards, tickets, spots (on #F7F7F8 screen bg) */
+.fit-light .fit-card { background: var(--fit-white); }
+.fit-light .fit-ticket { background: var(--fit-white); }
+.fit-light .fit-participants-card { background: var(--fit-white); }
+.fit-light .fit-spots { background: var(--fit-gray-100); }
+.fit-light .fit-spots-fill { background: var(--fit-gray-200); }
