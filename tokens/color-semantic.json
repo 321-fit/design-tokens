@@ -2,7 +2,7 @@
   "color": {
     "screen": {
       "dark": { "value": "{color.neutral-gray.900}" },
-      "light": { "value": "{color.neutral-gray.white}" }
+      "light": { "value": "#F2F2F7" }
     },
     "surface": {
       "low": {
