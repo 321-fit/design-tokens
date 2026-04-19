@@ -11,6 +11,12 @@
     "8": { "value": 40 },
     "9": { "value": 48 }
   },
+  "layout": {
+    "horizontalPadding": { "value": 16, "comment": "Screen horizontal padding (Apple HIG)" },
+    "sectionGap": { "value": 20, "comment": "Between input groups / sections" },
+    "labelToContent": { "value": 8, "comment": "Title/label to its content below" },
+    "cardPadding": { "value": 12, "comment": "Internal card padding" }
+  },
   "radius": {
     "xs": { "value": 4 },
     "sm": { "value": 8 },

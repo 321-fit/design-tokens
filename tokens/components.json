@@ -2,7 +2,7 @@
   "component": {
     "button": {
       "height": {
-        "value": 56
+        "value": 50
       },
       "radius": {
         "value": 99
