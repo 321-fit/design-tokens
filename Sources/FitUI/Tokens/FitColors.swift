@@ -49,6 +49,7 @@ public enum FitColors {
     public enum Yellow {
         public static let y50 = Color(hex: "FFF8DB")
         public static let y400 = Color(hex: "F7C948")
+        public static let y600 = Color(hex: "DE911D")
         public static let y900 = Color(hex: "8D2B0A")
     }
 
