@@ -9,3 +9,5 @@ build/tokens.json
 # Hand-maintained — DO NOT ignore
 # build/css/fit-ui.css
 # build/js/fit-ui.js
+.DS_Store
+*.DS_Store

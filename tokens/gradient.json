@@ -1,0 +1,16 @@
+{
+  "gradient": {
+    "brand-135": {
+      "value":   "linear-gradient(135deg, {color.blue.500}, {color.teal.500})",
+      "comment": "Primary CTA, hero backgrounds — 135° diagonal"
+    },
+    "brand-horizontal": {
+      "value":   "linear-gradient(to right, {color.blue.500}, {color.teal.500})",
+      "comment": "Primary button fill — left-to-right"
+    },
+    "selection-overlay": {
+      "value":   "linear-gradient(to right, rgba(10,147,189,0.2), rgba(5,224,166,0.2))",
+      "comment": "Sidebar active state, selection chip, selected calendars — translucent brand gradient"
+    }
+  }
+}
