@@ -1,32 +1,71 @@
 {
   "spacing": {
-    "0": { "value": 0 },
-    "1": { "value": 4 },
-    "2": { "value": 8 },
-    "3": { "value": 12 },
-    "4": { "value": 16 },
-    "5": { "value": 20 },
-    "6": { "value": 24 },
-    "7": { "value": 32 },
-    "8": { "value": 40 },
-    "9": { "value": 48 }
+    "0":    { "value": 0,  "comment": "Zero" },
+    "0_5":  { "value": 2,  "comment": "Component internal micro — pill padding, badge border" },
+    "1":    { "value": 4,  "comment": "Micro gap" },
+    "1_5":  { "value": 6,  "comment": "Component internal — chip padding, small gap" },
+    "2":    { "value": 8,  "comment": "Small gap" },
+    "2_5":  { "value": 10, "comment": "Component internal — card inner, icon-text gap" },
+    "3":    { "value": 12, "comment": "Medium gap, card padding" },
+    "3_5":  { "value": 14, "comment": "Component internal — tab bar item, input padding" },
+    "4":    { "value": 16, "comment": "Screen horizontal padding (Apple HIG baseline)" },
+    "4_5":  { "value": 18, "comment": "Component internal edge case" },
+    "5":    { "value": 20, "comment": "Section gap (forms), sheet top radius" },
+    "6":    { "value": 24, "comment": "Section gap (content)" },
+    "7":    { "value": 28, "comment": "Sheet major block rhythm" },
+    "8":    { "value": 32, "comment": "Large section gap" },
+    "9":    { "value": 40, "comment": "Sheet bottom safe area" },
+    "10":   { "value": 48, "comment": "Extra large gap" }
   },
   "layout": {
-    "horizontalPadding": { "value": 16, "comment": "Screen horizontal padding (Apple HIG)" },
-    "sectionGap": { "value": 20, "comment": "Between input groups / sections" },
-    "labelToContent": { "value": 8, "comment": "Title/label to its content below" },
-    "cardPadding": { "value": 12, "comment": "Internal card padding" }
+    "horizontalPadding":  { "value": 16, "comment": "Screen horizontal padding (Apple HIG)" },
+    "sectionGapForm":     { "value": 20, "comment": "Between input groups on forms" },
+    "sectionGapContent":  { "value": 24, "comment": "Between sections on content screens" },
+    "labelToContent":     { "value": 8,  "comment": "Title/label to its content below" },
+    "cardPadding":        { "value": 12, "comment": "Internal card padding (compact)" },
+    "cardPaddingLarge":   { "value": 16, "comment": "Internal card padding (standard)" },
+    "cardGap":            { "value": 12, "comment": "Between stacked cards" },
+    "sheetHandleToBody":  { "value": 16, "comment": "Sheet handle to first content block" },
+    "sheetBlockRhythm":   { "value": 28, "comment": "Between major blocks in event sheets" },
+    "sheetBottomSafe":    { "value": 40, "comment": "Sheet bottom safe area" },
+    "sheetBottomCompact": { "value": 28, "comment": "Sheet bottom (compact variant — quick-action sheets)" }
   },
   "radius": {
-    "xs": { "value": 4 },
-    "sm": { "value": 8 },
-    "md": { "value": 12 },
-    "lg": { "value": 16 },
-    "full": { "value": 9999 }
+    "4":    { "value": 4,     "comment": "Chip, tiny badge — alias: xs" },
+    "6":    { "value": 6,     "comment": "Small badge, input inner" },
+    "8":    { "value": 8,     "comment": "Small button, tag — alias: sm" },
+    "10":   { "value": 10,    "comment": "Icon container (rounded-rect avatar)" },
+    "12":   { "value": 12,    "comment": "Card compact — alias: md" },
+    "14":   { "value": 14,    "comment": "Card standard" },
+    "16":   { "value": 16,    "comment": "Card large, sheet inner — alias: lg" },
+    "20":   { "value": 20,    "comment": "Sheet top" },
+    "28":   { "value": 28,    "comment": "Extended FAB (Material 3), large container" },
+    "full": { "value": 9999,  "comment": "Pill buttons, avatar circles" }
+  },
+  "radiusAlias": {
+    "xs":   { "value": "{radius.4.value}",  "comment": "Alias for --fit-radius-4" },
+    "sm":   { "value": "{radius.8.value}",  "comment": "Alias for --fit-radius-8" },
+    "md":   { "value": "{radius.12.value}", "comment": "Alias for --fit-radius-12" },
+    "lg":   { "value": "{radius.16.value}", "comment": "Alias for --fit-radius-16" }
+  },
+  "avatar": {
+    "xs": { "value": 24, "comment": "Inline chip with avatar" },
+    "sm": { "value": 32, "comment": "Compact list avatar" },
+    "md": { "value": 40, "comment": "Standard list avatar" },
+    "lg": { "value": 48, "comment": "Event sheet / card avatar" },
+    "xl": { "value": 80, "comment": "Profile hero avatar" }
+  },
+  "height": {
+    "tapMin":  { "value": 44, "comment": "iOS HIG minimum tap target" },
+    "btnSm":   { "value": 40, "comment": "Compact button (in sheets, cards)" },
+    "btnMd":   { "value": 44, "comment": "Card-level CTA" },
+    "btnLg":   { "value": 50, "comment": "Footer primary CTA (Apple HIG, was 56px)" },
+    "iconBtn": { "value": 32, "comment": "Header icon button (bell, +, etc.)" }
   },
   "effect": {
     "blur": {
-      "glass": { "value": 8 }
+      "glass":     { "value": 8,  "comment": "Standard backdrop blur" },
+      "glassMild": { "value": 4,  "comment": "Mild backdrop blur (sheet overlays)" }
     }
   }
 }

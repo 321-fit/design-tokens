@@ -1,115 +1,139 @@
 {
   "color": {
     "screen": {
-      "dark": { "value": "{color.neutral-gray.900}" },
-      "light": { "value": "#F2F2F7" }
+      "dark":  { "value": "{color.neutral-gray.900}", "comment": "Page background dark theme" },
+      "light": { "value": "#F2F2F7",                   "comment": "Page background light theme — iOS system gray 6" }
     },
     "surface": {
       "low": {
-        "dark": { "value": "{color.neutral-gray.black}" },
-        "light": { "value": "{color.neutral-gray.100}" }
+        "dark":  { "value": "{color.neutral-gray.black}" },
+        "light": { "value": "{color.neutral-gray.100}" },
+        "comment": "Lowest surface — modals beneath sheets, deepest containers"
       },
       "default": {
-        "dark": { "value": "{color.neutral-gray.500}" },
-        "light": { "value": "{color.neutral-gray.200}" }
+        "dark":  { "value": "{color.neutral-gray.800}" },
+        "light": { "value": "{color.neutral-gray.white}" },
+        "comment": "Standard surface — card, sheet body"
       },
       "high": {
-        "dark": { "value": "{color.neutral-gray.800}" },
-        "light": { "value": "{color.neutral-gray.white}" }
+        "dark":  { "value": "{color.neutral-gray.800}" },
+        "light": { "value": "{color.neutral-gray.white}" },
+        "comment": "Elevated surface — card, sheet (same as default in current system, reserved for future differentiation)"
+      },
+      "higher": {
+        "dark":  { "value": "{color.neutral-gray.700}" },
+        "light": { "value": "{color.neutral-gray.50}" },
+        "comment": "Double elevation — nested card within card, input inside card"
       }
     },
     "brand": {
-      "primary": { "value": "{color.blue-vivid.500}" },
-      "secondary": { "value": "{color.teal-vivid.500}" }
+      "primary":   { "value": "{color.blue-vivid.500}",  "comment": "Primary brand blue" },
+      "secondary": { "value": "{color.teal-vivid.500}",  "comment": "Secondary brand teal" },
+      "gradient-135": {
+        "value":   "linear-gradient(135deg, {color.blue-vivid.500}, {color.teal-vivid.500})",
+        "comment": "Primary CTA, hero backgrounds — 135° diagonal"
+      },
+      "gradient-horizontal": {
+        "value":   "linear-gradient(to right, {color.blue-vivid.500}, {color.teal-vivid.500})",
+        "comment": "Primary button fill — left-to-right"
+      },
+      "selection-overlay": {
+        "value":   "linear-gradient(to right, rgba(10,147,189,0.2), rgba(5,224,166,0.2))",
+        "comment": "Sidebar active state, selection chip — translucent brand gradient"
+      }
     },
     "text": {
       "primary": {
-        "dark": { "value": "{color.neutral-gray.white}" },
-        "light": { "value": "{color.neutral-gray.900}" }
+        "dark":  { "value": "{color.neutral-gray.white}" },
+        "light": { "value": "{color.neutral-gray.900}" },
+        "comment": "Main text — body, titles, values"
       },
       "secondary": {
-        "dark": { "value": "{color.neutral-gray.200}" },
-        "light": { "value": "{color.neutral-gray.500}" }
+        "dark":  { "value": "{color.neutral-gray.200}" },
+        "light": { "value": "{color.neutral-gray.500}" },
+        "comment": "Supporting text — descriptions, labels"
       },
       "tertiary": {
-        "dark": { "value": "{color.neutral-gray.400}" },
-        "light": { "value": "{color.neutral-gray.400}" }
+        "dark":  { "value": "{color.neutral-gray.400}" },
+        "light": { "value": "{color.neutral-gray.400}" },
+        "comment": "Muted text — captions, meta, time stamps"
+      },
+      "placeholder": {
+        "dark":  { "value": "{color.neutral-gray.500}" },
+        "light": { "value": "{color.neutral-gray.400}" },
+        "comment": "Input placeholder text"
       },
       "disabled": {
-        "dark": { "value": "{color.neutral-gray.400}" },
-        "light": { "value": "{color.neutral-gray.300}" }
+        "dark":  { "value": "{color.neutral-gray.600}" },
+        "light": { "value": "{color.neutral-gray.300}" },
+        "comment": "Disabled state text"
       },
-      "on-brand-primary": {
-        "dark": { "value": "{color.neutral-gray.white}" },
-        "light": { "value": "{color.neutral-gray.white}" }
-      },
-      "on-brand-secondary": {
-        "dark": { "value": "{color.neutral-gray.white}" },
-        "light": { "value": "{color.blue-vivid.700}" }
+      "on-brand": {
+        "dark":  { "value": "{color.neutral-gray.white}" },
+        "light": { "value": "{color.blue-vivid.700}" },
+        "comment": "Text rendered on brand-colored bg"
       },
       "error": {
-        "dark": { "value": "{color.red.400}" },
-        "light": { "value": "{color.red.400}" }
-      },
-      "on-error": {
-        "dark": { "value": "{color.red.50}" }
-      },
-      "success-on": {
-        "dark": { "value": "{color.green.50}" }
-      },
-      "warning-on": {
-        "dark": { "value": "{color.yellow.50}" }
+        "dark":  { "value": "{color.red.400}" },
+        "light": { "value": "{color.red.400}" },
+        "comment": "Error message text"
       }
+    },
+    "divider": {
+      "dark":  { "value": "{color.neutral-gray.700}" },
+      "light": { "value": "{color.neutral-gray.100}" },
+      "comment": "1px borders, dividers between rows"
     },
     "bg": {
       "disabled": {
-        "dark": { "value": "{color.neutral-gray.600}" },
-        "light": { "value": "{color.neutral-gray.400}" }
+        "dark":  { "value": "{color.neutral-gray.700}" },
+        "light": { "value": "{color.neutral-gray.200}" },
+        "comment": "Disabled button/input bg"
       },
-      "error": {
-        "dark": { "value": "{color.red.900}" }
+      "error-subtle": {
+        "dark":  { "value": "rgba(240,92,91,0.1)" },
+        "light": { "value": "rgba(240,92,91,0.08)" },
+        "comment": "Error banner / warning card bg"
       },
-      "warning": {
-        "dark": { "value": "{color.yellow.900}" }
+      "success-subtle": {
+        "dark":  { "value": "rgba(5,224,166,0.12)" },
+        "light": { "value": "{color.green.50}" },
+        "comment": "Success badge / indicator bg"
       },
-      "success": {
-        "dark": { "value": "{color.green.900}" }
+      "warning-subtle": {
+        "dark":  { "value": "rgba(247,201,72,0.08)" },
+        "light": { "value": "{color.yellow.50}" },
+        "comment": "Warning banner bg"
+      },
+      "info-subtle": {
+        "dark":  { "value": "rgba(3,178,226,0.12)" },
+        "light": { "value": "rgba(3,178,226,0.08)" },
+        "comment": "Info banner / badge bg"
       }
     },
     "border": {
+      "divider": {
+        "dark":  { "value": "{color.neutral-gray.700}" },
+        "light": { "value": "{color.neutral-gray.100}" }
+      },
       "focus": {
-        "dark": { "value": "{color.neutral-gray.600}" },
-        "light": { "value": "{color.neutral-gray.300}" }
+        "dark":  { "value": "{color.blue-vivid.500}" },
+        "light": { "value": "{color.blue-vivid.500}" },
+        "comment": "Keyboard/focus ring"
       },
       "error": {
-        "dark": { "value": "{color.red.400}" },
+        "dark":  { "value": "{color.red.400}" },
         "light": { "value": "{color.red.400}" }
       },
-      "success": {
-        "dark": { "value": "{color.green.800}" }
-      },
-      "warning": {
-        "dark": { "value": "{color.yellow.800}" }
-      },
-      "selection": { "value": "{color.teal-vivid.600}" }
-    },
-    "on-surface": {
-      "glass-primary": {
-        "dark": { "value": "{color.neutral-gray.white}" },
-        "light": { "value": "{color.neutral-gray.900}" }
-      },
-      "glass-secondary": {
-        "dark": { "value": "{color.neutral-gray.300}" },
-        "light": { "value": "{color.neutral-gray.500}" }
-      },
-      "placeholder": {
-        "dark": { "value": "{color.neutral-gray.500}" },
-        "light": { "value": "{color.neutral-gray.400}" }
-      },
-      "filled": {
-        "dark": { "value": "{color.neutral-gray.50}" },
-        "light": { "value": "{color.neutral-gray.900}" }
+      "selection": {
+        "value": "{color.teal-vivid.600}",
+        "comment": "Selected-state border (chips, radio)"
       }
+    },
+    "destructive": {
+      "primary":   { "value": "{color.red.400}",          "comment": "Destructive filled button bg / text on outlined" },
+      "bg-tinted": { "value": "rgba(240,92,91,0.15)",     "comment": "Destructive Medium tier bg" },
+      "bg-subtle": { "value": "rgba(240,92,91,0.08)",     "comment": "Destructive Low-hover / banner bg" }
     }
   }
 }

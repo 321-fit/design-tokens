@@ -74,18 +74,12 @@
       }
     },
     "avatar": {
-      "sm": {
-        "value": 32
-      },
-      "md": {
-        "value": 48
-      },
-      "lg": {
-        "value": 80
-      },
-      "radius": {
-        "value": 60
-      }
+      "xs":     { "value": 24, "comment": "Inline chip with avatar" },
+      "sm":     { "value": 32, "comment": "Compact list avatar" },
+      "md":     { "value": 40, "comment": "Standard list avatar (Clients list)" },
+      "lg":     { "value": 48, "comment": "Event sheet / card avatar" },
+      "xl":     { "value": 80, "comment": "Profile hero avatar" },
+      "radius": { "value": 9999, "comment": "Default circle (use {radius.full})" }
     },
     "navbar": {
       "height": {

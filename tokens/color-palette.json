@@ -53,6 +53,21 @@
       "500": { "value": "#36B03D" },
       "800": { "value": "#05610D" },
       "900": { "value": "#004806" }
+    },
+    "external": {
+      "comment": "External brand colors — OAuth providers, third-party integrations. NOT part of 321Fit palette; never replace or theme these.",
+      "google-blue":        { "value": "#4285F4", "comment": "Google brand blue (OAuth button)" },
+      "google-red":         { "value": "#EA4335", "comment": "Google red accent" },
+      "google-yellow":      { "value": "#FBBC04", "comment": "Google yellow accent" },
+      "google-green":       { "value": "#34A853", "comment": "Google green accent" },
+      "apple-red":          { "value": "#FF3B30", "comment": "Apple system red" },
+      "apple-orange":       { "value": "#FF9500", "comment": "Apple system orange" },
+      "apple-indigo":       { "value": "#5856D6", "comment": "Apple system indigo" },
+      "whatsapp-green":     { "value": "#25D366", "comment": "WhatsApp brand green" },
+      "zoom-blue":          { "value": "#2D8CFF", "comment": "Zoom brand blue (events)" },
+      "zoom-blue-alt":      { "value": "#229ED9", "comment": "Zoom brand blue alt" },
+      "stripe-purple":      { "value": "#635BFF", "comment": "Stripe brand purple" },
+      "telegram-blue":      { "value": "#229ED9", "comment": "Telegram brand blue" }
     }
   }
 }

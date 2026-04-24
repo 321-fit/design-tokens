@@ -1,0 +1,52 @@
+{
+  "animation": {
+    "duration": {
+      "instant": { "value": "120ms", "comment": "Context menu pop-in, tiny feedback" },
+      "fast":    { "value": "150ms", "comment": "Hover, button press, minor state" },
+      "base":    { "value": "200ms", "comment": "Fade, slide, tap scale" },
+      "medium":  { "value": "250ms", "comment": "Sheet slide-up, dialog" },
+      "slow":    { "value": "300ms", "comment": "Progress fill, expand/collapse" },
+      "spinner": { "value": "800ms", "comment": "Loading spinner rotation" },
+      "shimmer": { "value": "1400ms", "comment": "Skeleton shimmer pulse" }
+    },
+    "easing": {
+      "linear":     { "value": "linear",                              "comment": "Spinner, shimmer — constant motion" },
+      "out":        { "value": "cubic-bezier(0.25, 0.46, 0.45, 0.94)","comment": "Default UI out — enter animations" },
+      "in":         { "value": "cubic-bezier(0.55, 0.055, 0.675, 0.19)","comment": "UI in — exit animations" },
+      "inOut":      { "value": "cubic-bezier(0.645, 0.045, 0.355, 1)","comment": "Symmetrical — back-and-forth" },
+      "standard":   { "value": "ease",                                "comment": "CSS default ease — generic transitions" }
+    },
+    "keyframe": {
+      "sheetUp": {
+        "from":     { "transform": "translateY(100%)" },
+        "to":       { "transform": "translateY(0)" },
+        "duration": "{animation.duration.medium.value}",
+        "easing":   "{animation.easing.standard.value}",
+        "comment":  "Bottom sheet entrance"
+      },
+      "menuIn": {
+        "from":     { "opacity": 0, "transform": "scale(0.95)" },
+        "to":       { "opacity": 1, "transform": "scale(1)" },
+        "duration": "{animation.duration.instant.value}",
+        "easing":   "{animation.easing.out.value}",
+        "comment":  "Context menu pop-in"
+      },
+      "spin": {
+        "from":     { "transform": "rotate(0deg)" },
+        "to":       { "transform": "rotate(360deg)" },
+        "duration": "{animation.duration.spinner.value}",
+        "easing":   "{animation.easing.linear.value}",
+        "iteration":"infinite",
+        "comment":  "Loading spinner"
+      },
+      "shimmer": {
+        "from":     { "backgroundPosition": "200% 0" },
+        "to":       { "backgroundPosition": "-200% 0" },
+        "duration": "{animation.duration.shimmer.value}",
+        "easing":   "{animation.easing.inOut.value}",
+        "iteration":"infinite",
+        "comment":  "Skeleton pulse"
+      }
+    }
+  }
+}
