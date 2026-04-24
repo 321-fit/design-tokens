@@ -11,6 +11,12 @@ public enum FitBadgeStyle {
     case pending    // yellow bg
     case special    // cyan light bg
     case error      // red text, subtle bg
+    case neutral    // surface-higher bg, text-tertiary (Cash/Card tags on prices)
+    case crm        // teal-tinted pill (coach-created client without app account)
+    case danger     // alias for full (kept for inventory semantics)
+    case info       // alias for special (info banners)
+    case success    // alias for joined (success states)
+    case accent     // brand-primary tint (highlights)
 }
 
 public struct FitBadge: View {
@@ -37,25 +43,31 @@ public struct FitBadge: View {
 
     private var foregroundColor: Color {
         switch style {
-        case .group: return FitColors.Blue.b500
+        case .group:    return FitColors.Blue.b500
         case .personal: return theme.textSecondary
-        case .full: return FitColors.error
-        case .joined: return FitColors.Green.g500
-        case .pending: return FitColors.Yellow.y400
-        case .special: return FitColors.Blue.b500
-        case .error: return FitColors.error
+        case .full, .danger: return FitColors.error
+        case .joined, .success: return FitColors.Green.g500
+        case .pending:  return FitColors.Yellow.y400
+        case .special, .info: return FitColors.Blue.b500
+        case .error:    return FitColors.error
+        case .neutral:  return theme.textTertiary
+        case .crm:      return FitColors.Teal.t500
+        case .accent:   return FitColors.brandPrimary
         }
     }
 
     private var backgroundColor: Color {
         switch style {
-        case .group: return FitColors.Blue.b500.opacity(0.15)
+        case .group:    return FitColors.Blue.b500.opacity(0.15)
         case .personal: return theme.surfaceHigh
-        case .full: return FitColors.error.opacity(0.12)
-        case .joined: return FitColors.success.opacity(0.12)
-        case .pending: return FitColors.warning.opacity(0.12)
-        case .special: return FitColors.Blue.b500.opacity(0.12)
-        case .error: return FitColors.error.opacity(0.12)
+        case .full, .danger: return FitColors.error.opacity(0.12)
+        case .joined, .success: return FitColors.success.opacity(0.12)
+        case .pending:  return FitColors.warning.opacity(0.12)
+        case .special, .info: return FitColors.Blue.b500.opacity(0.12)
+        case .error:    return FitColors.error.opacity(0.12)
+        case .neutral:  return theme.surfaceHigher
+        case .crm:      return FitColors.Teal.t500.opacity(0.15)
+        case .accent:   return FitColors.brandPrimary.opacity(0.12)
         }
     }
 }
