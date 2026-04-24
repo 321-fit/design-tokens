@@ -80,7 +80,7 @@ module.exports = {
     // iOS (Swift) — generated into FitUI package
     ios: {
       transformGroup: 'ios-swift',
-      buildPath: 'swift/FitUI/Sources/FitUI/Tokens/Generated/',
+      buildPath: 'Sources/FitUI/Tokens/Generated/',
       files: [
         {
           destination: 'DesignTokensColors.swift',
@@ -126,10 +126,10 @@ module.exports = {
       ],
     },
 
-    // Android (XML resources)
+    // Android (XML resources) — output into android/ library module
     android: {
       transformGroup: 'android-fit',
-      buildPath: 'build/android/',
+      buildPath: 'android/src/main/res/values/',
       prefix: 'fit',
       files: [
         {
