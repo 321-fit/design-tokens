@@ -34,17 +34,23 @@ public enum FitRadius {
 }
 
 public enum FitSize {
-    // Button
-    public static let buttonHeight: CGFloat = 56
-    public static let buttonSmHeight: CGFloat = 40
+    // Button (per feedback_spacing_typography — Apple HIG 50pt)
+    public static let buttonLgHeight: CGFloat = 50   // footer primary CTA
+    public static let buttonMdHeight: CGFloat = 44   // card-level CTA, tap-target min
+    public static let buttonSmHeight: CGFloat = 40   // compact in sheets / cards
+    public static let buttonHeight: CGFloat = buttonLgHeight   // legacy alias
+
+    public static let tapMin: CGFloat = 44            // iOS HIG minimum tap target
 
     // Input
     public static let inputHeight: CGFloat = 56
 
-    // Avatar
+    // Avatar (5 semantic sizes per spacing.json)
+    public static let avatarXs: CGFloat = 24
     public static let avatarSm: CGFloat = 32
-    public static let avatarMd: CGFloat = 48
-    public static let avatarLg: CGFloat = 80
+    public static let avatarMd: CGFloat = 40          // standard list avatar
+    public static let avatarLg: CGFloat = 48          // event sheet / card avatar
+    public static let avatarXl: CGFloat = 80          // profile hero
 
     // Navbar
     public static let navbarHeight: CGFloat = 56
@@ -55,6 +61,9 @@ public enum FitSize {
     public static let iconMd: CGFloat = 16
     public static let iconLg: CGFloat = 24
 
+    // Header / toolbar
+    public static let iconBtnSize: CGFloat = 32
+
     // Settings card
     public static let settingsCardIcon: CGFloat = 24
     public static let settingsCardChevron: CGFloat = 16
@@ -62,6 +71,18 @@ public enum FitSize {
     // Select row
     public static let selectRowCheck: CGFloat = 22
     public static let selectRowDot: CGFloat = 10
+
+    // Checkbox
+    public static let checkboxSize: CGFloat = 28
+
+    // Toggle
+    public static let toggleWidth: CGFloat = 48
+    public static let toggleHeight: CGFloat = 28
+    public static let toggleThumb: CGFloat = 22
+
+    // Stepper
+    public static let stepperHeight: CGFloat = 48
+    public static let stepperButton: CGFloat = 48
 
     // Toast/Snackbar
     public static let toastIcon: CGFloat = 16
