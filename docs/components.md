@@ -679,24 +679,50 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
-### FitChip / FitSelectionChip
-**Purpose:** Tag-like selectable button for exclusive (single) or multi-select choices.
+### FitChip
+**Purpose:** Single, standalone tag-like selectable button (toggleable on/off). For grouped exclusive or multi-select choices use `FitSelectionGroup` instead.
 
 **Required props:**
 - `label: String`
-- `isSelected: Binding<Bool>`
+- `isSelected: Binding<Bool>` (iOS) / `isSelected: Boolean` + `onClick` (Android)
 
 **Optional props:**
-- `icon: Icon?`
-- `mode: enum { single, multi }`
+- `icon: Icon?` (iOS `systemImage`) / `icon: ImageVector?` (Android)
 
-**States:** unselected (surface-high bg, no border), selected (selection-gradient bg, teal-600 border).
+**States:** unselected (surface-high bg, no border), selected (selection-gradient bg, selection-border).
 
-**Used:** payment type chips (Cash/Card), sport selection.
+**Used:** standalone toggleable tags. Most form-style chip groups should use `FitSelectionGroup` instead.
 
-**iOS/Android notes:** 48px height, 12px radius, 16px font, 8px gap inside.
+**iOS/Android notes:** 48px height, `radius-md`, `body1` font, `sp-2` gap inside.
 
-**Status:** ❌ Swift missing. Compose: to build (`FilterChip` Material 3).
+**Status:** ✅ Swift `FitChip.swift`. Compose `FitLists.kt`.
+
+---
+
+### FitSelectionGroup
+**Purpose:** Equal-width chip group with single-select (radio-like) or multi-select mode. Replaces the need for separate FitRadio component — a single API serves both modes via the binding shape.
+
+**Required props:**
+- `options: [Option]` — generic over any `Hashable` value type
+- `label: (Option) -> String` — human-readable label per option
+- One of:
+  - `selection: Binding<Option?>` (iOS) / `selectedSingle + onSelectSingle` (Android) — **single-select**
+  - `selection: Binding<Set<Option>>` (iOS) / `selectedMulti + onSelectMulti` (Android) — **multi-select**
+
+**Variants:**
+- Single mode — tapping a chip selects it and deselects others (radio behavior)
+- Multi mode — tapping toggles each chip independently
+
+**States:**
+- Unselected chip: `surfaceHigh` bg, `textPrimary` text, no border
+- Selected chip: `selectionGradient` bg, 1px `selectionBorder`, `textPrimary` text
+- Transition: 150ms ease-in-out on selection change
+
+**Used:** Personal/Group toggle, Recurring/One-off toggle, payment method (Cash/Card), online provider (Zoom/Meet/Custom). Whenever a form needs a small fixed set of mutually-aware choices.
+
+**iOS/Android notes:** 48px height per chip, equal-width via `flex: 1` (iOS `frame(maxWidth: .infinity)` per chip; Android `Modifier.weight(1f)`). Gap `sp-2` between chips, no horizontal padding on the group itself (caller adds container padding).
+
+**Status:** ✅ Swift `FitSelectionGroup.swift`. Compose `FitLists.kt`.
 
 ---
 

@@ -228,3 +228,73 @@ fun FitChip(
         Text(label, style = FitFont.body1, color = theme.textPrimary)
     }
 }
+
+// ============================================================================
+// FitSelectionGroup — equal-width chip group, single or multi select
+//
+// Used for: Personal/Group, Recurring/One-off, payment method (Cash/Card),
+// online provider (Zoom/Meet/Custom), etc.
+//
+// Provide either:
+//   selectedSingle + onSelectSingle   (single-select / radio behavior)
+//   selectedMulti  + onSelectMulti    (multi-select)
+// ============================================================================
+
+@Composable
+fun <Option> FitSelectionGroup(
+    options: List<Option>,
+    label: (Option) -> String,
+    modifier: Modifier = Modifier,
+    selectedSingle: Option? = null,
+    onSelectSingle: ((Option) -> Unit)? = null,
+    selectedMulti: Set<Option> = emptySet(),
+    onSelectMulti: ((Set<Option>) -> Unit)? = null,
+) {
+    require((onSelectSingle != null) xor (onSelectMulti != null)) {
+        "FitSelectionGroup: provide exactly one of onSelectSingle or onSelectMulti"
+    }
+    val theme = LocalFitTheme.current
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2),
+    ) {
+        options.forEach { option ->
+            val isSelected = if (onSelectSingle != null) {
+                selectedSingle == option
+            } else {
+                option in selectedMulti
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(FitRadius.md))
+                    .then(
+                        if (isSelected)
+                            Modifier
+                                .background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.md))
+                                .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.md))
+                        else Modifier.background(theme.surfaceHigh)
+                    )
+                    .clickable {
+                        if (onSelectSingle != null) {
+                            onSelectSingle(option)
+                        } else {
+                            val current = selectedMulti
+                            val next = if (option in current) current - option else current + option
+                            onSelectMulti?.invoke(next)
+                        }
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    label(option),
+                    style = FitFont.body1,
+                    color = theme.textPrimary,
+                )
+            }
+        }
+    }
+}
