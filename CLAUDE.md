@@ -152,6 +152,27 @@ listed there. When adding a new component:
 - **API parity iOS ↔ Android.** Same enum names, same prop names, same
   variants. Swift has slight CamelCase differences but semantic match 1:1.
 - **Theme via CompositionLocal / Environment.** Never pass theme as prop.
+- **Theme-aware tokens must split.** A token with both `dark` and `light` keys
+  in `tokens/color-semantic.json` MUST have physically different resolved values.
+  If the value is identical across themes (brand mark, accent), it belongs as
+  a single `value` field — not as a `dark`/`light` pair with the same RGB.
+  Examples of the correct shape: `brand.primary` (single value), `border.selection`
+  (single value), `text.primary` (split — dark white / light gray.900).
+  - **Why:** identical-but-split tokens ("dynamic but actually static") are silent
+    landmines. They look theme-aware to readers but never switch — bugs surface
+    only via visual review of light mode.
+  - **Aliases are allowed via Style Dictionary refs** when a name is kept for
+    historical reasons (e.g. `surface.high → surface.default`). The ref makes
+    intent explicit and grep-able.
+- **Opacity-based tints belong in tokens, not at the call site.** Anywhere a
+  component would otherwise write `.opacity(0.12)`, `rgba(.., 0.18)`, or
+  `Color(...).copy(alpha = 0.2f)` over a base color, add (or reuse) a
+  `bg.<status>-subtle` / `bg.<status>-tinted` token in `color-semantic.json`
+  with **separate opacities for light and dark** (alpha that reads on a tinted
+  surface differs from alpha that reads on white).
+  - **Why:** `0.18` of red on white ≠ `0.18` of red on gray.800 — opacity
+    constants are theme-dependent; baking them into call sites guarantees one
+    of the two themes will look wrong.
 - **Exceptions allowed with documentation.** See `feedback_spacing_typography`
   meta-rule.
 

@@ -81,58 +81,113 @@ public enum FitColors {
     // MARK: - Semantic (theme-aware)
 
     public struct Theme {
+        // Surfaces
         public let screenBg: Color
         public let surfaceLow: Color
+        public let surfaceDefault: Color
         public let surfaceHigh: Color
         public let surfaceHigher: Color
+        // Text
         public let textPrimary: Color
         public let textSecondary: Color
         public let textTertiary: Color
         public let textPlaceholder: Color
-        public let divider: Color
+        public let textDisabled: Color
         public let textOnBrand: Color
-        public let inputBg: Color
-        public let cardBg: Color
-        public let focusBorder: Color
+        public let textError: Color
+        // Borders
+        public let divider: Color
+        public let borderFocus: Color
+        public let borderError: Color
+        // Backgrounds — disabled + status tints
+        public let bgDisabled: Color
+        public let bgErrorSubtle: Color
+        public let bgErrorTinted: Color
+        public let bgSuccessSubtle: Color
+        public let bgSuccessTinted: Color
+        public let bgWarningSubtle: Color
+        public let bgWarningTinted: Color
+        public let bgInfoSubtle: Color
+        public let bgInfoTinted: Color
+        public let bgBrandSubtle: Color
+        public let bgBrandTinted: Color
+        // Destructive
+        public let destructiveBgSubtle: Color
+        public let destructiveBgTinted: Color
+        // Compatibility aliases — pre-existing names retained so existing FitUI components keep working
+        public var inputBg: Color { surfaceLow }
+        public var cardBg: Color { surfaceDefault }
+        public var focusBorder: Color { borderFocus }
 
         public static let dark = Theme(
             screenBg: Gray.g900,
             surfaceLow: Gray.black,
+            surfaceDefault: Gray.g800,
             surfaceHigh: Gray.g800,
             surfaceHigher: Gray.g700,
             textPrimary: Gray.white,
             textSecondary: Gray.g200,
             textTertiary: Gray.g400,
             textPlaceholder: Gray.g500,
-            divider: Gray.g700,
+            textDisabled: Gray.g600,
             textOnBrand: Gray.white,
-            inputBg: Gray.black,
-            cardBg: Gray.g800,
-            focusBorder: Gray.g600
+            textError: Red.r400,
+            divider: Gray.g700,
+            borderFocus: Blue.b500,
+            borderError: Red.r400,
+            bgDisabled: Gray.g700,
+            bgErrorSubtle: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.12),
+            bgErrorTinted: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.18),
+            bgSuccessSubtle: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.12),
+            bgSuccessTinted: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.18),
+            bgWarningSubtle: Color(red: 247/255, green: 201/255, blue: 72/255).opacity(0.12),
+            bgWarningTinted: Color(red: 247/255, green: 201/255, blue: 72/255).opacity(0.20),
+            bgInfoSubtle: Color(red: 3/255, green: 178/255, blue: 226/255).opacity(0.12),
+            bgInfoTinted: Color(red: 3/255, green: 178/255, blue: 226/255).opacity(0.18),
+            bgBrandSubtle: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.12),
+            bgBrandTinted: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.18),
+            destructiveBgSubtle: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.12),
+            destructiveBgTinted: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.18)
         )
 
         public static let light = Theme(
             screenBg: Gray.g50,
             surfaceLow: Gray.g100,
+            surfaceDefault: Gray.white,
             surfaceHigh: Gray.white,
             surfaceHigher: Gray.g50,
             textPrimary: Gray.g900,
             textSecondary: Gray.g500,
-            textTertiary: Gray.g400,
+            textTertiary: Gray.g500,
             textPlaceholder: Gray.g400,
-            divider: Gray.g100,
+            textDisabled: Gray.g300,
             textOnBrand: Blue.b700,
-            inputBg: Gray.g100,
-            cardBg: Gray.white,
-            focusBorder: Gray.g300
+            textError: Red.r700,
+            divider: Gray.g100,
+            borderFocus: Blue.b600,
+            borderError: Red.r700,
+            bgDisabled: Gray.g200,
+            bgErrorSubtle: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.08),
+            bgErrorTinted: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.12),
+            bgSuccessSubtle: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.08),
+            bgSuccessTinted: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.12),
+            bgWarningSubtle: Color(red: 247/255, green: 201/255, blue: 72/255).opacity(0.10),
+            bgWarningTinted: Color(red: 247/255, green: 201/255, blue: 72/255).opacity(0.16),
+            bgInfoSubtle: Color(red: 3/255, green: 178/255, blue: 226/255).opacity(0.08),
+            bgInfoTinted: Color(red: 3/255, green: 178/255, blue: 226/255).opacity(0.12),
+            bgBrandSubtle: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.08),
+            bgBrandTinted: Color(red: 5/255, green: 224/255, blue: 166/255).opacity(0.12),
+            destructiveBgSubtle: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.08),
+            destructiveBgTinted: Color(red: 240/255, green: 92/255, blue: 91/255).opacity(0.12)
         )
     }
 
-    // MARK: - Semantic Colors
+    // MARK: - Semantic Colors (theme-agnostic accents)
 
     public static let error = Red.r400
     public static let warning = Yellow.y400
     public static let success = Teal.t500
+    public static let destructive = Red.r400
 }
 
 // MARK: - Color hex initializer

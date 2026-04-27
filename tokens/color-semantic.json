@@ -2,7 +2,7 @@
   "color": {
     "screen": {
       "dark":  { "value": "{color.gray.900}", "comment": "Page background dark theme" },
-      "light": { "value": "#F2F2F7",                   "comment": "Page background light theme — iOS system gray 6" }
+      "light": { "value": "#F2F2F7",          "comment": "Page background light theme — iOS system gray 6" }
     },
     "surface": {
       "low": {
@@ -16,19 +16,19 @@
         "comment": "Standard surface — card, sheet body"
       },
       "high": {
-        "dark":  { "value": "{color.gray.800}" },
-        "light": { "value": "{color.gray.white}" },
-        "comment": "Elevated surface — card, sheet (same as default in current system, reserved for future differentiation)"
+        "dark":  { "value": "{color.surface.default.dark}" },
+        "light": { "value": "{color.surface.default.light}" },
+        "comment": "Alias for surface.default — historical name; FitUI components + CSS prototypes still reference it. New code should prefer surface.default. A dedicated elevated surface, if needed, will land as surface.elevated."
       },
       "higher": {
         "dark":  { "value": "{color.gray.700}" },
         "light": { "value": "{color.gray.50}" },
-        "comment": "Double elevation — nested card within card, input inside card"
+        "comment": "Elevation step — nested card within card, input inside card on sheet (one step above default)"
       }
     },
     "brand": {
-      "primary":   { "value": "{color.blue.500}",  "comment": "Primary brand blue" },
-      "secondary": { "value": "{color.teal.500}",  "comment": "Secondary brand teal" }
+      "primary":   { "value": "{color.blue.500}", "comment": "Primary brand blue (constant — brand mark unchanged across themes)" },
+      "secondary": { "value": "{color.teal.500}", "comment": "Secondary brand teal (constant — used for selection / accent / brand-tint surfaces)" }
     },
     "text": {
       "primary": {
@@ -43,7 +43,7 @@
       },
       "tertiary": {
         "dark":  { "value": "{color.gray.400}" },
-        "light": { "value": "{color.gray.400}" },
+        "light": { "value": "{color.gray.500}" },
         "comment": "Muted text — captions, meta, time stamps"
       },
       "placeholder": {
@@ -63,8 +63,8 @@
       },
       "error": {
         "dark":  { "value": "{color.red.400}" },
-        "light": { "value": "{color.red.400}" },
-        "comment": "Error message text"
+        "light": { "value": "{color.red.700}" },
+        "comment": "Error message text — light theme uses darker red for WCAG contrast on white"
       }
     },
     "divider": {
@@ -79,24 +79,54 @@
         "comment": "Disabled button/input bg"
       },
       "error-subtle": {
-        "dark":  { "value": "rgba(240,92,91,0.1)" },
+        "dark":  { "value": "rgba(240,92,91,0.12)" },
         "light": { "value": "rgba(240,92,91,0.08)" },
-        "comment": "Error banner / warning card bg"
+        "comment": "Error banner / faint surface — used for inline validation banners"
+      },
+      "error-tinted": {
+        "dark":  { "value": "rgba(240,92,91,0.18)" },
+        "light": { "value": "rgba(240,92,91,0.12)" },
+        "comment": "Error highlight — pill, chip, badge bg with stronger presence than subtle"
       },
       "success-subtle": {
         "dark":  { "value": "rgba(5,224,166,0.12)" },
-        "light": { "value": "{color.green.50}" },
-        "comment": "Success badge / indicator bg"
+        "light": { "value": "rgba(5,224,166,0.08)" },
+        "comment": "Success faint surface — confirmation banner, paid-status row"
+      },
+      "success-tinted": {
+        "dark":  { "value": "rgba(5,224,166,0.18)" },
+        "light": { "value": "rgba(5,224,166,0.12)" },
+        "comment": "Success highlight — completion pill, active state on success"
       },
       "warning-subtle": {
-        "dark":  { "value": "rgba(247,201,72,0.08)" },
-        "light": { "value": "{color.yellow.50}" },
-        "comment": "Warning banner bg"
+        "dark":  { "value": "rgba(247,201,72,0.12)" },
+        "light": { "value": "rgba(247,201,72,0.10)" },
+        "comment": "Warning faint surface — heads-up banner, soft alert"
+      },
+      "warning-tinted": {
+        "dark":  { "value": "rgba(247,201,72,0.20)" },
+        "light": { "value": "rgba(247,201,72,0.16)" },
+        "comment": "Warning highlight — yellow needs slightly higher alpha to read on light bg"
       },
       "info-subtle": {
         "dark":  { "value": "rgba(3,178,226,0.12)" },
         "light": { "value": "rgba(3,178,226,0.08)" },
-        "comment": "Info banner / badge bg"
+        "comment": "Info faint surface — informational banner, neutral tip"
+      },
+      "info-tinted": {
+        "dark":  { "value": "rgba(3,178,226,0.18)" },
+        "light": { "value": "rgba(3,178,226,0.12)" },
+        "comment": "Info highlight — pill, badge for info-state"
+      },
+      "brand-subtle": {
+        "dark":  { "value": "rgba(5,224,166,0.12)" },
+        "light": { "value": "rgba(5,224,166,0.08)" },
+        "comment": "Brand faint surface — premium / featured row, brand-themed banner. Uses brand.secondary (teal) to avoid colliding with bg.info-* which uses brand.primary (blue)."
+      },
+      "brand-tinted": {
+        "dark":  { "value": "rgba(5,224,166,0.18)" },
+        "light": { "value": "rgba(5,224,166,0.12)" },
+        "comment": "Brand highlight — active/selected card surface, brand pill bg. Mirrors selectionGradient and border.selection (teal.600)."
       }
     },
     "border": {
@@ -106,22 +136,31 @@
       },
       "focus": {
         "dark":  { "value": "{color.blue.500}" },
-        "light": { "value": "{color.blue.500}" },
-        "comment": "Keyboard/focus ring"
+        "light": { "value": "{color.blue.600}" },
+        "comment": "Keyboard/focus ring — light theme darkens to blue.600 for WCAG contrast on white"
       },
       "error": {
         "dark":  { "value": "{color.red.400}" },
-        "light": { "value": "{color.red.400}" }
+        "light": { "value": "{color.red.700}" },
+        "comment": "Error border — light theme uses darker red for WCAG contrast"
       },
       "selection": {
         "value": "{color.teal.600}",
-        "comment": "Selected-state border (chips, radio)"
+        "comment": "Selected-state border (chips, radio) — constant across themes, matches brand.secondary line"
       }
     },
     "destructive": {
-      "primary":   { "value": "{color.red.400}",          "comment": "Destructive filled button bg / text on outlined" },
-      "bg-tinted": { "value": "rgba(240,92,91,0.15)",     "comment": "Destructive Medium tier bg" },
-      "bg-subtle": { "value": "rgba(240,92,91,0.08)",     "comment": "Destructive Low-hover / banner bg" }
+      "primary":   { "value": "{color.red.400}", "comment": "Destructive filled button bg / text on outlined (constant — destructive accent identical across themes)" },
+      "bg-tinted": {
+        "dark":  { "value": "rgba(240,92,91,0.18)" },
+        "light": { "value": "rgba(240,92,91,0.12)" },
+        "comment": "Destructive Medium tier bg — split mirrors bg.error-tinted opacities"
+      },
+      "bg-subtle": {
+        "dark":  { "value": "rgba(240,92,91,0.12)" },
+        "light": { "value": "rgba(240,92,91,0.08)" },
+        "comment": "Destructive Low-hover / banner bg — split mirrors bg.error-subtle opacities"
+      }
     }
   }
 }
