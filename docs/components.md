@@ -252,7 +252,7 @@ Every component lists **purpose · required props · optional props · variants 
 
 **iOS/Android notes:** Floating with `margin 0 16px 16px`. Backdrop blur 10px (glassmorphism). Shadow `0 0 24px rgba(0,0,0,0.4)` on dark.
 
-**Compose API note:** Compose `FitNavbar` accepts `items: List<FitNavbarItem>` where each item carries `tab` + `icon: ImageVector` — icon source is decoupled from the component to avoid pulling `material-icons-extended` into the tokens module. iOS resolves icons internally via SF Symbols on the `FitNavTab` enum.
+**Compose API note:** Compose `FitNavbar` accepts `items: List<FitNavbarItem>` where each item carries `tab` + `icon: ImageVector` — icon source is decoupled from the component so consumers can supply custom (non-Material) glyphs per tab without changing the library. iOS resolves icons internally via SF Symbols on the `FitNavTab` enum.
 
 **Status:** ✅ Swift, ✅ Compose.
 

@@ -28,9 +28,10 @@ import com.fit321.fitui.tokens.FitSpacing
  * (Dashboard, Clients, Calendar, Messages, Settings) — see
  * `feedback_navbar_visibility` rule. Caller is responsible for filtering.
  *
- * Icon source is intentionally not coupled to a specific icon set:
- * pass `ImageVector` per tab. This avoids pulling
- * `material-icons-extended` into the design-tokens module.
+ * Icon source is intentionally decoupled from any specific icon set:
+ * pass `ImageVector` per tab. Consumers can mix Material icons with
+ * custom 24×24 vectors per the design (sport-set glyphs, etc.) without
+ * forcing the library to take a side.
  */
 enum class FitNavTab { Dashboard, Clients, Calendar, Messages, Settings }
 
