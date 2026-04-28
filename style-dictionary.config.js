@@ -131,14 +131,19 @@ module.exports = {
           destination: 'DesignTokensComponent.swift',
           format: 'ios-swift/class.swift',
           className: 'DesignTokensComponent',
-          filter: (token) => token.attributes.category === 'component',
+          // Component tokens carry mixed shapes (numeric dimensions, CSS
+          // positions like "top-60px", color refs that resolve to hex
+          // strings). Only numeric values translate cleanly to Swift here;
+          // colors live in DesignTokensColors and should be referenced via
+          // FitColors / FitTheme. Filter to numbers only.
+          filter: (token) =>
+            token.attributes.category === 'component' &&
+            typeof token.value === 'number',
         },
-        {
-          destination: 'DesignTokensElevation.swift',
-          format: 'ios-swift/class.swift',
-          className: 'DesignTokensElevation',
-          filter: (token) => token.attributes.category === 'elevation',
-        },
+        // Elevation tokens are CSS box-shadows ("0 4px 20px rgba(...)"),
+        // no clean Swift counterpart yet. Skip the iOS file until we add a
+        // FitShadow-style typedef + transformer. None of the Swift FitUI
+        // components consume DesignTokensElevation today.
         {
           // Only emit durations to Swift for now. Easing tokens
           // ("cubic-bezier(...)" / "linear" / "ease") and keyframe tokens
