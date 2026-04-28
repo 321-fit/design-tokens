@@ -4,12 +4,21 @@ import SwiftUI
 //
 // Horizontal scrollable day chips with today highlight + event dots.
 // 50×62 chips, 10pt uppercase weekday name + 16pt day number.
-// See `docs/components.md`.
+// See `docs/components.md` § FitDayStrip.
 
 public enum FitDayEventType: Hashable {
     case personal
     case group
     case external
+}
+
+public enum FitDayStripMode {
+    /// Calendar navigation — chips drive the active day on a connected
+    /// timeline / list. Default for the strip in calendar.html.
+    case nav
+    /// Selection — chips read as toggleable "pick a day" affordances
+    /// (invite flows, group session schedule preview).
+    case select
 }
 
 public struct FitDayStrip: View {
@@ -19,6 +28,7 @@ public struct FitDayStrip: View {
     @Binding var selectedDay: Int
     let todayDay: Int?
     let events: [Int: Set<FitDayEventType>]
+    let mode: FitDayStripMode
     let onDaySelect: (Int) -> Void
 
     @Environment(\.fitTheme) private var theme
@@ -30,6 +40,7 @@ public struct FitDayStrip: View {
         selectedDay: Binding<Int>,
         todayDay: Int? = nil,
         events: [Int: Set<FitDayEventType>] = [:],
+        mode: FitDayStripMode = .nav,
         onDaySelect: @escaping (Int) -> Void = { _ in }
     ) {
         self.year = year
@@ -38,6 +49,7 @@ public struct FitDayStrip: View {
         self._selectedDay = selectedDay
         self.todayDay = todayDay
         self.events = events
+        self.mode = mode
         self.onDaySelect = onDaySelect
     }
 
@@ -46,55 +58,94 @@ public struct FitDayStrip: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
                     ForEach(1...days, id: \.self) { day in
-                        dayChip(day)
-                            .id(day)
-                            .onTapGesture {
-                                selectedDay = day
-                                onDaySelect(day)
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    proxy.scrollTo(day, anchor: .center)
-                                }
+                        FitDayButton(
+                            year: year,
+                            month: month,
+                            day: day,
+                            isSelected: selectedDay == day,
+                            isToday: todayDay == day,
+                            events: events[day] ?? []
+                        ) {
+                            selectedDay = day
+                            onDaySelect(day)
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                proxy.scrollTo(day, anchor: .center)
                             }
+                        }
+                        .id(day)
                     }
                 }
                 .padding(.horizontal, FitSpacing.sp4)
             }
         }
     }
+}
 
-    @ViewBuilder
-    private func dayChip(_ day: Int) -> some View {
-        let isSelected = selectedDay == day
-        let isToday = todayDay == day
-        let weekdayName = weekdayAbbreviation(for: day)
+// MARK: - FitDayButton (standalone sub-component)
+//
+// Public so invite / select flows that don't render an entire month
+// strip can compose a row of buttons directly. Mirrors `.day-btn` /
+// `.mg-day` patterns in the prototype.
 
-        VStack(spacing: FitSpacing.sp1) {
-            Text(weekdayName.uppercased())
-                .font(.custom(FitFont.family, size: 10).weight(.medium))
-                .foregroundColor(isSelected ? theme.textPrimary : theme.textTertiary)
+public struct FitDayButton: View {
+    let year: Int
+    let month: Int
+    let day: Int
+    let isSelected: Bool
+    let isToday: Bool
+    let events: Set<FitDayEventType>
+    let onTap: () -> Void
 
-            Text("\(day)")
-                .font(.custom(FitFont.family, size: 16).weight(isSelected ? .semibold : .medium))
-                .foregroundColor(dayNumberColor(selected: isSelected, today: isToday))
+    @Environment(\.fitTheme) private var theme
 
-            dotsRow(day)
+    public init(
+        year: Int,
+        month: Int,
+        day: Int,
+        isSelected: Bool,
+        isToday: Bool = false,
+        events: Set<FitDayEventType> = [],
+        onTap: @escaping () -> Void
+    ) {
+        self.year = year
+        self.month = month
+        self.day = day
+        self.isSelected = isSelected
+        self.isToday = isToday
+        self.events = events
+        self.onTap = onTap
+    }
+
+    public var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: FitSpacing.sp1) {
+                Text(weekdayAbbreviation.uppercased())
+                    .font(.custom(FitFont.family, size: 10).weight(.medium))
+                    .foregroundColor(isSelected ? theme.textPrimary : theme.textTertiary)
+
+                Text("\(day)")
+                    .font(.custom(FitFont.family, size: 16).weight(isSelected ? .semibold : .medium))
+                    .foregroundColor(dayNumberColor)
+
+                dotsRow
+            }
+            .frame(width: 50, height: 62)
+            .background(isSelected ? AnyView(FitColors.selectionGradient) : AnyView(Color.clear))
+            .overlay(
+                RoundedRectangle(cornerRadius: FitRadius.lg)
+                    .stroke(isSelected ? FitColors.selectionBorder : Color.clear, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: FitRadius.lg))
         }
-        .frame(width: 50, height: 62)
-        .background(isSelected ? AnyView(FitColors.selectionGradient) : AnyView(Color.clear))
-        .overlay(
-            RoundedRectangle(cornerRadius: FitRadius.lg)
-                .stroke(isSelected ? FitColors.selectionBorder : Color.clear, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: FitRadius.lg))
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder
-    private func dotsRow(_ day: Int) -> some View {
-        let types = events[day] ?? []
+    private var dotsRow: some View {
         HStack(spacing: 3) {
-            if types.contains(.personal) { dot(FitColors.Teal.t500) }
-            if types.contains(.group)    { dot(FitColors.brandPrimary) }
-            if types.contains(.external) { dot(theme.textTertiary) }
+            if events.contains(.personal) { dot(FitColors.Teal.t500) }
+            if events.contains(.group)    { dot(FitColors.brandPrimary) }
+            if events.contains(.external) { dot(theme.textTertiary) }
         }
         .frame(height: 4)
     }
@@ -103,13 +154,13 @@ public struct FitDayStrip: View {
         Circle().fill(color).frame(width: 4, height: 4)
     }
 
-    private func dayNumberColor(selected: Bool, today: Bool) -> Color {
-        if selected { return theme.textPrimary }
-        if today    { return FitColors.brandPrimary }
+    private var dayNumberColor: Color {
+        if isSelected { return theme.textPrimary }
+        if isToday    { return FitColors.brandPrimary }
         return theme.textSecondary
     }
 
-    private func weekdayAbbreviation(for day: Int) -> String {
+    private var weekdayAbbreviation: String {
         var components = DateComponents()
         components.year = year
         components.month = month

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
@@ -85,15 +87,22 @@ fun FitSelectRow(
 
 // ============================================================================
 // FitSettingsCard — icon + title + subtitle + trailing
+// Extension: context (settings/location/space), isDefault badge,
+// addressOrSubtitle (single-line ellipsised) for non-settings contexts.
 // ============================================================================
 
 enum class FitSettingsTrailing { Chevron, None }
+
+enum class FitSettingsCardContext { Settings, Location, Space }
 
 @Composable
 fun FitSettingsCard(
     icon: ImageVector,
     title: String,
     subtitle: String? = null,
+    addressOrSubtitle: String? = null,
+    context: FitSettingsCardContext = FitSettingsCardContext.Settings,
+    isDefault: Boolean = false,
     trailing: FitSettingsTrailing = FitSettingsTrailing.Chevron,
     destructive: Boolean = false,
     onClick: (() -> Unit)? = null,
@@ -101,6 +110,11 @@ fun FitSettingsCard(
 ) {
     val theme = LocalFitTheme.current
     val titleColor = if (destructive) FitColors.error else theme.textPrimary
+    val effectiveSubtitle = when (context) {
+        FitSettingsCardContext.Location, FitSettingsCardContext.Space -> addressOrSubtitle ?: subtitle
+        FitSettingsCardContext.Settings -> subtitle
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -111,13 +125,43 @@ fun FitSettingsCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
-        Icon(icon, null, tint = titleColor, modifier = Modifier.size(FitSize.settingsCardIcon))
+        when (context) {
+            FitSettingsCardContext.Settings ->
+                Icon(icon, null, tint = titleColor, modifier = Modifier.size(FitSize.settingsCardIcon))
+            FitSettingsCardContext.Location, FitSettingsCardContext.Space ->
+                Box(
+                    modifier = Modifier
+                        .size(FitSize.avatarMd)
+                        .clip(RoundedCornerShape(FitRadius.sm))
+                        .background(theme.surfaceHigher),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(icon, null, tint = titleColor, modifier = Modifier.size(FitSize.iconLg))
+                }
+        }
+
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, style = FitFont.body1, color = titleColor)
-            if (subtitle != null) {
-                Text(subtitle, style = FitFont.body2, color = theme.textSecondary)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2)
+            ) {
+                Text(title, style = FitFont.body1, color = titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                if (isDefault) {
+                    FitBadge("Default", FitBadgeStyle.Accent)
+                }
+            }
+            if (effectiveSubtitle != null) {
+                val maxLines = if (context == FitSettingsCardContext.Settings) 2 else 1
+                Text(
+                    effectiveSubtitle,
+                    style = FitFont.body2,
+                    color = theme.textSecondary,
+                    maxLines = maxLines,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
+
         if (trailing == FitSettingsTrailing.Chevron) {
             Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary,
                 modifier = Modifier.size(FitSize.settingsCardChevron))
@@ -127,51 +171,107 @@ fun FitSettingsCard(
 
 // ============================================================================
 // FitParticipant — list row with avatar + name + sub + remove/paid/you states
+// Extensions: leading (avatar | icon), trailing (chevron|edit|dot|swipe|none),
+// state (default|connected|disconnected|disabled|destructive).
 // ============================================================================
 
 enum class FitParticipantPayment { Cash, Card, None }
+
+sealed class FitParticipantLeading {
+    data class Avatar(val initials: String) : FitParticipantLeading()
+    data class IconPlate(val icon: ImageVector, val tone: FitIconPlateTone = FitIconPlateTone.Neutral)
+        : FitParticipantLeading()
+}
+
+sealed class FitParticipantTrailing {
+    object Chevron : FitParticipantTrailing()
+    object Edit : FitParticipantTrailing()
+    data class Dot(val color: Color) : FitParticipantTrailing()
+    object Swipe : FitParticipantTrailing()
+    object None : FitParticipantTrailing()
+}
+
+enum class FitParticipantState { Default, Connected, Disconnected, Disabled, Destructive }
 
 @Composable
 fun FitParticipant(
     name: String,
     subtitle: String,
-    avatarInitials: String,
+    leading: FitParticipantLeading,
+    trailing: FitParticipantTrailing = FitParticipantTrailing.Chevron,
+    state: FitParticipantState = FitParticipantState.Default,
     isRemovable: Boolean = false,
     onRemove: (() -> Unit)? = null,
     isPaid: Boolean = false,
     payment: FitParticipantPayment = FitParticipantPayment.None,
     isYou: Boolean = false,
+    onTap: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
+
+    val nameColor: Color = when {
+        isPaid -> theme.textSecondary
+        state == FitParticipantState.Destructive -> FitColors.error
+        state == FitParticipantState.Disabled -> theme.textTertiary
+        else -> theme.textPrimary
+    }
+    val subtitleColor: Color = when {
+        isYou -> FitColors.brandPrimary
+        state == FitParticipantState.Destructive -> FitColors.error.copy(alpha = 0.85f)
+        else -> theme.textSecondary
+    }
+    val rowBg: Color = when {
+        isYou -> Color.Transparent           // gradient overlays via background brush below
+        state == FitParticipantState.Connected -> theme.bgSuccessSubtle
+        state == FitParticipantState.Disconnected -> theme.bgWarningSubtle
+        state == FitParticipantState.Destructive -> theme.bgErrorSubtle
+        else -> Color.Transparent
+    }
+    val rowRadius =
+        if (isYou || state in setOf(
+                FitParticipantState.Connected,
+                FitParticipantState.Disconnected,
+                FitParticipantState.Destructive
+            )
+        ) FitRadius.md else 0.dp
+
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(rowRadius))
             .then(
-                if (isYou) Modifier.clip(RoundedCornerShape(FitRadius.md))
-                    .background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.md))
-                    .padding(FitSpacing.sp3)
-                else Modifier.padding(vertical = FitSpacing.sp3)
-            ),
+                if (isYou) Modifier.background(FitColors.selectionGradient, RoundedCornerShape(rowRadius))
+                else Modifier.background(rowBg)
+            )
+            .then(
+                if (onTap != null && state != FitParticipantState.Disabled)
+                    Modifier.clickable(onClick = onTap) else Modifier
+            )
+            .padding(horizontal = if (isYou) FitSpacing.sp3 else 0.dp, vertical = FitSpacing.sp3)
+            .alpha(if (state == FitParticipantState.Disabled) 0.6f else 1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
-        FitAvatar(initials = avatarInitials, size = FitAvatarSize.Lg, isPaid = isPaid)
+        // Leading
+        when (val l = leading) {
+            is FitParticipantLeading.Avatar ->
+                FitAvatar(initials = l.initials, size = FitAvatarSize.Lg, isPaid = isPaid)
+            is FitParticipantLeading.IconPlate ->
+                FitIconPlate(icon = l.icon, tone = l.tone, size = FitIconPlateSize.Lg)
+        }
+
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 name,
                 style = FitFont.body2.copy(fontWeight = FontWeight.Medium),
-                color = if (isPaid) theme.textSecondary else theme.textPrimary
+                color = nameColor
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1)
             ) {
-                Text(
-                    subtitle,
-                    style = FitFont.caption,
-                    color = if (isYou) FitColors.brandPrimary else theme.textSecondary
-                )
+                Text(subtitle, style = FitFont.caption, color = subtitleColor)
                 when (payment) {
                     FitParticipantPayment.Cash -> FitBadge("Cash", FitBadgeStyle.Neutral)
                     FitParticipantPayment.Card -> FitBadge("Card", FitBadgeStyle.Neutral)
@@ -179,24 +279,42 @@ fun FitParticipant(
                 }
             }
         }
-        if (isRemovable && onRemove != null) {
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(FitColors.error.copy(alpha = 0.1f))
-                    .clickable(onClick = onRemove),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Default.Close, null, tint = FitColors.error, modifier = Modifier.size(12.dp))
+
+        // Trailing — explicit remove button takes precedence (legacy support)
+        when {
+            isRemovable && onRemove != null -> {
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(CircleShape)
+                        .background(FitColors.error.copy(alpha = 0.1f))
+                        .clickable(onClick = onRemove),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.Close, null, tint = FitColors.error, modifier = Modifier.size(12.dp))
+                }
             }
+            trailing is FitParticipantTrailing.Chevron ->
+                Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary, modifier = Modifier.size(16.dp))
+            trailing is FitParticipantTrailing.Edit ->
+                Icon(Icons.Default.Edit, null, tint = theme.textTertiary, modifier = Modifier.size(16.dp))
+            trailing is FitParticipantTrailing.Dot ->
+                Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(trailing.color))
+            trailing is FitParticipantTrailing.Swipe -> {}
+            trailing is FitParticipantTrailing.None -> {}
         }
     }
 }
 
 // ============================================================================
-// FitChip — tag-like selectable button
+// FitChip — tag-like selectable button (now with size enum)
 // ============================================================================
+
+enum class FitChipSize(val heightDp: Int) {
+    Sm(40),
+    Md(48),
+    Lg(56)
+}
 
 @Composable
 fun FitChip(
@@ -204,12 +322,13 @@ fun FitChip(
     isSelected: Boolean,
     onClick: () -> Unit,
     icon: ImageVector? = null,
+    size: FitChipSize = FitChipSize.Md,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
     Row(
         modifier = modifier
-            .height(48.dp)
+            .height(size.heightDp.dp)
             .clip(RoundedCornerShape(FitRadius.md))
             .then(
                 if (isSelected)
@@ -225,7 +344,8 @@ fun FitChip(
         if (icon != null) {
             Icon(icon, null, tint = theme.textPrimary, modifier = Modifier.size(FitSize.iconMd))
         }
-        Text(label, style = FitFont.body1, color = theme.textPrimary)
+        val style = if (size == FitChipSize.Sm) FitFont.body2 else FitFont.body1
+        Text(label, style = style, color = theme.textPrimary)
     }
 }
 
@@ -298,3 +418,10 @@ fun <Option> FitSelectionGroup(
         }
     }
 }
+
+// ----------------------------------------------------------------------------
+// Internal helper — alpha modifier (avoids importing graphicsLayer for simple alpha)
+// ----------------------------------------------------------------------------
+
+private fun Modifier.alpha(alpha: Float): Modifier =
+    this.then(androidx.compose.ui.draw.alpha(alpha))
