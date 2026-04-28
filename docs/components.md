@@ -68,6 +68,49 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitIconPlate
+**Purpose:** Decorative leading icon container — rounded square with tinted background + centered icon. Used wherever a row / card needs a visual category accent (Dashboard action cards, Settings rows, empty-state CTAs, list category accents). Non-interactive — for tappable plates use `FitIconBtn` with `tintedBg: true`.
+
+**Required props:**
+- `icon: Icon` (SF Symbol on iOS / `ImageVector` on Compose / SVG `<symbol>` reference on web)
+
+**Optional props:**
+- `tone: enum { info, success, warning, error, brand, neutral } = .neutral`
+- `size: enum { sm (24), md (32, default), lg (40) }`
+
+**Sub-elements:** none — pure leaf.
+
+**States:** default. (Decorative; no pressed / hover.)
+
+**Sizing:**
+
+| Size | Container | Icon | Use case |
+|---|---|---|---|
+| sm | 24×24 | 12 | inline rows, compact lists |
+| md | 32×32 | 16 | dashboard action cards, settings row leading |
+| lg | 40×40 | 20 | empty-state CTAs, hero rows |
+
+**Tone → tokens** (read from current FitTheme):
+
+| Tone | Background | Foreground |
+|---|---|---|
+| info | `theme.bgInfoSubtle` | `FitColors.Blue.b500` |
+| success | `theme.bgSuccessSubtle` | `FitColors.Teal.t500` |
+| warning | `theme.bgWarningSubtle` | `FitColors.Yellow.y400` |
+| error | `theme.bgErrorSubtle` | `FitColors.Red.r400` |
+| brand | `theme.bgBrandSubtle` | `FitColors.brandPrimary` |
+| neutral | `theme.surfaceHigher` | `theme.textSecondary` |
+
+**Shape:** `RoundedRectangle(cornerRadius: FitRadius.sm)` (8 px).
+
+**Used:** Dashboard action cards (requests=info, cash=success, review=warning), Settings rows (legacy `FitSettingsCard.icon` callsites should migrate), empty-state CTAs.
+
+**iOS/Android/Web notes:** Identical visual API across platforms. Web uses CSS class `.fit-icon-plate` with modifiers `.fit-icon-plate--{tone}` and `.fit-icon-plate--{size}` (`prototypes/lib/fit-ui.css`).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
 ### FitBadge
 **Purpose:** Tag/status pill — 12px font, pill shape, color variants.
 
