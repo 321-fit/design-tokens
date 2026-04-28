@@ -4,10 +4,10 @@
 //
 
 // Do not edit directly
-// Generated on Mon, 27 Apr 2026 17:53:37 GMT
+// Generated on Tue, 28 Apr 2026 16:28:20 GMT
 
 
-import UIKit
+import SwiftUI
 
 public class DesignTokensSpacing {
     public static let avatarLg = 48 /* Event sheet / card avatar */

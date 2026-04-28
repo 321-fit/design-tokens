@@ -37,16 +37,16 @@ public struct FitContextMenuItem: Identifiable {
 ///   FitIconBtn(systemName: "ellipsis") { }
 /// }
 /// ```
-public struct FitContextMenuTrigger<Label: View>: View {
+public struct FitContextMenuTrigger<TriggerLabel: View>: View {
     let items: [FitContextMenuItem]
-    let label: () -> Label
+    let triggerLabel: () -> TriggerLabel
 
     public init(
         items: [FitContextMenuItem],
-        @ViewBuilder label: @escaping () -> Label
+        @ViewBuilder label: @escaping () -> TriggerLabel
     ) {
         self.items = items
-        self.label = label
+        self.triggerLabel = label
     }
 
     public var body: some View {
@@ -54,12 +54,13 @@ public struct FitContextMenuTrigger<Label: View>: View {
             ForEach(items) { item in
                 Button(role: item.destructive ? .destructive : nil, action: item.action) {
                     if let icon = item.systemImage {
-                        Label(item.title, systemImage: icon)
+                        // Disambiguate from the generic above — this is SwiftUI.Label.
+                        SwiftUI.Label(item.title, systemImage: icon)
                     } else {
                         Text(item.title)
                     }
                 }
             }
-        }, label: label)
+        }, label: triggerLabel)
     }
 }

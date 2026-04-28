@@ -4,10 +4,10 @@
 //
 
 // Do not edit directly
-// Generated on Mon, 27 Apr 2026 17:53:37 GMT
+// Generated on Tue, 28 Apr 2026 16:28:20 GMT
 
 
-import UIKit
+import SwiftUI
 
 public class DesignTokensColors {
     public static let colorBgBrandSubtleDark = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.12)

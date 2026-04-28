@@ -33,6 +33,23 @@ StyleDictionary.registerTransform({
 // Convert line-height multiplier (1.35) to unitless (stay as-is, no change)
 // Already handled by default; explicit no-op for clarity.
 
+// Convert "200ms" → 0.2 (TimeInterval / Double seconds) for Swift output.
+// Animation duration tokens are stored CSS-style ("200ms") in JSON for the
+// CSS pipeline; iOS needs them as numeric literals.
+StyleDictionary.registerTransform({
+  name: 'time/swift/seconds',
+  type: 'value',
+  matcher: (prop) =>
+    prop.attributes.category === 'animation' &&
+    prop.path[1] === 'duration' &&
+    typeof prop.value === 'string' &&
+    prop.value.endsWith('ms'),
+  transformer: (prop) => {
+    const ms = parseFloat(prop.value);
+    return (ms / 1000).toString();
+  },
+});
+
 // ============================================================
 // TRANSFORM GROUPS (extend built-ins)
 // ============================================================
@@ -49,14 +66,19 @@ StyleDictionary.registerTransformGroup({
 
 StyleDictionary.registerTransformGroup({
   name: 'ios-swift-fit',
+  // Mirrors built-in `ios-swift` group exactly, with one addition:
+  // `time/swift/seconds` to convert "200ms" → 0.2 for animation durations.
+  // Renaming or dropping any other transform here will rename all
+  // generated symbol names — keep in lockstep with built-in.
   transforms: [
     'attribute/cti',
-    'name/cti/pascal',
+    'name/cti/camel',
     'color/UIColorSwift',
     'content/swift/literal',
     'asset/swift/literal',
     'size/swift/remToCGFloat',
     'font/swift/literal',
+    'time/swift/seconds',
   ],
 });
 
@@ -79,7 +101,7 @@ module.exports = {
   platforms: {
     // iOS (Swift) — generated into FitUI package
     ios: {
-      transformGroup: 'ios-swift',
+      transformGroup: 'ios-swift-fit',
       buildPath: 'Sources/FitUI/Tokens/Generated/',
       files: [
         {
@@ -118,10 +140,17 @@ module.exports = {
           filter: (token) => token.attributes.category === 'elevation',
         },
         {
+          // Only emit durations to Swift for now. Easing tokens
+          // ("cubic-bezier(...)" / "linear" / "ease") and keyframe tokens
+          // are CSS-shaped and don't have a clean Swift representation
+          // until we add a `FitEasing` enum + matching transformer.
+          // Generating them produces invalid Swift literals.
           destination: 'DesignTokensAnimation.swift',
           format: 'ios-swift/class.swift',
           className: 'DesignTokensAnimation',
-          filter: (token) => token.attributes.category === 'animation',
+          filter: (token) =>
+            token.attributes.category === 'animation' &&
+            token.path[1] === 'duration',
         },
       ],
     },
