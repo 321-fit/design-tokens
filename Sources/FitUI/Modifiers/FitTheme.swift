@@ -28,7 +28,12 @@ extension EnvironmentValues {
 
 extension View {
     public func fitTheme(_ role: FitRole) -> some View {
-        self
+        // Side-effect: register the bundled Rubik TTFs the first time any
+        // FitUI-themed view appears. `FitFontRegister.ensure()` is idempotent
+        // and thread-safe (lazy `let` static), so calling it on every modifier
+        // application is free after the first call.
+        FitFontRegister.ensure()
+        return self
             .environment(\.fitTheme, role.theme)
             .background(role.theme.screenBg)
     }
