@@ -252,7 +252,9 @@ Every component lists **purpose · required props · optional props · variants 
 
 **iOS/Android notes:** Floating with `margin 0 16px 16px`. Backdrop blur 10px (glassmorphism). Shadow `0 0 24px rgba(0,0,0,0.4)` on dark.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Compose API note:** Compose `FitNavbar` accepts `items: List<FitNavbarItem>` where each item carries `tab` + `icon: ImageVector` — icon source is decoupled from the component to avoid pulling `material-icons-extended` into the tokens module. iOS resolves icons internally via SF Symbols on the `FitNavTab` enum.
+
+**Status:** ✅ Swift, ✅ Compose.
 
 ---
 
@@ -276,9 +278,11 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Used:** profile sections, event summary cards, settings groups.
 
-**iOS/Android notes:** 20px padding, 16px radius. Dark: surface-high + 1px gray-600 border. Light: white + `0 0 12px rgba(0,0,0,0.07)` shadow.
+**iOS/Android notes:** 20px padding, 16px radius. Dark: `surfaceDefault` only (no border, no shadow — tonal contrast). Light: `surfaceDefault` + 1px `divider` border + soft drop shadow.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Compose API addition:** optional `onClick: (() -> Unit)?` for tappable cards (e.g. `Next session`). Same default styling regardless of clickability.
+
+**Status:** ✅ Swift, ✅ Compose.
 
 ---
 
