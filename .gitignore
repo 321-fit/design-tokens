@@ -7,6 +7,7 @@ build/
 # Swift / Gradle local build
 .build/
 .swiftpm/
+.gradle/
 android/build/
 android/.gradle/
 local.properties

@@ -4,6 +4,17 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// Group + artifact name for composite-build substitution.
+// Consumers reference this module as `implementation("com.fit321:fitui")`
+// — the path is rewired locally via `dependencySubstitution` in the
+// consumer `settings.gradle.kts`.
+group = "com.fit321"
+version = "0.1.0-SNAPSHOT"
+
+base {
+    archivesName.set("fitui")
+}
+
 android {
     namespace = "com.fit321.designtokens"
     compileSdk = 34
