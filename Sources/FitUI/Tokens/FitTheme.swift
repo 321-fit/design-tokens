@@ -1,12 +1,12 @@
 import SwiftUI
 
 // MARK: - 321Fit Theme System
-// Extracted from FitColors — semantic, theme-aware tokens.
 //
 // Usage:
 //   Static (default = dark/coach):  .background(FitTheme.bgErrorTinted)
 //   Explicit variant:                .foregroundStyle(FitTheme.light.textPrimary)
 //   Raw palette color:               .foregroundStyle(FitColors.Gray.g600)
+//   Screen background:               .fitBackground()
 
 public struct FitTheme {
 
@@ -125,7 +125,6 @@ public struct FitTheme {
 }
 
 // MARK: - Static convenience (defaults to dark/coach)
-// Allows: .background(FitTheme.bgErrorTinted) without @Environment
 
 extension FitTheme {
     public static var screenBg: Color { dark.screenBg }
@@ -164,4 +163,54 @@ extension FitTheme {
     public static var inputBg: Color { dark.inputBg }
     public static var cardBg: Color { dark.cardBg }
     public static var focusBorder: Color { dark.focusBorder }
+}
+
+// MARK: - Role
+
+public enum FitRole {
+    case coach
+    case athlete
+
+    public var theme: FitTheme {
+        switch self {
+        case .coach: return .dark
+        case .athlete: return .light
+        }
+    }
+}
+
+// MARK: - Environment (used internally by FitUI components)
+
+private struct FitThemeKey: EnvironmentKey {
+    static let defaultValue: FitTheme = .dark
+}
+
+extension EnvironmentValues {
+    public var fitTheme: FitTheme {
+        get { self[FitThemeKey.self] }
+        set { self[FitThemeKey.self] = newValue }
+    }
+}
+
+// MARK: - View modifiers
+
+extension View {
+    public func fitTheme(_ role: FitRole) -> some View {
+        FitFontRegister.ensure()
+        return self
+            .environment(\.fitTheme, role.theme)
+            .background(role.theme.screenBg)
+    }
+
+    /// Applies themed background filling behind safe area.
+    /// Usage: `.fitBackground()` or `.fitBackground(.light, edges: .bottom)`
+    public func fitBackground(
+        _ theme: FitTheme = .dark,
+        edges: Edge.Set = .all
+    ) -> some View {
+        FitFontRegister.ensure()
+        return self
+            .environment(\.fitTheme, theme)
+            .background(theme.screenBg.ignoresSafeArea(.container, edges: edges))
+    }
 }
