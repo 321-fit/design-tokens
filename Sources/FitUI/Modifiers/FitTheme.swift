@@ -40,4 +40,21 @@ extension View {
             .environment(\.fitTheme, role.theme)
             .background(role.theme.screenBg)
     }
+
+    /// Applies the default theme background (screenBg) filling all edges
+    /// including behind the safe area. Replaces the verbose pattern:
+    /// ```
+    /// .fitTheme(systemColorScheme == .light ? .athlete : .coach)
+    /// .background(themeBackground.ignoresSafeArea(.container, edges: .bottom))
+    /// ```
+    /// Usage: `.fitBackground()` or `.fitBackground(edges: .all)`
+    public func fitBackground(
+        _ theme: FitTheme = .dark,
+        edges: Edge.Set = .all
+    ) -> some View {
+        FitFontRegister.ensure()
+        return self
+            .environment(\.fitTheme, theme)
+            .background(theme.screenBg.ignoresSafeArea(.container, edges: edges))
+    }
 }
