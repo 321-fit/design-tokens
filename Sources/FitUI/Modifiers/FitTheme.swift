@@ -2,12 +2,15 @@ import SwiftUI
 
 // MARK: - Theme Environment
 // Coach = dark, Athlete = light (always)
+//
+// For FitUI internal components that need dynamic theme switching.
+// App-level code can use static access instead: FitTheme.bgErrorTinted
 
 public enum FitRole {
     case coach
     case athlete
 
-    public var theme: FitColors.Theme {
+    public var theme: FitTheme {
         switch self {
         case .coach: return .dark
         case .athlete: return .light
@@ -16,11 +19,11 @@ public enum FitRole {
 }
 
 private struct FitThemeKey: EnvironmentKey {
-    static let defaultValue: FitColors.Theme = .dark
+    static let defaultValue: FitTheme = .dark
 }
 
 extension EnvironmentValues {
-    public var fitTheme: FitColors.Theme {
+    public var fitTheme: FitTheme {
         get { self[FitThemeKey.self] }
         set { self[FitThemeKey.self] = newValue }
     }
