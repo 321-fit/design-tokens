@@ -168,40 +168,6 @@ fun FitNavbar(
 // ============================================================================
 
 @Composable
-fun FitCard(
-    title: String? = null,
-    onEdit: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    val theme = LocalFitTheme.current
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(FitRadius.card))
-            .background(theme.cardBg)
-            .border(1.dp, theme.divider, RoundedCornerShape(FitRadius.card))
-            .padding(FitSpacing.sp5),
-        verticalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
-    ) {
-        if (title != null) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    title,
-                    style = FitFont.body1.copy(fontSize = 18.sp, fontWeight = FontWeight.Medium),
-                    color = theme.textPrimary,
-                    modifier = Modifier.weight(1f)
-                )
-                if (onEdit != null) {
-                    Icon(Icons.Default.Edit, null, tint = theme.textTertiary, modifier = Modifier.size(FitSize.iconMd).clickable(onClick = onEdit))
-                }
-            }
-        }
-        content()
-    }
-}
-
-@Composable
 fun FitCardRow(icon: ImageVector, text: String) {
     val theme = LocalFitTheme.current
     Row(
