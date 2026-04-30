@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitSize
@@ -36,15 +35,15 @@ import com.fit321.fitui.tokens.FitSpacing
 enum class FitNavTab { Dashboard, Clients, Calendar, Messages, Settings }
 
 data class FitNavbarItem(
-    val tab: FitNavTab,
+    val tab: FitNavTabEnum,
     val icon: ImageVector
 )
 
 @Composable
 fun FitNavbar(
     items: List<FitNavbarItem>,
-    activeTab: FitNavTab,
-    onTabChange: (FitNavTab) -> Unit,
+    activeTab: FitNavTabEnum,
+    onTabChange: (FitNavTabEnum) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current

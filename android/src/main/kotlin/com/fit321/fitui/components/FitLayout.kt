@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -118,7 +117,7 @@ fun FitFooter(
 // FitNavbar — 5-tab floating pill
 // ============================================================================
 
-enum class FitNavTab(val icon: ImageVector) {
+enum class FitNavTabEnum(val icon: ImageVector) {
     Dashboard(Icons.Default.Home),
     Clients(Icons.Default.People),
     Calendar(Icons.Default.CalendarMonth),
@@ -128,8 +127,8 @@ enum class FitNavTab(val icon: ImageVector) {
 
 @Composable
 fun FitNavbar(
-    activeTab: FitNavTab,
-    onTabChange: (FitNavTab) -> Unit,
+    activeTab: FitNavTabEnum,
+    onTabChange: (FitNavTabEnum) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
@@ -141,7 +140,7 @@ fun FitNavbar(
             .padding(FitSpacing.sp1),
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
-        FitNavTab.values().forEach { tab ->
+        FitNavTabEnum.values().forEach { tab ->
             val active = activeTab == tab
             Box(
                 modifier = Modifier

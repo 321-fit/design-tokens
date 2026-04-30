@@ -3,7 +3,15 @@ package com.fit321.fitui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -16,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,7 +42,12 @@ import com.fit321.fitui.tokens.FitSpacing
 // FitSelectRow — selectable list row
 // ============================================================================
 
-enum class FitSelectRowTrailing { Chevron, Check, Toggle, None }
+enum class FitSelectRowTrailing {
+    Chevron,
+    Check,
+    Toggle,
+    None
+}
 
 @Composable
 fun FitSelectRow(
@@ -52,8 +66,16 @@ fun FitSelectRow(
             .clip(RoundedCornerShape(FitRadius.selectRow))
             .then(
                 if (isSelected)
-                    Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.selectRow))
-                        .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.selectRow))
+                    Modifier
+                        .background(
+                            FitColors.selectionGradient,
+                            RoundedCornerShape(FitRadius.selectRow)
+                        )
+                        .border(
+                            1.dp,
+                            FitColors.selectionBorder,
+                            RoundedCornerShape(FitRadius.selectRow)
+                        )
                 else Modifier.background(theme.surfaceHigher)
             )
             .clickable(onClick = onClick)
@@ -64,11 +86,19 @@ fun FitSelectRow(
         if (icon != null) {
             Icon(icon, null, tint = theme.textSecondary, modifier = Modifier.size(FitSize.iconLg))
         }
-        Text(label, style = FitFont.body1, color = theme.textPrimary, modifier = Modifier.weight(1f))
+        Text(
+            label,
+            style = FitFont.body1,
+            color = theme.textPrimary,
+            modifier = Modifier.weight(1f)
+        )
         when (trailing) {
             FitSelectRowTrailing.Chevron ->
-                Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary,
-                    modifier = Modifier.size(FitSize.iconMd))
+                Icon(
+                    Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                    modifier = Modifier.size(FitSize.iconMd)
+                )
+
             FitSelectRowTrailing.Check -> if (isSelected) {
                 Box(
                     modifier = Modifier
@@ -77,9 +107,15 @@ fun FitSelectRow(
                         .background(FitColors.Teal.t600),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(14.dp))
+                    Icon(
+                        Icons.Default.Check,
+                        null,
+                        tint = Color.White,
+                        modifier = Modifier.size(14.dp)
+                    )
                 }
             }
+
             FitSelectRowTrailing.Toggle, FitSelectRowTrailing.None -> {}
         }
     }
@@ -91,9 +127,16 @@ fun FitSelectRow(
 // addressOrSubtitle (single-line ellipsised) for non-settings contexts.
 // ============================================================================
 
-enum class FitSettingsTrailing { Chevron, None }
+enum class FitSettingsTrailing {
+    Chevron,
+    None
+}
 
-enum class FitSettingsCardContext { Settings, Location, Space }
+enum class FitSettingsCardContext {
+    Settings,
+    Location,
+    Space
+}
 
 @Composable
 fun FitSettingsCard(
@@ -111,7 +154,9 @@ fun FitSettingsCard(
     val theme = LocalFitTheme.current
     val titleColor = if (destructive) FitColors.error else theme.textPrimary
     val effectiveSubtitle = when (context) {
-        FitSettingsCardContext.Location, FitSettingsCardContext.Space -> addressOrSubtitle ?: subtitle
+        FitSettingsCardContext.Location, FitSettingsCardContext.Space -> addressOrSubtitle
+            ?: subtitle
+
         FitSettingsCardContext.Settings -> subtitle
     }
 
@@ -127,7 +172,13 @@ fun FitSettingsCard(
     ) {
         when (context) {
             FitSettingsCardContext.Settings ->
-                Icon(icon, null, tint = titleColor, modifier = Modifier.size(FitSize.settingsCardIcon))
+                Icon(
+                    icon,
+                    null,
+                    tint = titleColor,
+                    modifier = Modifier.size(FitSize.settingsCardIcon)
+                )
+
             FitSettingsCardContext.Location, FitSettingsCardContext.Space ->
                 Box(
                     modifier = Modifier
@@ -145,7 +196,13 @@ fun FitSettingsCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2)
             ) {
-                Text(title, style = FitFont.body1, color = titleColor, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    title,
+                    style = FitFont.body1,
+                    color = titleColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 if (isDefault) {
                     FitBadge("Default", FitBadgeStyle.Accent)
                 }
@@ -163,8 +220,10 @@ fun FitSettingsCard(
         }
 
         if (trailing == FitSettingsTrailing.Chevron) {
-            Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary,
-                modifier = Modifier.size(FitSize.settingsCardChevron))
+            Icon(
+                Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                modifier = Modifier.size(FitSize.settingsCardChevron)
+            )
         }
     }
 }
@@ -175,12 +234,18 @@ fun FitSettingsCard(
 // state (default|connected|disconnected|disabled|destructive).
 // ============================================================================
 
-enum class FitParticipantPayment { Cash, Card, None }
+enum class FitParticipantPayment {
+    Cash,
+    Card,
+    None
+}
 
 sealed class FitParticipantLeading {
     data class Avatar(val initials: String) : FitParticipantLeading()
-    data class IconPlate(val icon: ImageVector, val tone: FitIconPlateTone = FitIconPlateTone.Neutral)
-        : FitParticipantLeading()
+    data class IconPlate(
+        val icon: ImageVector,
+        val tone: FitIconPlateTone = FitIconPlateTone.Neutral
+    ) : FitParticipantLeading()
 }
 
 sealed class FitParticipantTrailing {
@@ -191,7 +256,13 @@ sealed class FitParticipantTrailing {
     object None : FitParticipantTrailing()
 }
 
-enum class FitParticipantState { Default, Connected, Disconnected, Disabled, Destructive }
+enum class FitParticipantState {
+    Default,
+    Connected,
+    Disconnected,
+    Disabled,
+    Destructive
+}
 
 @Composable
 fun FitParticipant(
@@ -241,7 +312,10 @@ fun FitParticipant(
             .fillMaxWidth()
             .clip(RoundedCornerShape(rowRadius))
             .then(
-                if (isYou) Modifier.background(FitColors.selectionGradient, RoundedCornerShape(rowRadius))
+                if (isYou) Modifier.background(
+                    FitColors.selectionGradient,
+                    RoundedCornerShape(rowRadius)
+                )
                 else Modifier.background(rowBg)
             )
             .then(
@@ -257,6 +331,7 @@ fun FitParticipant(
         when (val l = leading) {
             is FitParticipantLeading.Avatar ->
                 FitAvatar(initials = l.initials, size = FitAvatarSize.Lg, isPaid = isPaid)
+
             is FitParticipantLeading.IconPlate ->
                 FitIconPlate(icon = l.icon, tone = l.tone, size = FitIconPlateSize.Lg)
         }
@@ -291,15 +366,37 @@ fun FitParticipant(
                         .clickable(onClick = onRemove),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Close, null, tint = FitColors.error, modifier = Modifier.size(12.dp))
+                    Icon(
+                        Icons.Default.Close,
+                        null,
+                        tint = FitColors.error,
+                        modifier = Modifier.size(12.dp)
+                    )
                 }
             }
+
             trailing is FitParticipantTrailing.Chevron ->
-                Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary, modifier = Modifier.size(16.dp))
+                Icon(
+                    Icons.Default.ChevronRight,
+                    null,
+                    tint = theme.textTertiary,
+                    modifier = Modifier.size(16.dp)
+                )
+
             trailing is FitParticipantTrailing.Edit ->
-                Icon(Icons.Default.Edit, null, tint = theme.textTertiary, modifier = Modifier.size(16.dp))
+                Icon(
+                    Icons.Default.Edit,
+                    null,
+                    tint = theme.textTertiary,
+                    modifier = Modifier.size(16.dp)
+                )
+
             trailing is FitParticipantTrailing.Dot ->
-                Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(trailing.color))
+                Box(modifier = Modifier
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(trailing.color))
+
             trailing is FitParticipantTrailing.Swipe -> {}
             trailing is FitParticipantTrailing.None -> {}
         }
@@ -332,7 +429,11 @@ fun FitChip(
             .clip(RoundedCornerShape(FitRadius.md))
             .then(
                 if (isSelected)
-                    Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.md))
+                    Modifier
+                        .background(
+                            FitColors.selectionGradient,
+                            RoundedCornerShape(FitRadius.md)
+                        )
                         .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.md))
                 else Modifier.background(theme.surfaceHigh)
             )
@@ -394,8 +495,15 @@ fun <Option> FitSelectionGroup(
                     .then(
                         if (isSelected)
                             Modifier
-                                .background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.md))
-                                .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.md))
+                                .background(
+                                    FitColors.selectionGradient,
+                                    RoundedCornerShape(FitRadius.md)
+                                )
+                                .border(
+                                    1.dp,
+                                    FitColors.selectionBorder,
+                                    RoundedCornerShape(FitRadius.md)
+                                )
                         else Modifier.background(theme.surfaceHigh)
                     )
                     .clickable {
@@ -452,7 +560,8 @@ fun <Option> FitSegmented(
     ) {
         options.forEach { option ->
             val isSelected = option == selected
-            val displayText = count?.invoke(option)?.let { "${label(option)} ($it)" } ?: label(option)
+            val displayText =
+                count?.invoke(option)?.let { "${label(option)} ($it)" } ?: label(option)
 
             Box(
                 modifier = Modifier
@@ -460,7 +569,10 @@ fun <Option> FitSegmented(
                     .clip(RoundedCornerShape(FitRadius.sm))
                     .then(
                         if (isSelected)
-                            Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.sm))
+                            Modifier.background(
+                                FitColors.selectionGradient,
+                                RoundedCornerShape(FitRadius.sm)
+                            )
                         else Modifier
                     )
                     .clickable { onSelectedChange(option) }
@@ -476,10 +588,3 @@ fun <Option> FitSegmented(
         }
     }
 }
-
-// ----------------------------------------------------------------------------
-// Internal helper — alpha modifier (avoids importing graphicsLayer for simple alpha)
-// ----------------------------------------------------------------------------
-
-private fun Modifier.alpha(alpha: Float): Modifier =
-    this.then(androidx.compose.ui.draw.alpha(alpha))
