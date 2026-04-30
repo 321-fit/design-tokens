@@ -419,6 +419,64 @@ fun <Option> FitSelectionGroup(
     }
 }
 
+// ============================================================================
+// FitSegmented — iOS-style segmented control / tab switcher
+//
+// Equal-width buttons inside a "selection well" container; tapping slides
+// selection. Use for screen-mode / filter switching (Archived vs Blocked
+// tabs, etc.). Always single-select. For form-input chip groups use
+// FitSelectionGroup instead — visual contract differs (chip border on
+// selection vs slid pill in a well).
+//
+// See docs/components.md § FitSegmented.
+// ============================================================================
+
+@Composable
+fun <Option> FitSegmented(
+    options: List<Option>,
+    selected: Option,
+    onSelectedChange: (Option) -> Unit,
+    label: (Option) -> String,
+    modifier: Modifier = Modifier,
+    count: ((Option) -> Int?)? = null,
+) {
+    val theme = LocalFitTheme.current
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(FitRadius.md))
+            .background(theme.surfaceHigh)
+            .padding(FitSpacing.sp1),
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
+    ) {
+        options.forEach { option ->
+            val isSelected = option == selected
+            val displayText = count?.invoke(option)?.let { "${label(option)} ($it)" } ?: label(option)
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(FitRadius.sm))
+                    .then(
+                        if (isSelected)
+                            Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.sm))
+                        else Modifier
+                    )
+                    .clickable { onSelectedChange(option) }
+                    .padding(vertical = FitSpacing.sp2),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    displayText,
+                    style = FitFont.button2,
+                    color = if (isSelected) theme.textOnBrand else theme.textSecondary,
+                )
+            }
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // Internal helper — alpha modifier (avoids importing graphicsLayer for simple alpha)
 // ----------------------------------------------------------------------------

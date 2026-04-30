@@ -789,6 +789,41 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitSegmented
+**Purpose:** iOS-native segmented control / tab switcher. Equal-width buttons inside a "selection well" container; tapping a button slides selection to it. Use for **navigation-style switching of screen modes / filters** (e.g. Archived / Blocked tabs on the Archived & Blocked screen, or any 2–3 way exclusive view filter). **Not a form input** — for form-style mutually-aware option choice use `FitSelectionGroup` instead.
+
+**Why separate from `FitSelectionGroup`:** different UX semantics + different visual contract. `FitSelectionGroup` is a chip group answering "which option are you choosing in this form?" (each chip stands alone, has its own border on selection). `FitSegmented` is a slid-pill container answering "which view / filter mode am I in?" (single grouped well with a moving selection pill, no border, brand gradient on the active tab).
+
+**Required props:**
+- `options: [Option]` — generic over any `Hashable` value type, typically an enum with 2–3 cases
+- `selection: Binding<Option>` (iOS) / `selected: Option` + `onSelectedChange: (Option) -> Unit` (Android) — **always single-select**, no nullable / multi-select variant by design
+- `label: (Option) -> String` — human-readable label per option
+
+**Optional props:**
+- `count: ((Option) -> Int?)?` — when set, appended to the label as ` (N)` for tabs that show a counter (e.g. "Archived (3) / Blocked (2)"). `nil` returned for an option means "no counter for this one".
+
+**Variants:** none — always single-select pill switcher. Container is full-width by default (caller wraps in horizontal padding).
+
+**States:**
+- Container: `surfaceHigh` bg, `radius-md` (12pt), `sp-1` (4pt) padding all sides
+- Selected button: `selectionGradient` bg, `textOnBrand` color, `radius-sm` (8pt), no border
+- Unselected button: transparent bg, `textSecondary` color, `radius-sm` (8pt), no border
+- Vertical button padding `sp-2` (8pt). Equal-width via `flex: 1` (iOS `frame(maxWidth: .infinity)`; Android `Modifier.weight(1f)`).
+- Selection transition 150ms ease-in-out on bg + color crossfade.
+- Font: `button2` (medium 16) — slightly larger than the 14pt rendered in the prototype, but stays within the existing token set; do not introduce a `medium-14` font token for one component.
+
+**Used:**
+- `s-archived` (Clients module): Archived / Blocked tabs with counters
+- Future: any screen-mode tab switcher (e.g. coach profile tabs if introduced; any 2–3 way filter row at top of a list)
+
+**Not used for:** form input options (Cash/Card, Personal/Group, Recurring/One-off) — those stay on `FitSelectionGroup` because they answer "what choice?" not "what mode?".
+
+**iOS/Android notes:** Container is `padding(sp-1)` + `background(surfaceHigh).clipShape(roundedRectangle(radius-md))`. Buttons are `frame(maxWidth: .infinity)` + vertical padding `sp-2` + `clipShape(roundedRectangle(radius-sm))`. Animation `easeInOut(0.15)` on the binding change (matches `FitSelectionGroup`).
+
+**Status:** ✅ Swift `FitSegmented.swift`. Compose `FitLists.kt` (alongside FitSelectionGroup). CSS `fit-ui.css` `.fit-segmented` / `.fit-segmented-tab`.
+
+---
+
 ## SOCIAL
 
 ### FitRating
