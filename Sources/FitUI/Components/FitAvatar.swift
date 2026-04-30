@@ -109,11 +109,16 @@ public struct FitAvatar: View {
         }
     }
 
-    @ViewBuilder
     private var shapeView: some Shape {
+        // Both branches type-erase to AnyShape so the opaque return type is
+        // satisfied. @ViewBuilder cannot apply here — Shape isn't a View,
+        // and the implicit `_ConditionalContent` it would synthesise won't
+        // conform to Shape. Explicit `return` keeps Swift 5.7-compatible.
         switch shape {
-        case .circle:   AnyShape(Circle())
-        case .rect10:   AnyShape(RoundedRectangle(cornerRadius: 10))
+        case .circle:
+            return AnyShape(Circle())
+        case .rect10:
+            return AnyShape(RoundedRectangle(cornerRadius: 10))
         }
     }
 }

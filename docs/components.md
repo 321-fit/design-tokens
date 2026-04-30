@@ -68,6 +68,49 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitIconPlate
+**Purpose:** Decorative leading icon container — rounded square with tinted background + centered icon. Used wherever a row / card needs a visual category accent (Dashboard action cards, Settings rows, empty-state CTAs, list category accents). Non-interactive — for tappable plates use `FitIconBtn` with `tintedBg: true`.
+
+**Required props:**
+- `icon: Icon` (SF Symbol on iOS / `ImageVector` on Compose / SVG `<symbol>` reference on web)
+
+**Optional props:**
+- `tone: enum { info, success, warning, error, brand, neutral } = .neutral`
+- `size: enum { sm (24), md (32, default), lg (40) }`
+
+**Sub-elements:** none — pure leaf.
+
+**States:** default. (Decorative; no pressed / hover.)
+
+**Sizing:**
+
+| Size | Container | Icon | Use case |
+|---|---|---|---|
+| sm | 24×24 | 12 | inline rows, compact lists |
+| md | 32×32 | 16 | dashboard action cards, settings row leading |
+| lg | 40×40 | 20 | empty-state CTAs, hero rows |
+
+**Tone → tokens** (read from current FitTheme):
+
+| Tone | Background | Foreground |
+|---|---|---|
+| info | `theme.bgInfoSubtle` | `FitColors.Blue.b500` |
+| success | `theme.bgSuccessSubtle` | `FitColors.Teal.t500` |
+| warning | `theme.bgWarningSubtle` | `FitColors.Yellow.y400` |
+| error | `theme.bgErrorSubtle` | `FitColors.Red.r400` |
+| brand | `theme.bgBrandSubtle` | `FitColors.brandPrimary` |
+| neutral | `theme.surfaceHigher` | `theme.textSecondary` |
+
+**Shape:** `RoundedRectangle(cornerRadius: FitRadius.sm)` (8 px).
+
+**Used:** Dashboard action cards (requests=info, cash=success, review=warning), Settings rows (legacy `FitSettingsCard.icon` callsites should migrate), empty-state CTAs.
+
+**iOS/Android/Web notes:** Identical visual API across platforms. Web uses CSS class `.fit-icon-plate` with modifiers `.fit-icon-plate--{tone}` and `.fit-icon-plate--{size}` (`prototypes/lib/fit-ui.css`).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
 ### FitBadge
 **Purpose:** Tag/status pill — 12px font, pill shape, color variants.
 
@@ -252,7 +295,9 @@ Every component lists **purpose · required props · optional props · variants 
 
 **iOS/Android notes:** Floating with `margin 0 16px 16px`. Backdrop blur 10px (glassmorphism). Shadow `0 0 24px rgba(0,0,0,0.4)` on dark.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Compose API note:** Compose `FitNavbar` accepts `items: List<FitNavbarItem>` where each item carries `tab` + `icon: ImageVector` — icon source is decoupled from the component so consumers can supply custom (non-Material) glyphs per tab without changing the library. iOS resolves icons internally via SF Symbols on the `FitNavTab` enum.
+
+**Status:** ✅ Swift, ✅ Compose.
 
 ---
 
@@ -276,9 +321,11 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Used:** profile sections, event summary cards, settings groups.
 
-**iOS/Android notes:** 20px padding, 16px radius. Dark: surface-high + 1px gray-600 border. Light: white + `0 0 12px rgba(0,0,0,0.07)` shadow.
+**iOS/Android notes:** 20px padding, 16px radius. Dark: `surfaceDefault` only (no border, no shadow — tonal contrast). Light: `surfaceDefault` + 1px `divider` border + soft drop shadow.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Compose API addition:** optional `onClick: (() -> Unit)?` for tappable cards (e.g. `Next session`). Same default styling regardless of clickability.
+
+**Status:** ✅ Swift, ✅ Compose.
 
 ---
 
@@ -478,20 +525,21 @@ Every component lists **purpose · required props · optional props · variants 
 **Optional props:**
 - `todayDay: Int?` (highlight current day)
 - `events: [Int: [EventType]]` (day → [personal, group, external])
+- `mode: enum { nav, select } = .nav` — `nav` drives a connected timeline (calendar.html); `select` is the "pick a day" affordance for invite / group preview flows
 
 **Sub-elements:**
-- `DayChip` — 50×62 rounded card, 16px radius
+- `FitDayButton` — **public sub-component**, 50×62 rounded card, 16px radius. Composable standalone (outside the strip) for invite / select flows that render a small set of explicitly-chosen days rather than a full month.
 - `DayChipName` — 10px uppercase tertiary (Mon, Tue…)
 - `DayChipNum` — 16px 500 (or 600 selected)
 - `DayChipDots` — up to 3 colored dots (4×4 each)
 
 **States:** default, today (brand-primary number), selected (selection-gradient bg + teal-600 border).
 
-**Used:** calendar.html main view, invite.html time selection.
+**Used:** calendar.html main view, invite.html time selection, group session schedule preview.
 
-**iOS/Android notes:** Horizontal `ScrollView` with snap-to-center. Smooth scroll 300ms on tap.
+**iOS/Android notes:** Horizontal `ScrollView` (iOS) / `LazyRow` (Compose) with snap-to-center. Smooth scroll 300ms on tap. `FitDayButton` exposed publicly as `FitDayButton(year:month:day:isSelected:isToday:events:onTap)` (Swift) / `FitDayButton(year, month, day, isSelected, isToday, events, onClick)` (Compose) — same API shape as the strip cell.
 
-**Status:** ❌ Swift missing (JS data-attr pattern exists). Compose: to build (LazyRow).
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
 
 ---
 
@@ -630,7 +678,7 @@ Every component lists **purpose · required props · optional props · variants 
 ---
 
 ### FitSettingsCard
-**Purpose:** Settings row with icon + title + subtitle + chevron/toggle.
+**Purpose:** Settings / location / space row with icon + title + subtitle + chevron + optional "Default" badge.
 
 **Required props:**
 - `icon: Icon`
@@ -638,44 +686,53 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Optional props:**
 - `subtitle: String?`
+- `addressOrSubtitle: String?` — single-line ellipsised subtitle for `.location` / `.space` contexts (overrides `subtitle` when present)
+- `context: enum { settings, location, space } = .settings` — drives the leading container styling
+- `isDefault: Bool = false` — when true, shows a trailing "Default" `FitBadge(.accent)` next to the title
 - `trailing: enum { chevron, toggle(Binding<Bool>), value(String), none }`
 - `destructive: Bool = false`
 - `onTap: (() -> Void)?`
 
-**States:** default, pressed.
+**Variants (`context`):**
+- `settings` — bare 24×24 icon at full theme.textPrimary contrast (default Settings list)
+- `location` / `space` — 40×40 rounded square (`surfaceHigher` bg, `radius-sm`) wrapping the icon — visually echoes `FitParticipant` so location / saved-space rows read at the same weight as participant rows in mixed lists
 
-**Used:** settings screens (profile, notifications, language, accounts, etc.).
+**States:** default, pressed, with-default-badge, with-address (ellipsised), destructive.
 
-**iOS/Android notes:** 12px padding, 16px radius, 24×24 icon. Light theme has box-shadow for elevation.
+**Used:** settings screens (profile, notifications, language, accounts, etc.); location settings (Saved Locations); workout-space management.
 
-**Status:** ✅ Swift exists. Compose: to build.
+**iOS/Android notes:** 12px padding, 16px radius. Settings icon is 24×24 bare; location/space icon container is 40×40 with `surfaceHigher` bg. `addressOrSubtitle` always single-line ellipsis; `subtitle` in `.settings` context allows up to 2 lines. Light theme has box-shadow for elevation.
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
 
 ---
 
 ### FitParticipant
-**Purpose:** User row with avatar + name + sport/detail + optional swipe actions or remove button.
+**Purpose:** User-or-entity row with leading avatar/icon + name + subtitle + trailing affordance + optional state tint. Pervasive across event sheets, clients lists, accounts list, integration providers, balance cash toggle.
 
 **Required props:**
 - `name: String`
 - `subtitle: String`
+- `leading: enum { avatar(initials, bg), icon(systemName, tone) } = .avatar(...)` — `.icon` reuses the row layout for non-user entries (calendar provider rows, integrations)
 
 **Optional props:**
-- `avatar: String` (initials)
-- `isRemovable: Bool = false`
-- `onRemove: (() -> Void)?`
-- `isPaid: Bool = false`
-- `paymentType: enum { cash, card, none }`
-- `isYou: Bool = false` (highlight)
+- `trailing: enum { chevron, edit, dot(color), swipe, none } = .chevron` — `.swipe` is informational; the swipe gesture is wired by the caller (`.swipeActions` on iOS, `SwipeToDismissBox` on Compose)
+- `state: enum { default, connected, disconnected, disabled, destructive } = .default` — tints the row background (`bg.success-subtle` / `bg.warning-subtle` / `bg.error-subtle`), the name color, and (for `.disabled`) reduces overall opacity
+- `isRemovable: Bool = false` + `onRemove: (() -> Void)?` — legacy explicit remove button (red ⊗) — when set, takes precedence over the trailing enum
+- `isPaid: Bool = false` — dims avatar + uses `text-secondary` for the name
+- `payment: enum { cash, card, none } = .none` — appends a `FitBadge(.neutral)` Cash/Card pill next to the subtitle
+- `isYou: Bool = false` — selection-gradient row highlight, `text-on-brand` subtitle
+- `onTap: (() -> Void)?`
 
-**States:** default, paid (dimmed name + avatar), you (selection-gradient bg), swipe-left (remove action), swipe-right (mark paid).
+**States:** default, paid (dimmed name + avatar), you (selection-gradient bg), connected (success tint), disconnected (warning tint), disabled (60% opacity, strikethrough name, no tap), destructive (error tint, red name), swipe-left (remove action), swipe-right (mark paid).
 
-**Used:** event sheet participants, clients list (swipe remove), balance cash toggle.
+**Used:** event sheet participants, clients list (swipe remove), balance cash toggle, accounts list (Settings → Accounts) where each row maps to a connected provider with status, integrations.
 
 **iOS/Android notes:**
-- iOS: SwiftUI `.swipeActions` for native feel
-- Android: `SwipeToDismissBox` from Material 3
+- iOS: SwiftUI `.swipeActions` for native feel; new `leading` / `trailing` enums replace the old implicit chevron-then-X pattern; the **legacy initializer** `init(name:, subtitle:, avatarInitials:, isRemovable:, onRemove:, isPaid:, payment:, isYou:)` is preserved so existing call sites compile unchanged.
+- Android: `SwipeToDismissBox` from Material 3; `leading: FitParticipantLeading` is sealed with `Avatar` / `IconPlate` cases.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
 
 ---
 
@@ -688,14 +745,20 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Optional props:**
 - `icon: Icon?` (iOS `systemImage`) / `icon: ImageVector?` (Android)
+- `size: enum { sm (h=40), md (h=48, default), lg (h=56) } = .md`
+
+**Variants (`size`):**
+- `sm` — 40px height, `body2` font (14pt), used inline in compact filter rows
+- `md` — 48px height, `body1` font (16pt), default form chip
+- `lg` — 56px height, `body1` font (16pt), prominent toggle (matches `FitInput` height for tall layouts; rare)
 
 **States:** unselected (surface-high bg, no border), selected (selection-gradient bg, selection-border).
 
 **Used:** standalone toggleable tags. Most form-style chip groups should use `FitSelectionGroup` instead.
 
-**iOS/Android notes:** 48px height, `radius-md`, `body1` font, `sp-2` gap inside.
+**iOS/Android notes:** Per `size`. Always `radius-md`, `sp-2` gap inside. Selection animation 150ms ease-in-out.
 
-**Status:** ✅ Swift `FitChip.swift`. Compose `FitLists.kt`.
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
 
 ---
 
@@ -726,6 +789,41 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitSegmented
+**Purpose:** iOS-native segmented control / tab switcher. Equal-width buttons inside a "selection well" container; tapping a button slides selection to it. Use for **navigation-style switching of screen modes / filters** (e.g. Archived / Blocked tabs on the Archived & Blocked screen, or any 2–3 way exclusive view filter). **Not a form input** — for form-style mutually-aware option choice use `FitSelectionGroup` instead.
+
+**Why separate from `FitSelectionGroup`:** different UX semantics + different visual contract. `FitSelectionGroup` is a chip group answering "which option are you choosing in this form?" (each chip stands alone, has its own border on selection). `FitSegmented` is a slid-pill container answering "which view / filter mode am I in?" (single grouped well with a moving selection pill, no border, brand gradient on the active tab).
+
+**Required props:**
+- `options: [Option]` — generic over any `Hashable` value type, typically an enum with 2–3 cases
+- `selection: Binding<Option>` (iOS) / `selected: Option` + `onSelectedChange: (Option) -> Unit` (Android) — **always single-select**, no nullable / multi-select variant by design
+- `label: (Option) -> String` — human-readable label per option
+
+**Optional props:**
+- `count: ((Option) -> Int?)?` — when set, appended to the label as ` (N)` for tabs that show a counter (e.g. "Archived (3) / Blocked (2)"). `nil` returned for an option means "no counter for this one".
+
+**Variants:** none — always single-select pill switcher. Container is full-width by default (caller wraps in horizontal padding).
+
+**States:**
+- Container: `surfaceHigh` bg, `radius-md` (12pt), `sp-1` (4pt) padding all sides
+- Selected button: `selectionGradient` bg, `textOnBrand` color, `radius-sm` (8pt), no border
+- Unselected button: transparent bg, `textSecondary` color, `radius-sm` (8pt), no border
+- Vertical button padding `sp-2` (8pt). Equal-width via `flex: 1` (iOS `frame(maxWidth: .infinity)`; Android `Modifier.weight(1f)`).
+- Selection transition 150ms ease-in-out on bg + color crossfade.
+- Font: `button2` (medium 16) — slightly larger than the 14pt rendered in the prototype, but stays within the existing token set; do not introduce a `medium-14` font token for one component.
+
+**Used:**
+- `s-archived` (Clients module): Archived / Blocked tabs with counters
+- Future: any screen-mode tab switcher (e.g. coach profile tabs if introduced; any 2–3 way filter row at top of a list)
+
+**Not used for:** form input options (Cash/Card, Personal/Group, Recurring/One-off) — those stay on `FitSelectionGroup` because they answer "what choice?" not "what mode?".
+
+**iOS/Android notes:** Container is `padding(sp-1)` + `background(surfaceHigh).clipShape(roundedRectangle(radius-md))`. Buttons are `frame(maxWidth: .infinity)` + vertical padding `sp-2` + `clipShape(roundedRectangle(radius-sm))`. Animation `easeInOut(0.15)` on the binding change (matches `FitSelectionGroup`).
+
+**Status:** ✅ Swift `FitSegmented.swift`. Compose `FitLists.kt` (alongside FitSelectionGroup). CSS `fit-ui.css` `.fit-segmented` / `.fit-segmented-tab`.
+
+---
+
 ## SOCIAL
 
 ### FitRating
@@ -748,6 +846,213 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitProfileHeader
+**Purpose:** Profile / coach hero — large avatar + name + metadata row + optional bio + optional trailing edit pencil. Used at the top of own-profile, viewed-coach, viewed-athlete screens.
+
+**Required props:**
+- `initials: String` (or `imageURL: URL?` on iOS for the loaded photo)
+- `name: String`
+
+**Optional props:**
+- `sports: [String] = []` — joined with ", " into the metadata row
+- `location: String?` — first segment of the metadata row
+- `bio: String?` — body1 text below the header row, multi-line
+- `onEdit: (() -> Void)?` — when set, renders a trailing `FitIconBtn` with the edit pencil
+
+**Sub-elements:** `FitAvatar(.xl)` leading, name (24pt 600), metadata row (`body2`, text-tertiary, `loc · sports` joined by `·`), optional bio block (`body1`, text-secondary).
+
+**States:** default, with-edit (trailing icon button visible), text-only (no avatar image, initials).
+
+**Used:** profile.html (own + viewed), coach detail, athlete detail.
+
+**iOS/Android notes:** 80×80 avatar (`FitSize.avatarXl`); 24pt 600 name; metadata row joined by ` · `. Edit affordance is `FitIconBtn(systemName: "pencil")` (iOS) / `FitIconBtn(icon: Icons.Default.Edit)` (Compose).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+## DASHBOARD / STATS
+
+### FitStatTile
+**Purpose:** Card-level stat row — leading `FitIconPlate` + title + subtitle + optional chevron. The kit form of the dashboard `.dash-action` pattern (26 prototype callsites).
+
+**Required props:**
+- `title: String`
+- `subtitle: String`
+
+**Optional props:**
+- `icon: Icon?` (SF Symbol / ImageVector)
+- `tone: FitIconPlate.Tone = .neutral` — `.info / .success / .warning / .error / .brand / .neutral` — drives the icon plate background + color
+- `showChevron: Bool = true`
+- `onTap: (() -> Void)?`
+
+**Sub-elements:** `FitIconPlate(size: .md)` leading (32×32, 16px icon); title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line; trailing 18×18 chevron text-tertiary.
+
+**States:** default, pressed.
+
+**Used:** coach dashboard action cards (Pending requests, Awaiting reviews, Today's earnings, etc.), athlete home stat cards, balance summary blocks.
+
+**iOS/Android notes:** 14px×12px padding (horizontal × vertical); `FitRadius.lg` corner; `theme.surfaceHigh` bg with 1px `theme.divider` border. On light theme the border is the visible affordance (no shadow needed). Full-width within container; row gap `sp-3`.
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitTransactionRow
+**Purpose:** Balance / payouts list row — leading `FitIconPlate` keyed to txn type, title + subtitle, trailing semantic-colored amount. The kit form of the balance.html `.aa-row` / txn pattern (92 prototype callsites).
+
+**Required props:**
+- `type: enum { earning, payout, refund }`
+- `title: String`
+- `subtitle: String`
+- `amount: String` (already-formatted, e.g. `"+€42.00"` / `"−€10.50"`)
+
+**Optional props:**
+- `date: String?` — small footnote below the amount (right column)
+- `isPending: Bool = false` — switches the amount color to `text-tertiary` (e.g. clearing payouts)
+- `onTap: (() -> Void)?`
+
+**Variants (`type`):**
+- `earning` — `FitIconPlate(.success, "arrow.up.right")`, amount `Teal.t500`
+- `payout` — `FitIconPlate(.success, "arrow.right")`, amount `Teal.t500`
+- `refund` — `FitIconPlate(.error, "arrow.uturn.left")`, amount `Red.r400`
+- `isPending` (any type) — amount renders in `text-tertiary` regardless
+
+**States:** default, pressed.
+
+**Used:** balance.html transaction list, coach payouts history, athlete top-up history.
+
+**iOS/Android notes:** 32×32 leading icon plate; title 15pt 500 single-line; subtitle 13pt text-tertiary single-line; amount 15pt 500 right-aligned with optional 11pt date below. Padding `sp-3` vertical, no horizontal padding (caller adds container padding).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitEarningsHero
+**Purpose:** Balance / earnings hero card — large amount + period label, optional trend pill, optional 60/40 breakdown grid, optional planned-line. The kit form of the balance.html hero (33 prototype callsites).
+
+**Required props:**
+- `amount: String`
+- `period: String`
+
+**Optional props:**
+- `trend: enum { up(percent), down(percent), flat }?` — renders as a `FitBadge` (`.success` for up, `.danger` for down, `.neutral` for flat) in the header trailing slot
+- `breakdown: [FitEarningsHeroBreakdown] = []` — up to 2 entries (60/40 split row below the amount)
+- `planned: String?` — small footnote line at the bottom (e.g. "+€80 planned this week")
+- `isEmpty: Bool = false` — replaces the amount with `—` and hides trend / breakdown / planned (empty state)
+
+**Sub-elements:** amount (28pt 600 text-primary), period (13pt text-tertiary), divider, breakdown columns (each: 13pt label text-tertiary + 16pt 500 value text-primary), planned (13pt text-tertiary).
+
+**States:** default, with-trend, with-breakdown, with-planned, empty (`isEmpty: true`).
+
+**Used:** balance.html top hero, coach earnings dashboard hero.
+
+**iOS/Android notes:** 16px padding, `FitRadius.lg`, `theme.surfaceHigh` bg. Header row uses `firstTextBaseline` alignment so trend pill aligns with amount baseline. Breakdown columns split `0.6 : 0.4` weight.
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitPaymentMethodCard
+**Purpose:** Provider selector / connected-method card — leading 40×40 logo container + title + subtitle (with optional status dot) + trailing button or "Coming soon" badge. Used in payment / payout / balance settings (7 prototype callsites).
+
+**Required props:**
+- `logoLetter: String` — first letter of provider name (e.g. "S" for Stripe). Replaced with `logo: Image?` once we have proper provider artwork.
+- `title: String`
+- `subtitle: String`
+
+**Optional props:**
+- `status: enum { connected, actionRequired, notConnected, comingSoon } = .notConnected`
+- `actionLabel: String?` — label for the trailing button (e.g. "Connect", "Manage")
+- `onAction: (() -> Void)?`
+- `disabled: Bool = false` — entire card at 60% opacity, no tap
+- `onTap: (() -> Void)?`
+
+**Variants (`status`):**
+- `connected` — leading 6×6 success dot before subtitle, optional `actionLabel` button (e.g. "Manage")
+- `actionRequired` — leading 6×6 warning dot before subtitle, optional `actionLabel` button (e.g. "Resolve")
+- `notConnected` — no dot, optional `actionLabel` button (e.g. "Connect")
+- `comingSoon` — no dot, trailing `FitBadge("Coming soon", .neutral)` instead of a button
+
+**States:** default, disabled (60% opacity, no tap).
+
+**Used:** Settings → Payments / Payouts; balance.html account list.
+
+**iOS/Android notes:** 14px × 12px padding, `FitRadius.md`. Logo container 40×40, `radius-sm`, `theme.surfaceHigher` bg, 18pt 600 letter. Title 15pt 500. Trailing button is the secondary `FitButton` style at `.sm` size; on Compose it's inlined as a pill (FitButton always fills width in Compose, so the row uses an inline pill that matches the secondary style).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitAvailabilityDay
+**Purpose:** Coach availability row for one day-of-week — header (`FitCheckbox` + day name) + collapsible time-interval list + add/remove buttons + optional validation error. Used in coach onboarding (availability step) and Settings → Availability (22 prototype callsites).
+
+**Required props:**
+- `day: enum DayOfWeek` (`.monday` … `.sunday`)
+- `isActive: Binding<Bool>`
+- `intervals: Binding<[Interval]>` — array of `(start: String, end: String)`
+
+**Optional props:**
+- `onAddInterval: (() -> Void)?`
+- `onRemoveInterval: ((Int) -> Void)?` — index into the intervals array
+- `onIntervalEdit: ((Int) -> Void)?` — index into the intervals array (caller opens the time picker)
+- `validationError: String?` — appended below the intervals as `text-error`, 13pt
+
+**Sub-elements:** header row (`FitCheckbox` 28×28 + day label 16pt 500 — text-primary when active, text-tertiary when inactive); intervals list (visible only when `isActive`); each interval row: `time-input` 56×56 box + "to" + 56×56 box + remove ⊗; "Add interval" button (text + plus icon, brand-primary); error text 13pt `Red.r400`.
+
+**States:** inactive (header only, day name dimmed), active (intervals visible), with-error (red text below intervals).
+
+**Used:** coach onboarding availability step, Settings → Availability.
+
+**iOS/Android notes:** Time inputs are 56×56 buttons (not free-form text fields) — caller opens the platform-native time picker on tap (UIDatePicker on iOS, Material3 TimePicker on Compose) per `feedback_native_pickers`. Intervals padded by `checkboxSize + sp-3` from the left, aligning with the day label baseline.
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitSpotCounter
+**Purpose:** Group-training capacity bar — 12px tall fill bar with proportional teal fill and centered "X of Y spots" label. Used on group session cards / event sheets (33 prototype callsites).
+
+**Required props:**
+- `available: Int`
+- `total: Int`
+
+**Optional props:**
+- `showLabel: Bool = true` — when false, render just the bar (compact filter rows)
+- `compact: Bool = false` — switches the bar to 8px tall (fits inside compact cards)
+
+**Sub-elements:** track (`theme.surfaceHigh`, `radius-md`); fill (`Teal.t500`, proportional width = `available / total`); label (11pt 500 text-primary, centered overlay).
+
+**States:** default, full (fill = 100%), empty (fill = 0%, label still shown), compact (8px tall).
+
+**Used:** group session ticket / event sheet capacity, Discover screen group cards.
+
+**iOS/Android notes:** Fill width clamps to `[0, 1]` of `available / total` with `total` defaulted to 1 if zero (avoids division-by-zero). Label is overlaid via `ZStack` (Swift) / `Box(contentAlignment = Center)` (Compose).
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+## AUTH
+
+### FitPasswordRule
+**Purpose:** Vertical list of password validation rules — 12×12 check icon (text-tertiary if unmet, Teal.t500 if met) + 14pt rule text. Used under password input on signup / reset / change-password.
+
+**Required props:**
+- `rules: [(label: String, isMet: Bool)]`
+
+**Sub-elements:** each rule = 12×12 icon (checkmark when met / circle when unmet) + 14pt label.
+
+**States:** all-unmet (all gray), partial-met (teal checks for met rules), all-met (all teal).
+
+**Used:** signup, password reset, change-password screens, settings → security.
+
+**iOS/Android notes:** 6px gap between rules; icon-to-label gap `sp-2`. Met rules use `text-secondary` for the label (more contrast than tertiary, signals "yes you got this"); unmet rules use `text-tertiary`.
+
+**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
 ## SUMMARY
 
 | Category | Components | Swift ✅ | Build ❌ |
@@ -758,10 +1063,16 @@ Every component lists **purpose · required props · optional props · variants 
 | Calendar | 4 | 0 | 4 |
 | Loading | 1 family | 0 | 1 |
 | Lists | 4 | 2 | 2 |
-| Social | 1 | 0 | 1 |
-| **Total native** | **29** | **7** | **22 + refactor** |
+| Social | 2 | 0 | 2 |
+| Dashboard / Stats | 6 | 6 | 0 |
+| Auth | 1 | 1 | 0 |
+| **Total native** | **37** | **14** | **22 + refactor** |
 
-Compose: **29 new** (no existing Android components).
+Compose: **37 new** (no existing Android components).
+
+**Gap-batch additions (2026-04-28):**
+- Extensions: FitParticipant (leading/trailing/state), FitChip (size), FitSettingsCard (context/isDefault/addressOrSubtitle), FitDayStrip (mode + standalone FitDayButton)
+- New: FitStatTile, FitTransactionRow, FitEarningsHero, FitPaymentMethodCard, FitAvailabilityDay, FitSpotCounter, FitProfileHeader, FitPasswordRule
 
 ## Meta notes
 

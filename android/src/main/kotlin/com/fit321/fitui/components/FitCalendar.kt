@@ -28,9 +28,13 @@ import java.util.Locale
 
 // ============================================================================
 // FitDayStrip — horizontal day chips with dots
+// Mode = nav (calendar timeline) | select (invite / group preview).
+// FitDayButton is exposed standalone for non-strip flows.
 // ============================================================================
 
 enum class FitDayEventType { Personal, Group, External }
+
+enum class FitDayStripMode { Nav, Select }
 
 @Composable
 fun FitDayStrip(
@@ -41,59 +45,84 @@ fun FitDayStrip(
     onDaySelect: (Int) -> Unit,
     todayDay: Int? = null,
     events: Map<Int, Set<FitDayEventType>> = emptyMap(),
+    mode: FitDayStripMode = FitDayStripMode.Nav,
     modifier: Modifier = Modifier
 ) {
-    val theme = LocalFitTheme.current
     LazyRow(
         modifier = modifier.padding(horizontal = FitSpacing.sp4),
         horizontalArrangement = Arrangement.Start
     ) {
         items(days) { index ->
             val day = index + 1
-            val isSelected = selectedDay == day
-            val isToday = todayDay == day
-            val weekday = weekdayAbbrev(year, month, day)
+            FitDayButton(
+                year = year,
+                month = month,
+                day = day,
+                isSelected = selectedDay == day,
+                isToday = todayDay == day,
+                events = events[day] ?: emptySet(),
+                onClick = { onDaySelect(day) }
+            )
+        }
+    }
+}
 
-            Column(
-                modifier = Modifier
-                    .size(50.dp, 62.dp)
-                    .clip(RoundedCornerShape(FitRadius.lg))
-                    .then(
-                        if (isSelected)
-                            Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.lg))
-                                .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.lg))
-                        else Modifier
-                    )
-                    .clickable { onDaySelect(day) },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    weekday.uppercase(),
-                    style = FitFont.captionMicro,
-                    color = if (isSelected) theme.textPrimary else theme.textTertiary
-                )
-                Spacer(Modifier.height(FitSpacing.sp1))
-                Text(
-                    "$day",
-                    style = FitFont.body2.copy(
-                        fontSize = 16.sp,
-                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
-                    ),
-                    color = when {
-                        isSelected -> theme.textPrimary
-                        isToday -> FitColors.brandPrimary
-                        else -> theme.textSecondary
-                    }
-                )
-                Spacer(Modifier.height(2.dp))
-                val types = events[day] ?: emptySet()
-                Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                    if (FitDayEventType.Personal in types) Dot(FitColors.Teal.t500)
-                    if (FitDayEventType.Group    in types) Dot(FitColors.brandPrimary)
-                    if (FitDayEventType.External in types) Dot(theme.textTertiary)
-                }
+/**
+ * Standalone day chip — same 50×62 visual as a strip cell, but composable
+ * outside `FitDayStrip` (invite flows, group session schedule preview).
+ * Mirrors Swift `FitDayButton`.
+ */
+@Composable
+fun FitDayButton(
+    year: Int,
+    month: Int,
+    day: Int,
+    isSelected: Boolean,
+    isToday: Boolean = false,
+    events: Set<FitDayEventType> = emptySet(),
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val theme = LocalFitTheme.current
+    val weekday = weekdayAbbrev(year, month, day)
+
+    Column(
+        modifier = modifier
+            .size(50.dp, 62.dp)
+            .clip(RoundedCornerShape(FitRadius.lg))
+            .then(
+                if (isSelected)
+                    Modifier.background(FitColors.selectionGradient, RoundedCornerShape(FitRadius.lg))
+                        .border(1.dp, FitColors.selectionBorder, RoundedCornerShape(FitRadius.lg))
+                else Modifier
+            )
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            weekday.uppercase(),
+            style = FitFont.captionMicro,
+            color = if (isSelected) theme.textPrimary else theme.textTertiary
+        )
+        Spacer(Modifier.height(FitSpacing.sp1))
+        Text(
+            "$day",
+            style = FitFont.body2.copy(
+                fontSize = 16.sp,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+            ),
+            color = when {
+                isSelected -> theme.textPrimary
+                isToday -> FitColors.brandPrimary
+                else -> theme.textSecondary
             }
+        )
+        Spacer(Modifier.height(2.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+            if (FitDayEventType.Personal in events) Dot(FitColors.Teal.t500)
+            if (FitDayEventType.Group    in events) Dot(FitColors.brandPrimary)
+            if (FitDayEventType.External in events) Dot(theme.textTertiary)
         }
     }
 }

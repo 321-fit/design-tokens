@@ -4,10 +4,10 @@
 //
 
 // Do not edit directly
-// Generated on Mon, 27 Apr 2026 17:53:37 GMT
+// Generated on Tue, 28 Apr 2026 16:32:19 GMT
 
 
-import UIKit
+import SwiftUI
 
 public class DesignTokensComponent {
     public static let componentAvatarLg = 48 /* Event sheet / card avatar */
@@ -53,17 +53,7 @@ public class DesignTokensComponent {
     public static let componentInputHeight = 56
     public static let componentInputPaddingX = 12
     public static let componentInputRadius = 12
-    public static let componentInputStatesDisabledLabelDark = #979EA5
-    public static let componentInputStatesDisabledLabelLight = #ACB1B6
     public static let componentInputStatesDisabledOpacity = 0.6
-    public static let componentInputStatesErrorBorder = #F05C5B
-    public static let componentInputStatesErrorTextColor = #F05C5B
-    public static let componentInputStatesFilledDark = #F7F7F8
-    public static let componentInputStatesFilledLight = #1F2123
-    public static let componentInputStatesFocusBorderDark = #5B6269
-    public static let componentInputStatesFocusBorderLight = #ACB1B6
-    public static let componentInputStatesPlaceholderDark = #757E87
-    public static let componentInputStatesPlaceholderLight = #979EA5
     public static let componentNavbarBlur = 12
     public static let componentNavbarHeight = 56
     public static let componentNavbarItemSize = 56
@@ -91,7 +81,6 @@ public class DesignTokensComponent {
     public static let componentSnackbarDotSize = 6
     public static let componentSnackbarFontSize = 13
     public static let componentSnackbarPadding = 10
-    public static let componentSnackbarPosition = bottom-100px
     public static let componentSnackbarRadius = 9999
     public static let componentSportChipFontSize = 16
     public static let componentSportChipIconSize = 24
@@ -117,7 +106,6 @@ public class DesignTokensComponent {
     public static let componentToastFontSize = 13
     public static let componentToastIconSize = 16
     public static let componentToastPadding = 12
-    public static let componentToastPosition = top-60px
     public static let componentToastRadius = 12
     public static let componentWheelPickerItemFontSize = 18
     public static let componentWheelPickerLabelFontSize = 12

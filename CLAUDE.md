@@ -128,8 +128,20 @@ cp ../design-tokens/build/css/tokens.css prototypes/lib/fit-ui-tokens.css
 npm install        # Install style-dictionary (run once)
 npm run build      # Generate Swift + Kotlin XML + CSS outputs
 swift build        # (requires iOS SDK) verify Swift package compiles
-# ./gradlew :android:build   # (when Gradle wrapper added) verify Android
+
+# iOS — full FitUI Swift compile via Xcode toolchain (most thorough check):
+xcodebuild -scheme FitUI -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/dt-build build
+
+# Android — verify Compose components compile (requires JDK 17 on PATH):
+./gradlew :android:assembleDebug
 ```
+
+**Verification expectation.** Every PR touching `Sources/FitUI/Components/` or
+`android/src/main/kotlin/.../components/` must show the corresponding build
+command result (BUILD SUCCEEDED) in the PR description. Compose component
+edits without a Gradle build run are a frequent source of "ships broken on
+Android" regressions — the design-tokens module has its own wrapper for this
+exact purpose.
 
 ## Components
 

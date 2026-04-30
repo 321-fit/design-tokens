@@ -4,10 +4,10 @@
 //
 
 // Do not edit directly
-// Generated on Mon, 27 Apr 2026 17:53:37 GMT
+// Generated on Tue, 28 Apr 2026 16:32:19 GMT
 
 
-import UIKit
+import SwiftUI
 
 public class DesignTokensTypography {
     public static let fontBody1LetterSpacing = "0"

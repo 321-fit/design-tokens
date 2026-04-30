@@ -10,7 +10,10 @@ let package = Package(
     targets: [
         .target(
             name: "FitUI",
-            path: "Sources/FitUI"
+            path: "Sources/FitUI",
+            resources: [
+                .process("Resources")
+            ]
         ),
     ]
 )
