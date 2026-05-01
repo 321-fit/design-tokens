@@ -44,7 +44,7 @@ Every component lists **purpose · required props · optional props · variants 
 ---
 
 ### FitIconBtn
-**Purpose:** Circular icon-only button (32px) for header, toolbar, inline actions.
+**Purpose:** Circular icon-only button (32px) for header right-slot actions, toolbar, inline actions. Visual weight matches `.fit-header-back` so left + right of header read as a single group.
 
 **Required props:**
 - `icon: Icon`
@@ -55,14 +55,14 @@ Every component lists **purpose · required props · optional props · variants 
 - `tintedBg: Bool = false` — adds background tint matching color
 
 **Variants:**
-- default — surface-high bg, text-secondary icon
-- `tintedBg: true` with `color: error` — used for header trash icons (10% red bg)
+- **default** — translucent blur bg (`rgba(117,126,135,0.3)` + 4px blur) in dark, subtle `surface-high` solid bg in light. Icon color = `text-primary` (matching back chevron). SVG stroke `1.8` (UI rule per `feedback_icon_system`; back chevron uses `2` for nav).
+- `tintedBg: true` with `color: error` — used for header trash icons (10% red bg + red stroke).
 
 **States:** default, pressed (scale 0.95)
 
-**Used:** headers (menu, bell, +, trash), balance account card actions.
+**Used:** headers (menu, bell, +, trash, share), balance account card actions, notification inbox `⋯` menu trigger.
 
-**iOS/Android notes:** 32×32 container, 16×16 SVG, min 44pt tap target (iOS) / 48dp (Android).
+**iOS/Android notes:** 32×32 container, 16×16 SVG, min 44pt tap target (iOS) / 48dp (Android). On iOS, replicate the dark-theme blur via `.background(.ultraThinMaterial)` masked to a circle; on Compose, use a translucent surface tint.
 
 **Status:** ❌ Swift missing. Compose: to build.
 
