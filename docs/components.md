@@ -64,7 +64,7 @@ Every component lists **purpose · required props · optional props · variants 
 
 **iOS/Android notes:** 32×32 container, 16×16 SVG, min 44pt tap target (iOS) / 48dp (Android). On iOS, replicate the dark-theme blur via `.background(.ultraThinMaterial)` masked to a circle; on Compose, use a translucent surface tint.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitIconBtn.swift`), ✅ Compose (`components/FitPrimitives.kt`), ✅ CSS. ⚠️ Both native impls currently use the old spec (`textSecondary` icon, flat `surfaceHigh` bg) — sync to the new spec above is tracked separately.
 
 ---
 
@@ -925,6 +925,42 @@ Every component lists **purpose · required props · optional props · variants 
 **iOS/Android notes:** 32×32 leading icon plate; title 15pt 500 single-line; subtitle 13pt text-tertiary single-line; amount 15pt 500 right-aligned with optional 11pt date below. Padding `sp-3` vertical, no horizontal padding (caller adds container padding).
 
 **Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+
+---
+
+### FitNotificationRow
+**Purpose:** Notification inbox feed row — leading `FitIconPlate` keyed to notification type, title + 2-line subtitle, trailing relative timestamp, optional unread brand dot. Specifically distinct from `FitTransactionRow` (which has semantic-colored amount in trailing slot and payment-typed variants); notifications need timestamp trailing + unread-state visual cue.
+
+**Required props:**
+- `type: enum { request, reschedule, approved, cancelled, declined, expired, onboardingDone }`
+- `title: String`
+- `subtitle: String`
+- `time: String` (already-formatted relative or short absolute, e.g. `"2h ago"` / `"Apr 14"`)
+
+**Optional props:**
+- `isUnread: Bool = false` — renders a 6×6 brand-primary dot at the row's left edge; title also de-emphasizes (weight + color) when read
+- `onTap: (() -> Void)?` — fires before navigation; caller handles optimistic mark-read + routing per `TargetData`
+
+**Variants (`type` → leading `FitIconPlate` color/icon):**
+- `request` — `FitIconPlate(.brand, "calendar.badge.plus")` — for `*CreatedTrainingRequest` events
+- `reschedule` — `FitIconPlate(.warning, "clock")` — for `*RescheduledTraining` events
+- `approved` — `FitIconPlate(.success, "checkmark.circle")` — for `trainingRequestApproved`
+- `cancelled` — `FitIconPlate(.error, "xmark.circle")` — for `trainingEventCancelled`
+- `declined` — `FitIconPlate(.neutral, "xmark.circle")` — for `trainingRequestDeclined` (low-severity, neutral not error)
+- `expired` — `FitIconPlate(.neutral, "clock.badge.xmark")` — for `pendingRequestAutoDeclined`
+- `onboardingDone` — `FitIconPlate(.success, "person.crop.circle.badge.checkmark")` — for `athleteOnboardingCompleted`
+
+**States:** default, pressed (background `surface-high` on tap), unread (`isUnread = true`)
+
+**Used:** `s-notifications` (notifications inbox in coach/athlete dashboard module). Kit form of the `flows/coach/dashboard.html` `.notif-row` pattern.
+
+**iOS/Android notes:**
+- 32×32 leading icon plate via existing `FitIconPlate`; title 15pt 500 single-line ellipsis (de-emphasizes to 400 / `text-secondary` when read); time 13pt `text-tertiary` flex-shrink-0; subtitle 13pt `text-tertiary` 2-line clamp; vertical padding `sp-3`, left padding `22px` to clear unread dot
+- Unread dot: 6×6 circle, `brand.primary` fill, absolute-positioned at left edge (8px from row leading), vertically centered to first line of title
+- Tap: `withAnimation(.fitFast)` strip the unread dot + de-emphasize title BEFORE navigation fires (optimistic). On iOS use `UIImpactFeedbackGenerator` light tap on row press
+- Decoupled from notification taxonomy: kit owns `type` enum and visual mapping; backend `TargetRoute` → kit `type` translation lives at the call site (a single helper enum on each platform)
+
+**Status:** ❌ Swift missing, ❌ Compose missing, ✅ CSS (`flows/coach/dashboard.html` `.notif-row`).
 
 ---
 
