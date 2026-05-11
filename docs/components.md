@@ -871,6 +871,74 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitStatStrip
+**Purpose:** Horizontal 4-column readout (Rating / Reviews / Sessions / Price from) used on coach profile in both athlete-view (`s-coach-v2`) and coach-view (`s-coach-profile`). Read-only, system-computed values. One column may be visually accented (e.g. price-from in teal).
+
+**Required props:**
+- `items: [Item]` — variable-length but typically 4 columns. Each `Item` carries `value: String`, `label: String`, `accent: Bool = false`.
+
+**Sub-elements:** flex row with equal-width columns + 1px vertical dividers (`theme.divider`). Each column: value (18pt 600 `theme.textPrimary`, or `Teal.t500` if `accent`) + label (12pt `theme.textTertiary`). Container: 12px×16px padding (vertical × horizontal), 12px corner radius, `theme.surfaceHigh` background. CSS class `.fit-stat-strip` + `-col`, `-value`, `-value--accent`, `-label`, `-divider`.
+
+**States:** default (real values), zero-state (`—` / `0`s with the price keeping `accent: true` so the column still reads as the "from" price).
+
+**Used:** coach profile (athlete-view + coach-view); future athlete dashboards may reuse.
+
+**iOS/Android notes:** Use `FitStatStripItem` (Swift) / `FitStatStripItem` (Compose) data classes. Compose enforces a 32dp tall divider column (vertically centered) to match the CSS divider height; iOS expands the `Rectangle` to fill row height. Accent color is `FitColors.Teal.t500` on both platforms — not theme-aware (price is a brand-accent signal, deliberate).
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitStatStrip.swift`), ✅ Compose (`components/FitStatStrip.kt`), ✅ CSS (`.fit-stat-strip` + sub-elements).
+
+---
+
+### FitMaturityProgress
+**Purpose:** "You're a new coach" graduation block on the coach-side profile. Leading icon plate + title + sub-copy + check-list of graduation criteria + optional Learn-more link. Frames the new-coach period as benefits, not burden (search-rank boost on graduation per memory `project_coach_maturity`).
+
+**Required props:**
+- `title: String`
+- `subtitle: String`
+- `criteria: [Criterion]` — each `Criterion` carries `label: String`, `done: Bool`
+
+**Optional props:**
+- `learnMoreLabel: String = "Learn more"`
+- `onLearnMore: (() -> Void)?` — when omitted, the chevron link is hidden
+
+**Visibility policy:** caller-controlled. Render only while `reviews_count < 1 OR sessions_count < 3` (auto-hide after graduation). The component itself does not gate.
+
+**Sub-elements:** outer card 14px radius, 1px `theme.divider` border, 16px padding. Header row = `FitIconPlate(success, .md)` star + 15pt 500 title. Sub = 13pt `theme.textSecondary`. Each criterion row = 18dp circle (`Teal.t500` filled when `done`, outlined `theme.divider` otherwise) + label (13pt; strike-through + `textTertiary` when `done`). Learn-more = brand-color text + 13dp chevron.
+
+**States:** default (some criteria pending), partial (some done — strike-through applied), all-done (caller should stop rendering — this is the post-graduation state, no UI fallback inside the component).
+
+**Used:** coach profile (`s-coach-profile`), new-coach states only.
+
+**iOS/Android notes:** Use `FitMaturityCriterion(label, done)` data class. Rule per memory `project_coach_maturity`: threshold `reviews >= 1 AND sessions >= 3` for graduation; component is agnostic, caller computes done state per criterion.
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitMaturityProgress.swift`), ✅ Compose (`components/FitMaturityProgress.kt`), ✅ CSS (`.fit-maturity-progress` + sub-elements).
+
+---
+
+### FitReviewCard
+**Purpose:** 280pt-wide snap card for a single review entry — reviewer avatar + name + relative time + 5-star rating + 4-line clamped body. Plus a trailing "Show all N reviews" variant that closes the carousel.
+
+**Variants:**
+- `.review(reviewer, initials, when, stars, body)` — default content card
+- `.showAll(total)` — terminal CTA card with arrow + "Show all N reviews"
+
+**Optional props:**
+- `onTap: (() -> Void)?` — tap routing (review → expanded sheet; showAll → all-reviews push screen)
+
+**Sub-elements:** 280pt fixed width, 14px radius, 14px padding. Head row = `FitAvatar(.sm, gray)` + reviewer name (14pt 500) + when (12pt `theme.textTertiary`). Stars row = 5 × 12pt stars (`Teal.t500` filled, `theme.textTertiary` empty), 2px gap. Body = 14pt `theme.textSecondary`, 4-line `lineClamp` with ellipsis. CSS classes `.fit-review-card`, `.fit-review-card-head`, `-name`, `-when`, `-stars`, `-body`, `--show-all`.
+
+**Reviewer avatar bg** is fixed `Gray.g600` (not theme-aware) — visual hierarchy intent: reviewers are subordinate to the coach themselves and shouldn't compete with the brand-gradient main avatar.
+
+**States:** default; truncated (>4 lines, "Show more" link can be applied at carousel level on tap).
+
+**Used:** coach profile reviews carousel (athlete-view + coach-view), All Reviews screen (single-column list reuses the same card).
+
+**iOS/Android notes:** Use `FitReviewCardData` sealed/enum hierarchy with `.Review` + `.ShowAll` cases. Compose carousel scrolls horizontally via `horizontalScroll(rememberScrollState())`; iOS uses `ScrollView(.horizontal, showsIndicators: false)`. Snap behavior preserved via scroll-padding alignment.
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitReviewCard.swift` — includes `FitReviewCarousel`), ✅ Compose (`components/FitReviewCard.kt` — includes `FitReviewCarousel`), ✅ CSS (`.fit-review-card` + `.fit-review-carousel`).
+
+---
+
 ## DASHBOARD / STATS
 
 ### FitStatTile
@@ -1109,6 +1177,9 @@ Compose: **37 new** (no existing Android components).
 **Gap-batch additions (2026-04-28):**
 - Extensions: FitParticipant (leading/trailing/state), FitChip (size), FitSettingsCard (context/isDefault/addressOrSubtitle), FitDayStrip (mode + standalone FitDayButton)
 - New: FitStatTile, FitTransactionRow, FitEarningsHero, FitPaymentMethodCard, FitAvailabilityDay, FitSpotCounter, FitProfileHeader, FitPasswordRule
+
+**Coach-profile additions (2026-05-11):**
+- New: FitStatStrip (4-column readout), FitMaturityProgress (new-coach progress block), FitReviewCard + FitReviewCarousel — all surfaced during `flows/coach/profile.html` build. CSS + Swift + Compose landed together.
 
 ## Meta notes
 
