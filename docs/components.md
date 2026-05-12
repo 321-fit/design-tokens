@@ -939,6 +939,67 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitProfileHero
+**Purpose:** 16:9 hero media block at the top of the coach profile (both athlete-side view and coach-side preview). Renders one of three media variants with a fallback chain: video → cover image → brand-gradient + initials. Optional camera-overlay edit affordance (top-right) wired to a media picker.
+
+**Required props:**
+- `media: enum { video(URL), cover(URL), initials(String) }`
+
+**Optional props:**
+- `onEdit: (() -> Void)?` — when set, renders the 36×36 camera button in the top-right corner. When nil, hero is read-only (e.g., athlete viewing a coach).
+
+**Sub-elements:** `.fit-profile-hero` 16:9 wrapper, three `.fit-profile-hero-media--*` sibling divs (only one shown via parent `.has-video` / `.has-cover` state class, default fallback otherwise), `.fit-profile-hero-edit` overlay button (36×36 with `rgba(0,0,0,0.5)` + blur), `.fit-profile-hero-initials` for fallback rendering.
+
+**States:** has-video / has-cover / default fallback.
+
+**Used:** coach-side `s-coach-profile`, athlete-side `s-coach-v2`. Future: athlete profile (their own).
+
+**iOS/Android notes:** Video renders via native player (AVPlayer on iOS, ExoPlayer on Android) in production — prototype + Swift component show a play-glyph placeholder. Cover image via `AsyncImage` (iOS) / `coil-compose` (Android) with the gradient as loading/error fallback. Initials use `FitColors.brandGradient` background.
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitProfileHero.swift`), ✅ Compose (`components/FitProfileHero.kt`), ✅ CSS (`.fit-profile-hero` + sub-elements). Prototype page-local `.cp-hero*` classes in `flows/coach/profile.html` to be refactored to use the kit class in a follow-up.
+
+---
+
+### FitInviteRow
+**Purpose:** Referral / invite list row — avatar + name + when (e.g. "Joined 1 week ago"). Optional trailing slot for Phase 2 status pills / chevrons. Used in `invite-coach` flow (coach-to-coach referral) on both main screen inline list and All Invites push.
+
+**Required props:**
+- `initials: String`
+- `name: String`
+- `when: String` — relative timestamp text rendered as-is (no formatting inside the component)
+
+**Optional props:**
+- `onTap: (() -> Void)?` — tap routing (e.g. open invitee detail in Phase 2)
+- `trailing: View?` — optional trailing slot. MVP omits (no pill). Phase 2: status pill (Pending / Joined / Active) or chevron.
+
+**Sub-elements:** `.fit-invite-row` 12px-padded card, `.fit-invite-row-body` flex column with `.fit-invite-row-name` (15pt 500) + `.fit-invite-row-when` (13pt tertiary), `.fit-invite-row-trailing` flex-shrink slot. Reuses `FitAvatar(.md, .brand)` as leading.
+
+**States:** default, pressed (if `onTap` provided).
+
+**Used:** `flows/coach/invite-coach.html` main screen inline list (3 rows) + push screen (12 rows). Future: athlete-side referral list (mirror).
+
+**iOS/Android notes:** Compose API exposes `trailing` as `(@Composable () -> Unit)?`; Swift uses ViewBuilder generic `Trailing: View` with `EmptyView` convenience overload. Surface: `theme.surfaceHigh` on dark, `Gray.white` + `theme.divider` 1px border on light.
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitInviteRow.swift`), ✅ Compose (`components/FitInviteRow.kt`), ✅ CSS (`.fit-invite-row` + sub-elements). Prototype page-local `.ic-invite-row*` in `flows/coach/invite-coach.html` to be refactored to use the kit class in a follow-up.
+
+---
+
+### FitSectionTitle—warm variant (`--md`)
+**Purpose:** 16pt medium normal-case section header. Profile / settings sections use this **warm** variant rather than the kit's default `.fit-section-title` (12pt UPPERCASE bold), which is too cold for human-facing sections like "My Sports" / "About Me" on the coach profile.
+
+**Class composition:**
+- `.fit-section-title--md` — standalone label
+- `.fit-section-title--md-row` — wrapper for label + optional trailing edit pencil
+- `.fit-section-title--md-row.tap` — whole-row tappable cursor + hover
+
+**No native widget — typography-only.** Swift uses `Font.custom(FitFont.family, size: 16).weight(.medium)` with `.foregroundColor(theme.textPrimary)`, no `.uppercase()` modifier. Compose uses `FitFont.body1.copy(fontSize = 16.sp, fontWeight = FontWeight.Medium)`.
+
+**Used:** coach-profile sections (My Sports, About Me, Reviews), settings.html row headings, invite-coach hero + section labels.
+
+**Status:** ✅ CSS (`.fit-section-title--md` + `--md-row`). Native: typography token references already present in `FitFont`. Document here so consumers know to NOT call `.uppercase()` / `.textTransform: uppercase` on these labels.
+
+---
+
 ## DASHBOARD / STATS
 
 ### FitStatTile
@@ -1180,6 +1241,9 @@ Compose: **37 new** (no existing Android components).
 
 **Coach-profile additions (2026-05-11):**
 - New: FitStatStrip (4-column readout), FitMaturityProgress (new-coach progress block), FitReviewCard + FitReviewCarousel — all surfaced during `flows/coach/profile.html` build. CSS + Swift + Compose landed together.
+
+**Coach-profile + Invite-coach additions (2026-05-12):**
+- New: FitProfileHero (16:9 hero with 3-variant media fallback + camera overlay), FitInviteRow (referral list row with optional trailing slot), FitSectionTitle--md warm variant (16pt medium normal-case section header). CSS + Swift + Compose landed together; prototype-side migration from page-local `.cp-hero*` / `.ic-invite-row*` is TODO follow-up.
 
 ## Meta notes
 
