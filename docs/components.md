@@ -563,8 +563,9 @@ Every component lists **purpose · required props · optional props · variants 
 
 **iOS/Android notes:**
 - Width 100%, `aspect-ratio: 16/9`, radius 12.
-- iOS: `PHPickerViewController` for picker (video filter, max 1); background upload via `URLSession.shared.uploadTask` so PUT survives app suspend. `VideoPlayer(AVPlayer(url:))` from AVKit for `.ready` playback preview (sheet).
-- Android: `ActivityResultContracts.PickVisualMedia(VideoOnly)`; `WorkManager` + OkHttp resumable PUT (256KB chunks). `ExoPlayer` + `PlayerView` for `.ready` playback.
+- iOS: `PHPickerViewController` for picker (video filter, max 1); background upload via `URLSession.shared.uploadTask` so PUT survives app suspend. Playback uses **Mux Player Swift SDK** (`MuxPlayerSwift` SPM) — owner replaces the kit's Ready slot with `MuxPlayerView` in-place on `onTap`; fullscreen via the player's own corner control (system fullscreen handoff). Preply-style inline playback — no sheet, no push.
+- Android: `ActivityResultContracts.PickVisualMedia(VideoOnly)`; `WorkManager` + OkHttp resumable PUT (256KB chunks). Playback uses **mux-player-android** Gradle dependency — same Preply-style inline pattern.
+- The kit component itself is **visual-only** (poster + play overlay + ⋯ menu). Playback integration lives at the app level (owner wires the Mux Player view to replace the Ready slot on tap).
 - Backend orchestration documented at [project-spec/architecture/mux-integration.md](https://github.com/321-fit/project-spec/blob/main/architecture/mux-integration.md).
 - Client-side limits: 200 MB / 5-120 s / mp4-mov-m4v / 480p min. Enforced before requesting direct-upload URL.
 
