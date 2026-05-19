@@ -568,7 +568,7 @@ Every component lists **purpose · required props · optional props · variants 
 - Backend orchestration documented at [project-spec/architecture/mux-integration.md](https://github.com/321-fit/project-spec/blob/main/architecture/mux-integration.md).
 - Client-side limits: 200 MB / 5-120 s / mp4-mov-m4v / 480p min. Enforced before requesting direct-upload URL.
 
-**Status:** ✅ HTML/CSS in `prototypes/lib/fit-ui.css` (canonical `.fit-vuc-*` classes). Swift: to build. Compose: to build.
+**Status:** ✅ HTML/CSS in `prototypes/lib/fit-ui.css` (`.fit-vuc-*` classes). ✅ Swift in `Sources/FitUI/Components/FitVideoUploadCard.swift` (xcodebuild iOS Simulator: BUILD SUCCEEDED). ⏳ Compose in `android/src/main/kotlin/.../components/FitVideoUploadCard.kt` (authored; Gradle verification pending JDK 17 install). Dashed border on Idle / Pending falls back to solid in Compose v1 (Modifier.border has no native dashed support on RoundedCornerShape).
 
 ---
 
