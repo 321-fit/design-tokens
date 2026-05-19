@@ -450,20 +450,32 @@ Every component lists **purpose · required props · optional props · variants 
 ---
 
 ### FitToast
-**Purpose:** Top notification banner (success / error / info).
+**Purpose:** Top notification banner (success / error / info). Used for async events, foreground push surfaces, and short non-blocking confirmations.
 
 **Required props:**
 - `message: String`
 - `isVisible: Binding<Bool>`
 - `type: enum { success, error, info }`
 
-**States:** hidden (opacity 0, translateY -10), visible (3-second auto-dismiss).
+**Optional props:**
+- `action: (label: String, callback: () -> Void)?` — adds a trailing tap-action button next to the message. Used for "View" / "Fix it" / "Retry" CTAs that route the user from a foreground push toast to the relevant screen.
 
-**Used:** "Signed out", "Google Calendar connected", "Password changed".
+**Sub-elements:**
+- Leading icon (color matches `type`)
+- Message text
+- **Trailing action button** (when `action` is set) — teal-400 text, no background, mirrors `.fit-snackbar .snack-action`
 
-**iOS/Android notes:** Top-anchored, 60pt from top. Radius 12, 3px left border (matching type color).
+**States:**
+- hidden (opacity 0, translateY -10)
+- visible — auto-dismiss **3s** without action / **5s** with action
+- Tap body (anywhere except action) → dismiss
+- Tap action → fire callback + dismiss
 
-**Status:** ✅ Swift exists. Compose: to build.
+**Used:** "Signed out", "Google Calendar connected", "Password changed", "Your intro video is live · View", "Couldn't process your video · Fix it".
+
+**iOS/Android notes:** Top-anchored, 60pt from top. Radius 12, 3px left border (matching type color). When `action` is set, button sits at the right side with `margin-left: auto`. See [project-spec/specs/notifications.md § Foreground push handling](https://github.com/321-fit/project-spec/blob/main/specs/notifications.md) for the foreground-push → toast conversion contract.
+
+**Status:** ✅ Swift exists (action variant: to extend). Compose: to build.
 
 ---
 
@@ -509,6 +521,54 @@ Every component lists **purpose · required props · optional props · variants 
 **iOS/Android notes:** 40×40 illustration (gray-600), 16px title (text-secondary), 14px sub (text-tertiary), 20px margin-bottom before CTA.
 
 **Status:** ❌ Swift missing. Compose: to build.
+
+---
+
+## MEDIA
+
+### FitVideoUploadCard
+**Purpose:** 16:9 state-aware video upload card. Owns the full lifecycle of a direct-upload video integration (Mux): picker entry, upload progress, server-side processing, ready-with-thumbnail, error recovery. Coach intro video on Personal Data is the primary consumer; reusable for any place that needs "pick from device → direct-upload → wait for processing → play" in our app.
+
+**Required props:**
+- `state: enum { idle, uploading, processing, ready, errored, pending }`
+- `onTap: () -> Void` — fired in `idle` / `pending` / `errored` states (opens picker / retry)
+
+**Optional props (per state):**
+- `progress: Double` (0…1) — used in `uploading`
+- `filename: String` — used in `uploading`
+- `thumbnailURL: URL?` — used in `ready` (defaults to Mux auto-thumbnail at `time=2s`)
+- `onCancel: () -> Void` — used in `uploading` (× button top-right)
+- `onMore: () -> Void` — used in `ready` (⋯ button top-right opens [FitContextMenu](#fitcontextmenu) with Preview / Replace / Remove)
+- `errorCode: String?` — used in `errored` (small muted code line)
+- `helpText: String?` — caption below the card, state-aware
+
+**States:**
+| State | Visual | Tap target |
+|---|---|---|
+| **idle** | Dashed 1.5px divider border, transparent bg, camera icon (32px, opacity 0.6) + CTA text + meta sub | opens native picker |
+| **uploading** | Yellow border + yellow-tinted bg, filename row + linear progress bar + percent label; floating × cancel button top-right | Cancel × aborts |
+| **processing** | Yellow border + yellow-tinted bg, spinner (28px) + "Processing…" + sub-line | non-tappable |
+| **ready** | Solid divider border, thumbnail fills 16:9 (background-image), centered play overlay 48px white, ⋯ button top-right | Tap plays preview · ⋯ opens menu |
+| **errored** | Red border + red-tinted bg, alert-triangle (32px) + title + retry link + optional error code | Tap = Retry (opens picker) |
+| **pending** | Same visual as idle + muted "Last upload didn't finish" line | opens picker |
+
+**Sub-elements:**
+- `FitVUCIcon` — 32px monochrome icon (camera for idle, alert-triangle for errored)
+- `FitVUCSpinner` — 28px circular yellow spinner (0.8s linear infinite)
+- `FitVUCProgress` — 6px linear bar with yellow fill
+- `FitVUCPlayOverlay` — full-bleed 25% black scrim + centered play SVG
+- `FitVUCMoreButton` — 32px circular semi-transparent black with ⋯ icon
+
+**Used:** Coach intro video upload on Personal Data screen.
+
+**iOS/Android notes:**
+- Width 100%, `aspect-ratio: 16/9`, radius 12.
+- iOS: `PHPickerViewController` for picker (video filter, max 1); background upload via `URLSession.shared.uploadTask` so PUT survives app suspend. `VideoPlayer(AVPlayer(url:))` from AVKit for `.ready` playback preview (sheet).
+- Android: `ActivityResultContracts.PickVisualMedia(VideoOnly)`; `WorkManager` + OkHttp resumable PUT (256KB chunks). `ExoPlayer` + `PlayerView` for `.ready` playback.
+- Backend orchestration documented at [project-spec/architecture/mux-integration.md](https://github.com/321-fit/project-spec/blob/main/architecture/mux-integration.md).
+- Client-side limits: 200 MB / 5-120 s / mp4-mov-m4v / 480p min. Enforced before requesting direct-upload URL.
+
+**Status:** ✅ HTML/CSS in `prototypes/lib/fit-ui.css` (canonical `.fit-vuc-*` classes). Swift: to build. Compose: to build.
 
 ---
 
