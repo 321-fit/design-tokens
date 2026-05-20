@@ -9,6 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -147,93 +150,250 @@ private fun weekdayAbbrev(year: Int, month: Int, day: Int): String {
 }
 
 // ============================================================================
-// FitCalEvent — event block on timeline
+// FitCalEvent — event block on timeline.
+//
+// Adaptive 3-tier layout based on tile height + optional recipient/location
+// fields + cross-role variant (user's own event from the OTHER role).
+// 3pt hairline gap reserved at the bottom so back-to-back events don't merge.
 // ============================================================================
 
-enum class FitCalEventType { Personal, Group, External }
+sealed class FitCalEventType {
+    object Personal : FitCalEventType()
+    object Group    : FitCalEventType()
+    object External : FitCalEventType()
+    data class CrossRole(val role: FitRole) : FitCalEventType()
+}
+
 enum class FitCalEventStatus { Planned, Request, Awaiting, Review, Missed, Finished }
+
+enum class FitCalEventTier {
+    Tiny, Compact, Standard;
+
+    companion object {
+        fun from(heightDp: androidx.compose.ui.unit.Dp): FitCalEventTier = when {
+            heightDp <= 30.dp -> Tiny
+            heightDp <= 45.dp -> Compact
+            else              -> Standard
+        }
+    }
+}
 
 @Composable
 fun FitCalEvent(
     title: String,
     time: String,
     type: FitCalEventType,
+    height: androidx.compose.ui.unit.Dp,
+    recipient: String? = null,
+    location: String? = null,
     status: FitCalEventStatus = FitCalEventStatus.Planned,
-    isTiny: Boolean = false,
     onTap: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
-    val bg = when {
+    val tier = FitCalEventTier.from(height)
+    val isCrossRole = type is FitCalEventType.CrossRole
+
+    val cardBg: Color = when {
         status == FitCalEventStatus.Request || status == FitCalEventStatus.Review ->
             FitColors.Yellow.y600.copy(alpha = 0.10f)
         status == FitCalEventStatus.Missed ->
             FitColors.error.copy(alpha = 0.10f)
-        type == FitCalEventType.External ->
-            theme.surfaceHigher
-        else -> theme.surfaceHigh
+        type is FitCalEventType.External   -> theme.surfaceHigher
+        type is FitCalEventType.Group      -> FitColors.brandPrimary.copy(alpha = 0.12f)
+        else                               -> theme.surfaceHigh
     }
-    val leftAccent = when (type) {
-        FitCalEventType.Personal -> FitColors.Teal.t500
-        FitCalEventType.Group    -> FitColors.brandPrimary
-        FitCalEventType.External -> theme.textTertiary
+    val leftAccent: Color = when (type) {
+        is FitCalEventType.Personal  -> FitColors.Teal.t500
+        is FitCalEventType.Group     -> FitColors.brandPrimary
+        is FitCalEventType.External  -> theme.textTertiary
+        is FitCalEventType.CrossRole -> theme.textTertiary
     }
-    val pillText: String? = when (status) {
-        FitCalEventStatus.Request -> "Request"
-        FitCalEventStatus.Review -> "Review"
-        FitCalEventStatus.Awaiting -> "Awaiting"
-        FitCalEventStatus.Missed -> "Missed"
+    val borderColor: Color? = when (status) {
+        FitCalEventStatus.Request, FitCalEventStatus.Review -> FitColors.Yellow.y600
+        FitCalEventStatus.Awaiting -> theme.textTertiary
+        FitCalEventStatus.Missed   -> FitColors.error
         else -> null
     }
-    val pillStatus: FitCalEventPillStatus? = when (status) {
-        FitCalEventStatus.Request -> FitCalEventPillStatus.Request
-        FitCalEventStatus.Review -> FitCalEventPillStatus.Review
-        FitCalEventStatus.Awaiting -> FitCalEventPillStatus.Awaiting
-        FitCalEventStatus.Missed -> FitCalEventPillStatus.Missed
-        else -> null
+    val outerOpacity: Float = when {
+        status == FitCalEventStatus.Finished -> 0.5f
+        type is FitCalEventType.External     -> 0.7f
+        isCrossRole                          -> 0.75f
+        else                                 -> 1.0f
     }
 
-    Row(
+    // Outer container keeps full inline height; visible card lives inside with
+    // padding(.bottom = 3) reserving the hairline gap.
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(FitRadius.md))
-            .background(bg)
+            .height(height)
+            .graphicsLayerOpacity(outerOpacity)
             .clickable(onClick = onTap)
-            .padding(horizontal = if (isTiny) 8.dp else 0.dp)
-            .height(IntrinsicSize.Min)
     ) {
-        // Left accent stripe
         Box(
             modifier = Modifier
-                .width(3.dp)
+                .fillMaxWidth()
                 .fillMaxHeight()
-                .background(leftAccent)
-        )
-        Column(
-            modifier = Modifier
-                .padding(horizontal = FitSpacing.sp3, vertical = if (isTiny) 2.dp else FitSpacing.sp2)
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+                .padding(bottom = 3.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    title,
-                    style = FitFont.body2.copy(
-                        fontSize = if (isTiny) 10.sp else 12.sp,
-                        fontWeight = FontWeight.Medium
-                    ),
-                    color = if (type == FitCalEventType.External) theme.textSecondary else theme.textPrimary,
-                    modifier = Modifier.weight(1f),
-                    maxLines = 1
-                )
-                if (pillText != null && pillStatus != null) {
-                    FitCalEventPill(pillText, pillStatus)
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(FitRadius.md))
+                    .background(cardBg)
+                    .then(
+                        if (borderColor != null)
+                            Modifier.border(1.dp, borderColor, RoundedCornerShape(FitRadius.md))
+                        else Modifier
+                    )
+            ) {
+                // Left stripe
+                if (isCrossRole) {
+                    DashedVerticalStripe(theme.textTertiary)
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .width(3.dp)
+                            .fillMaxHeight()
+                            .background(leftAccent)
+                    )
                 }
-            }
-            if (!isTiny) {
-                Text(time, style = FitFont.caption, color = theme.textSecondary)
+                FitCalEventContent(
+                    title = title,
+                    recipient = recipient,
+                    time = time,
+                    location = location,
+                    type = type,
+                    status = status,
+                    tier = tier,
+                    titleColor = theme.textPrimary,
+                    secondary = theme.textSecondary,
+                    tertiary = theme.textTertiary
+                )
             }
         }
+
+        // Cross-role role tag — bottom-right corner of OUTER, inset above the gap.
+        if (type is FitCalEventType.CrossRole && tier != FitCalEventTier.Tiny) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp, bottom = 9.dp)   // 3 (gap) + 6 (visual inset)
+            ) {
+                FitRoleTag(role = type.role)
+            }
+        }
+    }
+}
+
+// Modifier extension: alpha (alias for graphicsLayer alpha).
+private fun Modifier.graphicsLayerOpacity(alpha: Float): Modifier =
+    this.then(androidx.compose.ui.draw.alpha(alpha))
+
+@Composable
+private fun FitCalEventContent(
+    title: String,
+    recipient: String?,
+    time: String,
+    location: String?,
+    type: FitCalEventType,
+    status: FitCalEventStatus,
+    tier: FitCalEventTier,
+    titleColor: Color,
+    secondary: Color,
+    tertiary: Color
+) {
+    val pillText: String? = if (type is FitCalEventType.CrossRole) null else when (status) {
+        FitCalEventStatus.Request  -> "Request"
+        FitCalEventStatus.Review   -> "Review"
+        FitCalEventStatus.Awaiting -> "Awaiting"
+        FitCalEventStatus.Missed   -> "Missed"
+        else -> null
+    }
+    val pillStatus: FitCalEventPillStatus? = if (type is FitCalEventType.CrossRole) null else when (status) {
+        FitCalEventStatus.Request  -> FitCalEventPillStatus.Request
+        FitCalEventStatus.Review   -> FitCalEventPillStatus.Review
+        FitCalEventStatus.Awaiting -> FitCalEventPillStatus.Awaiting
+        FitCalEventStatus.Missed   -> FitCalEventPillStatus.Missed
+        else -> null
+    }
+    val metaText = recipient?.let { "$it · $time" } ?: time
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = FitSpacing.sp3, vertical = if (tier == FitCalEventTier.Tiny) 4.dp else FitSpacing.sp2)
+            .padding(start = 4.dp)
+            .weight(1f),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        when (tier) {
+            FitCalEventTier.Tiny -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        title,
+                        style = FitFont.body2.copy(fontSize = 10.sp, fontWeight = FontWeight.Medium),
+                        color = titleColor,
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    Text(" · ", style = FitFont.caption, color = tertiary, fontSize = 10.sp)
+                    Text(time, style = FitFont.caption, color = tertiary, fontSize = 10.sp, maxLines = 1)
+                    if (pillText != null && pillStatus != null) {
+                        Spacer(Modifier.weight(1f))
+                        FitCalEventPill(pillText, pillStatus)
+                    }
+                }
+            }
+            FitCalEventTier.Compact, FitCalEventTier.Standard -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        title,
+                        style = FitFont.body2.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium),
+                        color = titleColor,
+                        modifier = Modifier.weight(1f),
+                        maxLines = 1
+                    )
+                    if (pillText != null && pillStatus != null) {
+                        FitCalEventPill(pillText, pillStatus)
+                    }
+                }
+                Text(metaText, style = FitFont.caption, color = secondary, maxLines = 1)
+                if (tier == FitCalEventTier.Standard && location != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = null,
+                            tint = tertiary,
+                            modifier = Modifier.size(10.dp)
+                        )
+                        Text(location, style = FitFont.caption, color = tertiary, fontSize = 11.sp, maxLines = 1)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DashedVerticalStripe(color: Color) {
+    androidx.compose.foundation.Canvas(
+        modifier = Modifier
+            .width(3.dp)
+            .fillMaxHeight()
+    ) {
+        val dash = floatArrayOf(3.dp.toPx(), 3.dp.toPx())
+        val effect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(dash, 0f)
+        drawLine(
+            color = color,
+            start = androidx.compose.ui.geometry.Offset(x = size.width / 2, y = 0f),
+            end   = androidx.compose.ui.geometry.Offset(x = size.width / 2, y = size.height),
+            strokeWidth = 3.dp.toPx(),
+            pathEffect = effect
+        )
     }
 }
 

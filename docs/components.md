@@ -605,42 +605,71 @@ Every component lists **purpose · required props · optional props · variants 
 ---
 
 ### FitCalEvent
-**Purpose:** Colored block representing an event on a timeline.
+**Purpose:** Colored block representing an event on a timeline. Adaptive 3-tier layout (tiny / compact / standard) derived from tile height + cross-role variant for users with both roles active.
 
 **Required props:**
 - `title: String`
 - `time: String`
-- `type: enum { personal, group, external }`
-- `status: enum { planned, request, awaiting, review, missed, finished }`
+- `type: enum { personal, group, external, crossRole(FitRole) }`
+- `height: CGFloat` / `Dp` (drives tier derivation)
 
 **Optional props:**
-- `isTiny: Bool = false` (<15min events)
-- `badge: String?`
-- `rescheduled: Bool = false`
+- `recipient: String?` — counterparty / group ratio. Examples:
+    - Personal coach view: `"Anna K."`
+    - Personal athlete view: `"with Coach Mark"`
+    - Group (any view): `"7/10 athletes"`
+    - Cross-role: counterparty in the OTHER role
+- `location: String?` — rendered only on Standard tier
+- `status: enum { planned, request, awaiting, review, missed, finished } = .planned`
 
-**Variants (status × type combos):**
-- personal.planned — surface-high bg + 3px teal-500 left border
-- personal.request — yellow tint bg + yellow-600 borders
-- personal.awaiting — gray borders, subtle bg
-- personal.review — yellow-600 borders (same as request)
-- personal.missed — red-400 borders + red tint bg
-- personal.finished — opacity 0.5 + teal stripe
-- group.* — same states with cyan accents
-- external — gray-700 bg, 0.7 opacity, 12px title, no meta
+**Tier derivation:**
+- `tiny`: height ≤ 30pt — 1 row: `{title} · {start-time}` inline
+- `compact`: height ≤ 45pt — 2 rows: title / `{recipient} · {time}`
+- `standard`: height ≥ 46pt — 3 rows: title / `{recipient} · {time}` / `📍 {location}`
+
+**Variants (type × status combos):**
+- personal — surface-high bg + 3pt teal-500 solid stripe
+- group — blue-500 12% bg + 3pt blue-500 solid stripe
+- external — gray-700 / gray-200 bg, opacity 0.7, 3pt text-tertiary solid stripe
+- crossRole(role) — surface-high bg, opacity 0.75, 3pt **dashed** text-tertiary stripe, role-tag badge anchored bottom-right (no status pill — actions belong to the other role)
+- Statuses overlay the type:
+    - request / review — yellow-600 10% bg + 1pt yellow-600 perimeter
+    - awaiting — gray-400/500 perimeter + subtle bg
+    - missed — red-400 perimeter + 10% red bg
+    - finished — opacity 0.5
 
 **Sub-elements:**
-- CalEventTitleRow — title + optional pill
-- CalEventTitle — 12px 500 (10px tiny)
-- CalEventMeta — 12px text-secondary (hidden in tiny)
-- CalEventPill — inline state badge
+- title row — title (12pt 500, 10pt on tiny) + optional FitCalEventPill (hidden on cross-role)
+- meta row — 12pt secondary, `{recipient} · {time}` or just `{time}`
+- location row — 11pt tertiary + pin glyph, only on standard tier
+- FitRoleTag — bottom-right corner badge on cross-role tiles (tier ≥ compact)
 
-**States:** per status above; hover for desktop (prototype-only).
+**3pt hairline gap (Apple Calendar style):**
+Every tile reserves a 3pt transparent strip at the bottom so back-to-back events don't visually merge. The visible card lives inside the outer container with `padding(.bottom, 3)` — outer still occupies the full inline height so neighbours don't reflow.
 
-**Used:** calendar timeline main content.
+**Used:** calendar timeline main content (coach + athlete).
 
-**iOS/Android notes:** Positioned absolutely on timeline with `top` = minutes from 00:00 * pixels/min, `height` = duration * pixels/min.
+**iOS/Android notes:** Outer is `.frame(height:)` on iOS / `.height()` on Compose. Tier is derived from `height` parameter — caller doesn't pass tier directly.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Status:** ✅ Swift implemented. ✅ Compose implemented (2026-05-20 rewrite — recipient + location + crossRole + 3-tier).
+
+---
+
+### FitRoleTag
+**Purpose:** Compact corner badge labelling the user role context of an event ("Athlete" or "Coach"). Used by FitCalEvent in cross-role state — placed at the bottom-right of the tile to signal "this event lives on your OTHER role profile."
+
+**Required props:**
+- `role: FitRole` (athlete | coach)
+
+**Visual:**
+- 18pt tall capsule, 10pt 500 font, 8pt horizontal padding
+- Subtle wash background (rgba(0,0,0,0.05) — reads on both light gray-100 and dark surface-high cross-role tile bgs)
+- Icon: `figure.run` (SF Symbol) / `DirectionsRun` (Material) for athlete, `person.fill` / `Person` for coach
+- Color: text-tertiary
+
+**Used:** FitCalEvent cross-role variant. Could be reused for other places where role context needs an inline label (currently only calendar event tiles).
+
+**Status:** ✅ Swift implemented. ✅ Compose implemented (new 2026-05-20).
 
 ---
 
