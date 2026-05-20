@@ -632,6 +632,7 @@ Every component lists **purpose · required props · optional props · variants 
 - group — blue-500 12% bg + 3pt blue-500 solid stripe
 - external — gray-700 / gray-200 bg, opacity 0.7, 3pt text-tertiary solid stripe
 - crossRole(role) — surface-high bg, opacity 0.75, 3pt **dashed** text-tertiary stripe, role-tag badge anchored bottom-right (no status pill — actions belong to the other role)
+- custom — surface-high bg, opacity 1.0 (your own event — no muting), 3pt **solid** text-tertiary stripe, no role tag, **no status pill** (custom events are stateless — they don't participate in the 6-state lifecycle per event-statuses.md). Default title "My time" when caller passes empty title. Render distinct from cross-role (which uses dashed stripe + opacity) and from external (which uses solid stripe + opacity).
 - Statuses overlay the type:
     - request / review — yellow-600 10% bg + 1pt yellow-600 perimeter
     - awaiting — gray-400/500 perimeter + subtle bg

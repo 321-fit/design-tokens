@@ -16,6 +16,7 @@ public enum FitCalEventType {
     case group
     case external
     case crossRole(FitRole)     // user's own event from the OTHER role
+    case custom                 // coach's own calendar block — no athlete, no template, stateless
 }
 
 public enum FitCalEventStatus {
@@ -217,6 +218,7 @@ public struct FitCalEvent: View {
         switch type {
         case .external:    return 0.7
         case .crossRole:   return 0.75
+        case .custom:      return 1.0      // your own event — no muting
         default:           return 1.0
         }
     }
@@ -234,6 +236,7 @@ public struct FitCalEvent: View {
         case .group:       return FitColors.brandPrimary
         case .external:    return theme.textTertiary
         case .crossRole:   return theme.textTertiary    // dashed, color used by DashedVerticalStripe
+        case .custom:      return theme.textTertiary    // solid tertiary stripe — distinct from cross-role's dashed
         }
     }
 
@@ -244,6 +247,7 @@ public struct FitCalEvent: View {
         case (_, .missed):            return FitColors.error.opacity(0.10)
         case (.external, _):          return theme.surfaceHigher
         case (.crossRole, _):         return theme.surfaceHigh
+        case (.custom, _):            return theme.surfaceHigh
         case (.group, _):             return FitColors.brandPrimary.opacity(0.12)
         case (.personal, _):          return theme.surfaceHigh
         }
@@ -267,7 +271,9 @@ public struct FitCalEvent: View {
 
     private var pillText: String? {
         // Cross-role tiles hide status pill — actions belong to the other role.
+        // Custom events are stateless — no 6-status lifecycle.
         if case .crossRole = type { return nil }
+        if case .custom = type { return nil }
         switch status {
         case .request:  return "Request"
         case .review:   return "Review"
@@ -279,6 +285,7 @@ public struct FitCalEvent: View {
 
     private var pillStatus: FitCalEventPillStatus? {
         if case .crossRole = type { return nil }
+        if case .custom = type { return nil }
         switch status {
         case .request:  return .request
         case .review:   return .review

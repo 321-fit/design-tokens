@@ -162,6 +162,7 @@ sealed class FitCalEventType {
     object Group    : FitCalEventType()
     object External : FitCalEventType()
     data class CrossRole(val role: FitRole) : FitCalEventType()
+    object Custom   : FitCalEventType()   // coach's own calendar block — stateless
 }
 
 enum class FitCalEventStatus { Planned, Request, Awaiting, Review, Missed, Finished }
@@ -208,6 +209,7 @@ fun FitCalEvent(
         is FitCalEventType.Group     -> FitColors.brandPrimary
         is FitCalEventType.External  -> theme.textTertiary
         is FitCalEventType.CrossRole -> theme.textTertiary
+        is FitCalEventType.Custom    -> theme.textTertiary   // solid; cross-role uses dashed
     }
     val borderColor: Color? = when (status) {
         FitCalEventStatus.Request, FitCalEventStatus.Review -> FitColors.Yellow.y600
@@ -304,14 +306,17 @@ private fun FitCalEventContent(
     secondary: Color,
     tertiary: Color
 ) {
-    val pillText: String? = if (type is FitCalEventType.CrossRole) null else when (status) {
+    // Cross-role tiles hide status pill — actions belong to the other role.
+    // Custom events are stateless — no 6-status lifecycle.
+    val suppressPill = type is FitCalEventType.CrossRole || type is FitCalEventType.Custom
+    val pillText: String? = if (suppressPill) null else when (status) {
         FitCalEventStatus.Request  -> "Request"
         FitCalEventStatus.Review   -> "Review"
         FitCalEventStatus.Awaiting -> "Awaiting"
         FitCalEventStatus.Missed   -> "Missed"
         else -> null
     }
-    val pillStatus: FitCalEventPillStatus? = if (type is FitCalEventType.CrossRole) null else when (status) {
+    val pillStatus: FitCalEventPillStatus? = if (suppressPill) null else when (status) {
         FitCalEventStatus.Request  -> FitCalEventPillStatus.Request
         FitCalEventStatus.Review   -> FitCalEventPillStatus.Review
         FitCalEventStatus.Awaiting -> FitCalEventPillStatus.Awaiting
