@@ -49,6 +49,7 @@ public struct FitCalEvent: View {
     let type: FitCalEventType
     let status: FitCalEventStatus
     let height: CGFloat
+    let overlapped: Bool
     let onTap: () -> Void
 
     @Environment(\.fitTheme) private var theme
@@ -61,6 +62,7 @@ public struct FitCalEvent: View {
         type: FitCalEventType,
         status: FitCalEventStatus = .planned,
         height: CGFloat,
+        overlapped: Bool = false,
         onTap: @escaping () -> Void = {}
     ) {
         self.title = title
@@ -70,6 +72,7 @@ public struct FitCalEvent: View {
         self.type = type
         self.status = status
         self.height = height
+        self.overlapped = overlapped
         self.onTap = onTap
     }
 
@@ -266,6 +269,37 @@ public struct FitCalEvent: View {
         if color != .clear {
             RoundedRectangle(cornerRadius: FitRadius.md)
                 .stroke(color, lineWidth: 1)
+        }
+        // Overlap overlay — muted red-brown gradient + corner dot.
+        // Sits on top of the regular type/status visual to flag conflicts
+        // with external (Google/Apple) events that can't be prevented at
+        // create time. Color matches iOS Theme.Gradient.overlappedEvent.
+        if overlapped {
+            ZStack(alignment: .topTrailing) {
+                LinearGradient(
+                    colors: [
+                        Color(red: 112/255, green: 89/255, blue: 89/255).opacity(0.35),
+                        Color(red: 187/255, green: 127/255, blue: 127/255).opacity(0.35)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .clipShape(RoundedRectangle(cornerRadius: FitRadius.md))
+
+                Circle()
+                    .fill(LinearGradient(
+                        colors: [
+                            Color(red: 187/255, green: 127/255, blue: 127/255),
+                            Color(red: 112/255, green: 89/255, blue: 89/255)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
+                    .frame(width: 8, height: 8)
+                    .overlay(Circle().stroke(theme.screenBg, lineWidth: 1.5))
+                    .padding(.top, 6)
+                    .padding(.trailing, 8)
+            }
         }
     }
 

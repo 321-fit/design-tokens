@@ -188,6 +188,7 @@ fun FitCalEvent(
     recipient: String? = null,
     location: String? = null,
     status: FitCalEventStatus = FitCalEventStatus.Planned,
+    overlapped: Boolean = false,
     onTap: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -285,6 +286,45 @@ fun FitCalEvent(
             ) {
                 FitRoleTag(role = type.role)
             }
+        }
+
+        // Overlap overlay — muted red-brown gradient + corner dot.
+        // Sits on top of the regular type/status visual to flag conflicts
+        // with external events that couldn't be prevented at create time.
+        if (overlapped) {
+            // Gradient overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(bottom = 3.dp)
+                    .clip(RoundedCornerShape(FitRadius.md))
+                    .background(
+                        androidx.compose.ui.graphics.Brush.linearGradient(
+                            colors = listOf(
+                                Color(red = 112, green = 89, blue = 89).copy(alpha = 0.35f),
+                                Color(red = 187, green = 127, blue = 127).copy(alpha = 0.35f)
+                            )
+                        )
+                    )
+            )
+            // Corner dot
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 6.dp, end = 8.dp)
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(
+                        androidx.compose.ui.graphics.Brush.linearGradient(
+                            colors = listOf(
+                                Color(red = 187, green = 127, blue = 127),
+                                Color(red = 112, green = 89, blue = 89)
+                            )
+                        )
+                    )
+                    .border(1.5.dp, theme.screenBg, CircleShape)
+            )
         }
     }
 }

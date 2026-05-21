@@ -621,6 +621,7 @@ Every component lists **purpose · required props · optional props · variants 
     - Cross-role: counterparty in the OTHER role
 - `location: String?` — rendered only on Standard tier
 - `status: enum { planned, request, awaiting, review, missed, finished } = .planned`
+- `overlapped: Bool = false` — marks the tile as overlapping with another event in the same time window. Adds red-tinted gradient overlay (#705959 → #BB7F7F, matches iOS `Theme.Gradient.overlappedEvent`) + 8pt corner dot. Works additively on top of any type/status — coach can still see the underlying tile color underneath. Use when client overlap detection (interval intersection between events on the same day) flags a conflict, typically between a 321Fit event and an external Google/Apple event pulled in post-factum.
 
 **Tier derivation:**
 - `tiny`: height ≤ 30pt — 1 row: `{title} · {start-time}` inline
