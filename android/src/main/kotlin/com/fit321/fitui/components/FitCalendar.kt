@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -231,7 +232,7 @@ fun FitCalEvent(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .graphicsLayerOpacity(outerOpacity)
+            .alpha(outerOpacity)
             .clickable(onClick = onTap)
     ) {
         Box(
@@ -329,12 +330,8 @@ fun FitCalEvent(
     }
 }
 
-// Modifier extension: alpha (alias for graphicsLayer alpha).
-private fun Modifier.graphicsLayerOpacity(alpha: Float): Modifier =
-    this.then(androidx.compose.ui.draw.alpha(alpha))
-
 @Composable
-private fun FitCalEventContent(
+private fun RowScope.FitCalEventContent(
     title: String,
     recipient: String?,
     time: String,
