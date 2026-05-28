@@ -90,6 +90,12 @@ Every component lists **purpose · required props · optional props · variants 
 | md | 32×32 | 16 | dashboard action cards, settings row leading |
 | lg | 40×40 | 20 | empty-state CTAs, hero rows |
 
+**Custom sizes (feature-driven, Android):**
+
+| Size | Container | Icon | Use case |
+|---|---|---|---|
+| mdLg | 36×36 | 18 | Coach Dashboard V2 HintCard (`FitHintCard`) |
+
 **Tone → tokens** (read from current FitTheme):
 
 | Tone | Background | Foreground |
@@ -521,6 +527,29 @@ Every component lists **purpose · required props · optional props · variants 
 **iOS/Android notes:** 40×40 illustration (gray-600), 16px title (text-secondary), 14px sub (text-tertiary), 20px margin-bottom before CTA.
 
 **Status:** ❌ Swift missing. Compose: to build.
+
+---
+
+### FitHintCard
+**Purpose:** Dashed-border onboarding/tip card with leading icon plate + title + subtitle + chevron action. The kit form of the dashboard `.dash-hint` prototype pattern. Used to surface a suggested next-step or contextual hint inside a feed of cards, visually distinct from solid action cards.
+
+**Required props:**
+- `title: String`
+- `subtitle: String`
+- `icon: ImageVector`
+- `onClick: () -> Unit`
+
+**Optional props:** none.
+
+**Sub-elements:** leading `FitIconPlate(tone = Info, size = MdLg)` (36×36 plate, 18px icon, blue-500 tint); title 15pt 500 text-primary; subtitle 13pt text-tertiary; trailing 18×18 chevron text-tertiary.
+
+**States:** default, pressed.
+
+**Used:** Coach Dashboard V2 Ready state — "Already coaching offline? Add your existing clients" hint card linking to Recent clients.
+
+**Notes:** 14px padding; 12px row gap; 14px corner radius; `theme.surfaceHigh` background; 1px dashed border in `theme.divider` (Compose: drawn via `drawBehind` + `PathEffect.dashPathEffect(6dp, 4dp)` since Compose `Modifier.border` doesn't natively support dashed strokes on `RoundedCornerShape`).
+
+**Status:** ✅ Compose.
 
 ---
 
