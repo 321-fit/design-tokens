@@ -530,6 +530,31 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+### FitTipCard
+**Purpose:** Dismissable suggestion card with teal-stripe accent, lightbulb icon, body text, inline CTA link, and a top-right close button. The kit form of the dashboard `.dash-tip` prototype pattern (Tier 2 onboarding tips on Coach Dashboard V2).
+
+**Required props:**
+- `title: String`
+- `subtitle: String`
+- `cta: String` (link label — the trailing `›` glyph is appended by the component)
+- `icon: ImageVector` (typically a lightbulb)
+- `onTap: () -> Unit`
+- `onDismiss: () -> Unit`
+
+**Optional props:** none.
+
+**Sub-elements:** 3px Teal-500 left stripe (full height); 16×16 icon tinted `FitColors.Yellow.y400`; title 14pt 500 text-primary; subtitle 13pt text-tertiary; CTA 13pt 500 blue-500 with trailing `›`; absolute 24×24 round dismiss button (top-right, 14×14 `Icons.Default.Close` text-tertiary).
+
+**States:** default, pressed.
+
+**Used:** Coach Dashboard V2 Tier 2 tips (Stripe / Hours / Video / Bio onboarding suggestions).
+
+**Notes:** 14dp padding (start/top/bottom), 40dp padding-end (reserves space for the dismiss button); `RoundedCornerShape(14dp)`; `theme.surfaceHigh` background; `1.dp theme.divider` outer border (gives the `var(--fit-gray-100)` outline on light theme, subtle in dark). The whole card is clickable (`onTap`), and the CTA text is independently clickable with the same callback for easier tap targeting on the link.
+
+**Status:** ✅ Compose.
+
+---
+
 ### FitHintCard
 **Purpose:** Dashed-border onboarding/tip card with leading icon plate + title + subtitle + chevron action. The kit form of the dashboard `.dash-hint` prototype pattern. Used to surface a suggested next-step or contextual hint inside a feed of cards, visually distinct from solid action cards.
 
