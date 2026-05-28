@@ -1149,7 +1149,7 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 ## DASHBOARD / STATS
 
 ### FitStatTile
-**Purpose:** Card-level stat row — leading `FitIconPlate` + title + optional subtitle + optional chevron. The kit form of the dashboard `.dash-action` pattern (26 prototype callsites).
+**Purpose:** Card-level stat row — leading `FitIconPlate` + title + optional subtitle + optional chevron. The kit form of the dashboard `.dash-action` pattern (26 prototype callsites). The `Large` size variant also covers the prototype `.boost-card` pattern (optional onboarding boost suggestions).
 
 **Required props:**
 - `title: String`
@@ -1160,16 +1160,24 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 - `tone: FitIconPlate.Tone = .neutral` — `.info / .success / .warning / .error / .brand / .neutral` — drives the icon plate background + color
 - `showChevron: Bool = true`
 - `onTap: (() -> Void)?`
+- `size: FitStatTileSize = .Default` — `Default` for `.dash-action`-style rows (32 icon, 12dp vertical padding); `Large` for `.boost-card`-style rows (36 icon, 14dp vertical padding)
 
-**Sub-elements:** `FitIconPlate(size: .md)` leading (32×32, 16px icon); title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line (omitted entirely when null); trailing 18×18 chevron text-tertiary.
+**Sub-elements:**
+
+| Size | Icon plate | Vertical padding |
+|---|---|---|
+| Default | `FitIconPlate(size = Md)` — 32×32, 16px icon | 12dp |
+| Large | `FitIconPlate(size = MdLg)` — 36×36, 18px icon | 14dp |
+
+Title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line (omitted entirely when null); trailing 18×18 chevron text-tertiary.
 
 **States:** default, pressed.
 
-**Used:** coach dashboard action cards (Pending requests, Awaiting reviews, Today's earnings, etc.), athlete home stat cards, balance summary blocks.
+**Used:** coach dashboard action cards (Pending requests, Awaiting reviews, Today's earnings — Default size), Tier 1 / UnderReview optional boost cards (Stripe / Hours / Video — Large size), athlete home stat cards, balance summary blocks.
 
-**iOS/Android notes:** 14px×12px padding (horizontal × vertical); `FitRadius.lg` corner; `theme.surfaceHigh` bg with 1px `theme.divider` border. On light theme the border is the visible affordance (no shadow needed). Full-width within container; row gap `sp-3`. **Android:** `subtitle: String? = null` — non-null in Swift currently (iOS alignment TODO).
+**iOS/Android notes:** 14px horizontal padding (both sizes); `FitRadius.lg` corner; `theme.surfaceHigh` bg with 1px `theme.divider` border. On light theme the border is the visible affordance (no shadow needed). Full-width within container; row gap `sp-3`. **Android:** `subtitle: String? = null` + `size: FitStatTileSize` enum.
 
-**Status:** ✅ Swift, ✅ Compose (subtitle nullable), ✅ CSS.
+**Status:** ✅ Compose (subtitle nullable + size variants).
 
 ---
 

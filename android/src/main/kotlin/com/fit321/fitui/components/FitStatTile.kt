@@ -28,6 +28,8 @@ import com.fit321.fitui.tokens.FitSpacing
 // Mirrors Swift FitStatTile. See `docs/components.md` § FitStatTile.
 // ============================================================================
 
+enum class FitStatTileSize { Default, Large }
+
 @Composable
 fun FitStatTile(
     title: String,
@@ -36,9 +38,18 @@ fun FitStatTile(
     tone: FitIconPlateTone = FitIconPlateTone.Neutral,
     showChevron: Boolean = true,
     onTap: (() -> Unit)? = null,
+    size: FitStatTileSize = FitStatTileSize.Default,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
+    val verticalPadding = when (size) {
+        FitStatTileSize.Default -> FitSpacing.sp3
+        FitStatTileSize.Large -> FitSpacing.sp3_5
+    }
+    val iconPlateSize = when (size) {
+        FitStatTileSize.Default -> FitIconPlateSize.Md
+        FitStatTileSize.Large -> FitIconPlateSize.MdLg
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -46,12 +57,12 @@ fun FitStatTile(
             .background(theme.surfaceHigh, RoundedCornerShape(FitRadius.lg))
             .border(1.dp, theme.divider, RoundedCornerShape(FitRadius.lg))
             .then(if (onTap != null) Modifier.clickable(onClick = onTap) else Modifier)
-            .padding(horizontal = 14.dp, vertical = FitSpacing.sp3),
+            .padding(horizontal = 14.dp, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
         if (icon != null) {
-            FitIconPlate(icon = icon, tone = tone, size = FitIconPlateSize.Md)
+            FitIconPlate(icon = icon, tone = tone, size = iconPlateSize)
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(
