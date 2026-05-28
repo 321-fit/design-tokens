@@ -31,7 +31,7 @@ import com.fit321.fitui.tokens.FitSpacing
 @Composable
 fun FitStatTile(
     title: String,
-    subtitle: String,
+    subtitle: String? = null,
     icon: ImageVector? = null,
     tone: FitIconPlateTone = FitIconPlateTone.Neutral,
     showChevron: Boolean = true,
@@ -61,13 +61,15 @@ fun FitStatTile(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
-                subtitle,
-                style = FitFont.footnote,
-                color = theme.textTertiary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (subtitle != null) {
+                Text(
+                    subtitle,
+                    style = FitFont.footnote,
+                    color = theme.textTertiary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
         if (showChevron) {
             Icon(
