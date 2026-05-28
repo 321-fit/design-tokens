@@ -1095,27 +1095,27 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 ## DASHBOARD / STATS
 
 ### FitStatTile
-**Purpose:** Card-level stat row — leading `FitIconPlate` + title + subtitle + optional chevron. The kit form of the dashboard `.dash-action` pattern (26 prototype callsites).
+**Purpose:** Card-level stat row — leading `FitIconPlate` + title + optional subtitle + optional chevron. The kit form of the dashboard `.dash-action` pattern (26 prototype callsites).
 
 **Required props:**
 - `title: String`
-- `subtitle: String`
 
 **Optional props:**
+- `subtitle: String?` — rendered only when non-null; with null the row collapses to title-only height (used when backend omits the secondary metric, e.g. `oldestAtHours` in `RequestsAction`)
 - `icon: Icon?` (SF Symbol / ImageVector)
 - `tone: FitIconPlate.Tone = .neutral` — `.info / .success / .warning / .error / .brand / .neutral` — drives the icon plate background + color
 - `showChevron: Bool = true`
 - `onTap: (() -> Void)?`
 
-**Sub-elements:** `FitIconPlate(size: .md)` leading (32×32, 16px icon); title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line; trailing 18×18 chevron text-tertiary.
+**Sub-elements:** `FitIconPlate(size: .md)` leading (32×32, 16px icon); title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line (omitted entirely when null); trailing 18×18 chevron text-tertiary.
 
 **States:** default, pressed.
 
 **Used:** coach dashboard action cards (Pending requests, Awaiting reviews, Today's earnings, etc.), athlete home stat cards, balance summary blocks.
 
-**iOS/Android notes:** 14px×12px padding (horizontal × vertical); `FitRadius.lg` corner; `theme.surfaceHigh` bg with 1px `theme.divider` border. On light theme the border is the visible affordance (no shadow needed). Full-width within container; row gap `sp-3`.
+**iOS/Android notes:** 14px×12px padding (horizontal × vertical); `FitRadius.lg` corner; `theme.surfaceHigh` bg with 1px `theme.divider` border. On light theme the border is the visible affordance (no shadow needed). Full-width within container; row gap `sp-3`. **Android:** `subtitle: String? = null` — non-null in Swift currently (iOS alignment TODO).
 
-**Status:** ✅ Swift, ✅ Compose, ✅ CSS.
+**Status:** ✅ Swift, ✅ Compose (subtitle nullable), ✅ CSS.
 
 ---
 
