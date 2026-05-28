@@ -26,7 +26,10 @@ enum class FitIconPlateTone { Info, Success, Warning, Error, Brand, Neutral }
 enum class FitIconPlateSize(val plateDp: Int, val iconDp: Int) {
     Sm(24, 12),
     Md(32, 16),
-    Lg(40, 20)
+    Lg(40, 20),
+
+    // Custom sizes for dashboard
+    MdLg(36, 18),
 }
 
 @Composable
