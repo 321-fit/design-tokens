@@ -3,6 +3,7 @@ package com.fit321.fitui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -19,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -454,10 +457,23 @@ fun FitTimeline(
     events: List<FitTimelineEvent>,
     currentMinute: Int? = null,
     hourHeight: androidx.compose.ui.unit.Dp = 96.dp,
+    onLongPressEmptyMinute: ((Int) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
-    Box(modifier = modifier.verticalScroll(rememberScrollState())) {
+    val density = LocalDensity.current
+    val hourHeightPx = with(density) { hourHeight.toPx() }
+    val longPressModifier = if (onLongPressEmptyMinute != null) {
+        Modifier.pointerInput(hourHeightPx) {
+            detectTapGestures(
+                onLongPress = { offset ->
+                    val minute = ((offset.y / hourHeightPx) * 60f).toInt().coerceIn(0, 24 * 60 - 1)
+                    onLongPressEmptyMinute(minute)
+                },
+            )
+        }
+    } else Modifier
+    Box(modifier = modifier.verticalScroll(rememberScrollState()).then(longPressModifier)) {
         // Hour grid
         Column(Modifier.fillMaxWidth()) {
             (0 until 24).forEach { hour ->
