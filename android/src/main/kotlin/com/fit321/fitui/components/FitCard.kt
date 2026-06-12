@@ -1,7 +1,6 @@
 package com.fit321.fitui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,8 +33,9 @@ import com.fit321.fitui.tokens.FitSpacing
  * Content container for grouped information. Optional header with edit
  * action. Mirrors Swift `FitCard`. See `docs/components.md`.
  *
- * Surface = `theme.surfaceDefault`. Light adds a 1-px divider stroke + soft
- * drop shadow. Dark relies on tonal contrast only. Components must never
+ * Surface = `theme.surfaceDefault`. Edge: light = soft drop shadow only (no
+ * border); dark = tonal contrast only (no border). Keeping both borderless
+ * avoids a hard hairline flashing on theme toggle. Components must never
  * hardcode colors — wrap with `FitTheme { FitCard { ... } }`.
  */
 @Composable
@@ -51,7 +51,6 @@ fun FitCard(
     val shape = RoundedCornerShape(FitRadius.card)
 
     val shadowed = if (isLight) Modifier.shadow(4.dp, shape) else Modifier
-    val borderMod = if (isLight) Modifier.border(1.dp, theme.divider, shape) else Modifier
     val clickableMod = if (onClick != null) Modifier.clickable { onClick() } else Modifier
 
     Column(
@@ -60,7 +59,6 @@ fun FitCard(
             .then(shadowed)
             .clip(shape)
             .background(theme.surfaceDefault)
-            .then(borderMod)
             .then(clickableMod)
             .padding(FitSpacing.sp5),
         verticalArrangement = Arrangement.spacedBy(FitSpacing.sp3)

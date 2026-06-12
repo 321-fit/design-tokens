@@ -3,8 +3,10 @@ import SwiftUI
 // MARK: - FitCard
 //
 // Content container for grouped information. Optional header with
-// edit action. Dark: surface-high bg + 1px border. Light: white bg +
-// soft shadow. See `docs/components.md`.
+// edit action. Edge: light = soft drop shadow (no border); dark = surface
+// bg on a darker screen, tonal contrast only (no border). Keeping dark
+// borderless avoids a hard hairline flashing on theme toggle.
+// See `docs/components.md`.
 
 public struct FitCard<Content: View>: View {
     let title: String?
@@ -47,15 +49,8 @@ public struct FitCard<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(theme.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: FitRadius.card))
-        .overlay(cardBorder)
         .shadow(color: theme.screenBg == Color(hex: "F2F2F7") ? Color.black.opacity(0.07) : .clear,
                 radius: 12, x: 0, y: 0)
-    }
-
-    @ViewBuilder
-    private var cardBorder: some View {
-        RoundedRectangle(cornerRadius: FitRadius.card)
-            .stroke(theme.divider, lineWidth: theme.screenBg == FitColors.Gray.g900 ? 0 : 1)
     }
 }
 

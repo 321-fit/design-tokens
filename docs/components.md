@@ -327,7 +327,7 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Used:** profile sections, event summary cards, settings groups.
 
-**iOS/Android notes:** 20px padding, 16px radius. Dark: `surfaceDefault` only (no border, no shadow — tonal contrast). Light: `surfaceDefault` + 1px `divider` border + soft drop shadow.
+**iOS/Android notes:** 20px padding, 16px radius. **Edge rule (updated 2026-06-12):** Dark = `surfaceDefault` only, tonal contrast (no border, no shadow). Light = `surfaceDefault` + soft drop shadow (`elevation/2` = `0 0 12px rgba(0,0,0,0.07)`), **no border**. The old 1px `divider` border on light was dropped — a hard hairline flashed against the borderless dark card on theme toggle; shadow-on-light + clean-dark keeps toggling seamless. Never a brand/teal edge (reads as selection).
 
 **Compose API addition:** optional `onClick: (() -> Unit)?` for tappable cards (e.g. `Next session`). Same default styling regardless of clickability.
 
