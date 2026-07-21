@@ -126,7 +126,12 @@ fun FitDayButton(
             }
         )
         Spacer(Modifier.height(2.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+        // Fixed height so the day number doesn't shift up/down as event dots load
+        // in (the dots arrive asynchronously when a new month's data is fetched).
+        Row(
+            modifier = Modifier.height(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+        ) {
             if (FitDayEventType.Personal in events) Dot(FitColors.Teal.t500)
             if (FitDayEventType.Group    in events) Dot(FitColors.brandPrimary)
             if (FitDayEventType.External in events) Dot(theme.textTertiary)
