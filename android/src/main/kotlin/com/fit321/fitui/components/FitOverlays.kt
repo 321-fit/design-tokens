@@ -15,8 +15,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +44,23 @@ import kotlinx.coroutines.delay
 
 enum class FitSheetVariant { Standard, Compact }
 
+/**
+ * The app's one bottom sheet.
+ *
+ * Built on Material 3 `ModalBottomSheet`, which is what gives it the behaviour a sheet is
+ * expected to have and a hand-rolled `Dialog` cannot: **swipe down to dismiss**, drag up /
+ * drag down between a partially-expanded and a fully-expanded height for tall content,
+ * nested scroll (scrolling the content to its top and continuing to pull drags the sheet
+ * instead), velocity-aware settling, and predictive back. The scrim dismisses on tap with
+ * no ripple — the old version put `clickable` on the full-screen scrim, so every outside
+ * tap painted a screen-sized ripple blob.
+ *
+ * [isVisible] is kept as the API because ~50 call sites drive the sheet from their own
+ * state. The sheet stays composed for the length of its own hide animation after
+ * [isVisible] flips to false, so closing from a button inside the sheet slides out exactly
+ * like a swipe instead of vanishing.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FitSheet(
     isVisible: Boolean,
@@ -49,41 +69,63 @@ fun FitSheet(
     content: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
-    if (isVisible) {
-        Dialog(onDismissRequest = onDismiss) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .clickable { onDismiss() },
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(topStart = FitRadius.lg, topEnd = FitRadius.lg))
-                        .background(theme.screenBg)
-                        .padding(
-                            top = FitSpacing.sp2,
-                            start = FitSpacing.sp4,
-                            end = FitSpacing.sp4,
-                            bottom = if (variant == FitSheetVariant.Standard) FitSpacing.sp9 else 28.dp
-                        )
-                        .clickable(enabled = false) {}    // absorb taps inside sheet
-                ) {
-                    // Handle
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp, 4.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .background(theme.divider)
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Spacer(Modifier.height(FitSpacing.sp4))
-                    content()
-                }
-            }
+    val sheetState = rememberModalBottomSheetState()
+    var rendered by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isVisible) {
+        if (isVisible) {
+            rendered = true
+        } else if (rendered) {
+            // hide() throws if the sheet was already torn down (e.g. a swipe dismiss that
+            // flipped isVisible on its own) — that path has already animated, so skip it.
+            runCatching { sheetState.hide() }
+            rendered = false
         }
+    }
+
+    if (!rendered) return
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = FitRadius.lg, topEnd = FitRadius.lg),
+        containerColor = theme.screenBg,
+        contentColor = theme.textPrimary,
+        tonalElevation = 0.dp,
+        scrimColor = Color.Black.copy(alpha = 0.5f),
+        dragHandle = { FitSheetDragHandle() },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = FitSpacing.sp4,
+                    end = FitSpacing.sp4,
+                    // Same bottom breathing room as before, plus the gesture bar — the
+                    // sheet's own insets only cover the top.
+                    bottom = if (variant == FitSheetVariant.Standard) FitSpacing.sp9 else 28.dp
+                )
+                .navigationBarsPadding()
+        ) {
+            content()
+        }
+    }
+}
+
+/** 36×4 pill in divider grey — the handle the app has always drawn, kept off M3 defaults. */
+@Composable
+private fun FitSheetDragHandle() {
+    val theme = LocalFitTheme.current
+    Box(
+        modifier = Modifier.fillMaxWidth().padding(top = FitSpacing.sp2, bottom = FitSpacing.sp4),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(36.dp, 4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(theme.divider)
+        )
     }
 }
 
