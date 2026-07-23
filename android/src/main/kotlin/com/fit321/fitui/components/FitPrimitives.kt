@@ -2,6 +2,7 @@ package com.fit321.fitui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -259,15 +260,28 @@ enum class FitBadgeStyle {
 }
 
 @Composable
-fun FitBadge(text: String, style: FitBadgeStyle, modifier: Modifier = Modifier) {
+fun FitBadge(
+    text: String,
+    style: FitBadgeStyle,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    bordered: Boolean = false,
+) {
     val theme = LocalFitTheme.current
     val (fg, bg) = colorsFor(style, theme)
-    Box(
+    val shape = RoundedCornerShape(FitRadius.badge)
+    Row(
         modifier = modifier
-            .clip(RoundedCornerShape(FitRadius.badge))
+            .clip(shape)
             .background(bg)
-            .padding(horizontal = 10.dp, vertical = 3.dp)
+            .then(if (bordered) Modifier.border(BorderStroke(1.dp, fg.copy(alpha = 0.3f)), shape) else Modifier)
+            .padding(horizontal = 10.dp, vertical = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        if (icon != null) {
+            Icon(icon, contentDescription = null, tint = fg, modifier = Modifier.size(12.dp))
+        }
         Text(text, style = FitFont.caption.copy(fontWeight = FontWeight.Medium), color = fg, maxLines = 1, softWrap = false)
     }
 }

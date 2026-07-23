@@ -124,6 +124,12 @@ Every component lists **purpose · required props · optional props · variants 
 - `text: String`
 - `style: enum { group, personal, full, joined, pending, special, neutral, success, danger, info, accent, cash }`
 
+**Optional props (Android):**
+- `icon: ImageVector? = null` — leading glyph, tinted to the style color (icon + text row)
+- `bordered: Boolean = false` — 1px border in the style color at 0.3 alpha (outlined pills like CRM)
+
+Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge truncates, never wraps per-letter.
+
 **States:** default (non-interactive). Paired with avatars, event cards, payment chips.
 
 **Used:** "Cash" / "Card" tag on prices, "Group" / "Personal" on events, "CRM" / "Deleted" / "Archived" on client cards.
