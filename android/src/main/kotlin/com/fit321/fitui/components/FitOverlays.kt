@@ -166,7 +166,7 @@ fun FitCalEventPill(text: String, status: FitCalEventPillStatus) {
             .background(bg)
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Text(text, style = FitFont.pill, color = Color.White)
+        Text(text, style = FitFont.pill, color = Color.White, maxLines = 1, softWrap = false)
     }
 }
 

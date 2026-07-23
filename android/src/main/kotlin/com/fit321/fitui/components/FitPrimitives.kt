@@ -268,7 +268,7 @@ fun FitBadge(text: String, style: FitBadgeStyle, modifier: Modifier = Modifier) 
             .background(bg)
             .padding(horizontal = 10.dp, vertical = 3.dp)
     ) {
-        Text(text, style = FitFont.caption.copy(fontWeight = FontWeight.Medium), color = fg)
+        Text(text, style = FitFont.caption.copy(fontWeight = FontWeight.Medium), color = fg, maxLines = 1, softWrap = false)
     }
 }
 
