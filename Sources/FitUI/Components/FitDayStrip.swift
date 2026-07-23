@@ -140,6 +140,9 @@ public struct FitDayButton: View {
         .buttonStyle(.plain)
     }
 
+    // Fixed height so the day number doesn't shift as event dots load in, and the dots
+    // ease in rather than popping — a week's dots arrive after the strip is already on
+    // screen (the month's data is fetched when you page to it). Mirrors Compose `DotSlot`.
     @ViewBuilder
     private var dotsRow: some View {
         HStack(spacing: 3) {
@@ -148,10 +151,14 @@ public struct FitDayButton: View {
             if events.contains(.external) { dot(theme.textTertiary) }
         }
         .frame(height: 4)
+        .animation(.easeOut(duration: 0.18), value: events)
     }
 
     private func dot(_ color: Color) -> some View {
-        Circle().fill(color).frame(width: 4, height: 4)
+        Circle()
+            .fill(color)
+            .frame(width: 4, height: 4)
+            .transition(.opacity.combined(with: .scale(scale: 0.4)))
     }
 
     private var dayNumberColor: Color {

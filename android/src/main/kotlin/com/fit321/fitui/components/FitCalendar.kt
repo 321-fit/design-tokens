@@ -1,5 +1,11 @@
 package com.fit321.fitui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -132,12 +138,32 @@ fun FitDayButton(
             modifier = Modifier.height(4.dp),
             horizontalArrangement = Arrangement.spacedBy(3.dp),
         ) {
-            if (FitDayEventType.Personal in events) Dot(FitColors.Teal.t500)
-            if (FitDayEventType.Group    in events) Dot(FitColors.brandPrimary)
-            if (FitDayEventType.External in events) Dot(theme.textTertiary)
+            DotSlot(FitDayEventType.Personal in events, FitColors.Teal.t500)
+            DotSlot(FitDayEventType.Group    in events, FitColors.brandPrimary)
+            DotSlot(FitDayEventType.External in events, theme.textTertiary)
         }
     }
 }
+
+/**
+ * One event dot that eases in rather than popping. Dots for a week arrive after the
+ * strip is already on screen (the month's data is fetched when you page to it), and a
+ * dot that just appears at full size reads as a glitch. A dot that is already known
+ * when the cell is first composed shows immediately — `AnimatedVisibility` does not
+ * animate its initial state, so paging back to a loaded week stays still.
+ */
+@Composable
+private fun DotSlot(visible: Boolean, color: Color) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(DOT_FADE_MS)) + scaleIn(tween(DOT_FADE_MS), initialScale = 0.4f),
+        exit = fadeOut(tween(DOT_FADE_MS)) + scaleOut(tween(DOT_FADE_MS), targetScale = 0.4f),
+    ) {
+        Dot(color)
+    }
+}
+
+private const val DOT_FADE_MS = 180
 
 @Composable
 private fun Dot(color: Color) {
