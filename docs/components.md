@@ -122,7 +122,14 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Required props:**
 - `text: String`
-- `style: enum { group, personal, full, joined, pending, special, neutral, success, danger, info, accent, cash }`
+- `style: enum { group, personal, full, joined, pending, special, neutral, success, danger, info, accent, cash, card }`
+
+**Optional props (Android):**
+- `icon: ImageVector? = null` — leading glyph, tinted to the style color (icon + text row)
+- `bordered: Boolean = false` — 1px border in the style color at 0.3 alpha (outlined pills like CRM)
+- `compact: Boolean = false` — dense row tag (10sp + 0.3 letter-spacing, padding 2×6, radius 4); default is the standard pill (12sp, padding 3×10, radius 6). CRM / Deleted / payment-method tags are compact; status pills like "€ owed" stay standard.
+
+Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge truncates, never wraps per-letter.
 
 **States:** default (non-interactive). Paired with avatars, event cards, payment chips.
 

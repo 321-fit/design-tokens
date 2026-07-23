@@ -2,6 +2,7 @@ package com.fit321.fitui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -255,20 +257,39 @@ private fun StepperButton(icon: ImageVector, enabled: Boolean, onClick: () -> Un
 
 enum class FitBadgeStyle {
     Group, Personal, Full, Joined, Pending, Special, Error,
-    Neutral, Crm, Danger, Info, Success, Accent
+    Neutral, Crm, Danger, Info, Success, Accent, Cash, Card
 }
 
 @Composable
-fun FitBadge(text: String, style: FitBadgeStyle, modifier: Modifier = Modifier) {
+fun FitBadge(
+    text: String,
+    style: FitBadgeStyle,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    bordered: Boolean = false,
+    compact: Boolean = false,
+) {
     val theme = LocalFitTheme.current
     val (fg, bg) = colorsFor(style, theme)
-    Box(
+    val shape = RoundedCornerShape(if (compact) FitRadius.r4 else FitRadius.badge)
+    val textStyle = if (compact) {
+        FitFont.captionMicro.copy(fontWeight = FontWeight.Medium, letterSpacing = 0.3.sp)
+    } else {
+        FitFont.caption.copy(fontWeight = FontWeight.Medium)
+    }
+    Row(
         modifier = modifier
-            .clip(RoundedCornerShape(FitRadius.badge))
+            .clip(shape)
             .background(bg)
-            .padding(horizontal = 10.dp, vertical = 3.dp)
+            .then(if (bordered) Modifier.border(BorderStroke(1.dp, fg.copy(alpha = 0.3f)), shape) else Modifier)
+            .padding(horizontal = if (compact) 6.dp else 10.dp, vertical = if (compact) 2.dp else 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(if (compact) 3.dp else 4.dp),
     ) {
-        Text(text, style = FitFont.caption.copy(fontWeight = FontWeight.Medium), color = fg)
+        if (icon != null) {
+            Icon(icon, contentDescription = null, tint = fg, modifier = Modifier.size(if (compact) 10.dp else 12.dp))
+        }
+        Text(text, style = textStyle, color = fg, maxLines = 1, softWrap = false)
     }
 }
 
@@ -286,6 +307,8 @@ private fun colorsFor(s: FitBadgeStyle, theme: FitColors.Theme): Pair<Color, Col
     FitBadgeStyle.Neutral  -> theme.textTertiary to theme.surfaceHigher
     FitBadgeStyle.Crm      -> FitColors.Teal.t500 to FitColors.Teal.t500.copy(alpha = 0.15f)
     FitBadgeStyle.Accent   -> FitColors.brandPrimary to FitColors.brandPrimary.copy(alpha = 0.12f)
+    FitBadgeStyle.Cash     -> FitColors.Teal.t500 to FitColors.Teal.t500.copy(alpha = 0.14f)
+    FitBadgeStyle.Card     -> FitColors.externalStripePurple to FitColors.externalStripePurple.copy(alpha = 0.14f)
 }
 
 // Helper for Int → .sp
