@@ -1,57 +1,31 @@
 package com.fit321.fitui.tokens
 
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font as GoogleFontFont
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.fit321.designtokens.R
 
 /**
  * 321Fit typography system — mirrors Swift FitFont.
- * Font: Rubik (Google Fonts).
+ * Font: Rubik.
  * Source: design-tokens/tokens/typography.json
  *
- * The fonts are fetched at runtime via the Compose Downloadable Fonts API
- * (`androidx.compose.ui:ui-text-google-fonts`), which uses Google Play
- * Services as the font provider. No bundled binaries — the OS caches the
- * font once, shared across apps on the device.
- *
- * Cert array note:
- * The standard Google Fonts provider needs a `certificates` int-array
- * resource. We can't easily wire the platform-default
- * `R.array.com_google_android_gms_fonts_certs` from inside a library module
- * (it lives in the consuming app's package), so we fall back to
- * `FontFamily.Default` if the provider hasn't been supplied.
- *
- * TODO: pass `GoogleFont.Provider` from app via `CompositionLocal` so the
- * provider lives in the app module (where the cert array is reachable) and
- * is propagated down to FitUI components. Tracked alongside the iOS Rubik
- * registration work — see Phase 1 plan.
+ * Rubik is bundled directly in the design-system module
+ * (`android/src/main/res/font/rubik_*.ttf`) and resolved from those
+ * resources — no runtime download, no Google Play Services, no per-app
+ * wiring. Every consumer of FitUI renders Rubik out of the box, offline,
+ * with no first-paint fallback flash.
  */
 object FitFont {
 
-    private val rubik = GoogleFont("Rubik")
-
-    /**
-     * Optional provider — set this from the consuming app once at startup
-     * (e.g. inside `FitTheme(...)` initialization in the app shell). When
-     * `null`, all FitFont styles fall back to `FontFamily.Default` so
-     * components keep rendering instead of crashing.
-     */
-    @Volatile
-    var provider: GoogleFont.Provider? = null
-
-    val family: FontFamily
-        get() = provider?.let { p ->
-            FontFamily(
-                GoogleFontFont(googleFont = rubik, fontProvider = p, weight = FontWeight.Normal,   style = FontStyle.Normal),
-                GoogleFontFont(googleFont = rubik, fontProvider = p, weight = FontWeight.Medium,   style = FontStyle.Normal),
-                GoogleFontFont(googleFont = rubik, fontProvider = p, weight = FontWeight.SemiBold, style = FontStyle.Normal),
-                GoogleFontFont(googleFont = rubik, fontProvider = p, weight = FontWeight.Bold,     style = FontStyle.Normal)
-            )
-        } ?: FontFamily.Default
+    val family: FontFamily = FontFamily(
+        Font(R.font.rubik_regular, FontWeight.Normal),
+        Font(R.font.rubik_medium, FontWeight.Medium),
+        Font(R.font.rubik_semibold, FontWeight.SemiBold),
+        Font(R.font.rubik_bold, FontWeight.Bold),
+    )
 
     val headline     get() = TextStyle(fontFamily = family, fontWeight = FontWeight.SemiBold, fontSize = 28.sp, lineHeight = 34.sp)
     val heading1     get() = TextStyle(fontFamily = family, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = 29.sp)
