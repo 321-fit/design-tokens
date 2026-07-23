@@ -67,6 +67,9 @@ object FitColors {
     val brandSecondary   = Teal.t500
     val selectionBorder  = Teal.t600
 
+    // ==== External brand ====
+    val externalStripePurple = Color(0xFF635BFF)
+
     val brandGradient: Brush = Brush.horizontalGradient(
         colors = listOf(Blue.b500, Teal.t500)
     )

@@ -122,7 +122,7 @@ Every component lists **purpose · required props · optional props · variants 
 
 **Required props:**
 - `text: String`
-- `style: enum { group, personal, full, joined, pending, special, neutral, success, danger, info, accent, cash }`
+- `style: enum { group, personal, full, joined, pending, special, neutral, success, danger, info, accent, cash, card }`
 
 **Optional props (Android):**
 - `icon: ImageVector? = null` — leading glyph, tinted to the style color (icon + text row)

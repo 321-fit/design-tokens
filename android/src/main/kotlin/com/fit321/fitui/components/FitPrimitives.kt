@@ -256,7 +256,7 @@ private fun StepperButton(icon: ImageVector, enabled: Boolean, onClick: () -> Un
 
 enum class FitBadgeStyle {
     Group, Personal, Full, Joined, Pending, Special, Error,
-    Neutral, Crm, Danger, Info, Success, Accent
+    Neutral, Crm, Danger, Info, Success, Accent, Cash, Card
 }
 
 @Composable
@@ -300,6 +300,8 @@ private fun colorsFor(s: FitBadgeStyle, theme: FitColors.Theme): Pair<Color, Col
     FitBadgeStyle.Neutral  -> theme.textTertiary to theme.surfaceHigher
     FitBadgeStyle.Crm      -> FitColors.Teal.t500 to FitColors.Teal.t500.copy(alpha = 0.15f)
     FitBadgeStyle.Accent   -> FitColors.brandPrimary to FitColors.brandPrimary.copy(alpha = 0.12f)
+    FitBadgeStyle.Cash     -> FitColors.Teal.t500 to FitColors.Teal.t500.copy(alpha = 0.14f)
+    FitBadgeStyle.Card     -> FitColors.externalStripePurple to FitColors.externalStripePurple.copy(alpha = 0.14f)
 }
 
 // Helper for Int → .sp
