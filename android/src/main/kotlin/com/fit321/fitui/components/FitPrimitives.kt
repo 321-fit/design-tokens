@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -266,23 +267,29 @@ fun FitBadge(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     bordered: Boolean = false,
+    compact: Boolean = false,
 ) {
     val theme = LocalFitTheme.current
     val (fg, bg) = colorsFor(style, theme)
-    val shape = RoundedCornerShape(FitRadius.badge)
+    val shape = RoundedCornerShape(if (compact) FitRadius.r4 else FitRadius.badge)
+    val textStyle = if (compact) {
+        FitFont.captionMicro.copy(fontWeight = FontWeight.Medium, letterSpacing = 0.3.sp)
+    } else {
+        FitFont.caption.copy(fontWeight = FontWeight.Medium)
+    }
     Row(
         modifier = modifier
             .clip(shape)
             .background(bg)
             .then(if (bordered) Modifier.border(BorderStroke(1.dp, fg.copy(alpha = 0.3f)), shape) else Modifier)
-            .padding(horizontal = 10.dp, vertical = 3.dp),
+            .padding(horizontal = if (compact) 6.dp else 10.dp, vertical = if (compact) 2.dp else 3.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(if (compact) 3.dp else 4.dp),
     ) {
         if (icon != null) {
-            Icon(icon, contentDescription = null, tint = fg, modifier = Modifier.size(12.dp))
+            Icon(icon, contentDescription = null, tint = fg, modifier = Modifier.size(if (compact) 10.dp else 12.dp))
         }
-        Text(text, style = FitFont.caption.copy(fontWeight = FontWeight.Medium), color = fg, maxLines = 1, softWrap = false)
+        Text(text, style = textStyle, color = fg, maxLines = 1, softWrap = false)
     }
 }
 
