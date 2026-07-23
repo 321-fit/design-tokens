@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,27 +25,49 @@ import com.fit321.fitui.tokens.FitSpacing
 // Shimmer modifier — creates the animated gradient effect
 // ============================================================================
 
+/**
+ * Animated shimmer fill.
+ *
+ * The phase is read inside the **draw** lambda, not in composition. Read in composition
+ * (the previous shape of this modifier: `background(Brush.horizontalGradient(startX =
+ * phase * …))`) it recomposed and allocated a fresh gradient on every frame — for EVERY
+ * skeleton element on screen. A screen with a dozen placeholder lines therefore ran a
+ * dozen recompositions and a dozen allocations per frame, and it started right as the
+ * navigation enter-transition was running, which is exactly when a screen can least
+ * afford it — the visible symptom was a stutter on open. Reading the phase at draw time
+ * invalidates drawing only; layout and composition are untouched.
+ */
 @Composable
 fun Modifier.fitShimmer(): Modifier {
     val theme = LocalFitTheme.current
     val transition = rememberInfiniteTransition(label = "fit-shimmer")
-    val phase by transition.animateFloat(
+    val phase = transition.animateFloat(
         initialValue = -1f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1400),
+            animation = tween(durationMillis = SHIMMER_PERIOD_MS),
             repeatMode = RepeatMode.Restart
         ),
         label = "fit-shimmer-phase"
     )
-    return this.background(
-        brush = Brush.horizontalGradient(
-            colors = listOf(theme.surfaceHigher, theme.surfaceHigh, theme.surfaceHigher),
-            startX = phase * 800f,
-            endX = (phase + 1) * 800f
-        )
-    )
+    val base = theme.surfaceHigher
+    val highlight = theme.surfaceHigh
+    return this.drawWithCache {
+        onDrawBehind {
+            val startX = phase.value * SHIMMER_SPAN_PX
+            drawRect(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(base, highlight, base),
+                    startX = startX,
+                    endX = startX + SHIMMER_SPAN_PX
+                )
+            )
+        }
+    }
 }
+
+private const val SHIMMER_PERIOD_MS = 1400
+private const val SHIMMER_SPAN_PX = 800f
 
 // ============================================================================
 // Primitives — card / row / circle / line / block / button / strip
