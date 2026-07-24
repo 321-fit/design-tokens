@@ -225,6 +225,13 @@ fun FitCalEvent(
     location: String? = null,
     status: FitCalEventStatus = FitCalEventStatus.Planned,
     overlapped: Boolean = false,
+    /**
+     * Drops the type tint for a plain surface fill while keeping the coloured left stripe. Used
+     * for a reference event that isn't the subject of the screen — e.g. the coach's / athlete's
+     * OWN existing events shown on the booking / reschedule grid, which must recede behind the
+     * block being placed rather than compete with it as solid teal cards.
+     */
+    neutralFill: Boolean = false,
     onTap: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -237,6 +244,7 @@ fun FitCalEvent(
     // missed) override the type fill with their own tint; awaiting has NO fill (dashed border
     // alone carries "you wait"); planned/finished keep the type tint. All theme-aware via tokens.
     val cardBg: Color = when {
+        neutralFill -> theme.surfaceHigh
         status == FitCalEventStatus.Request || status == FitCalEventStatus.Review -> theme.bgWarningSubtle
         status == FitCalEventStatus.Missed   -> theme.bgErrorSubtle
         status == FitCalEventStatus.Awaiting -> theme.surfaceHigh
@@ -424,17 +432,24 @@ private fun RowScope.FitCalEventContent(
         when (tier) {
             FitCalEventTier.Tiny -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        title,
-                        style = FitFont.body2.copy(fontSize = 10.sp, fontWeight = FontWeight.Medium),
-                        color = titleColor,
-                        maxLines = 1,
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
-                    Text(" · ", style = FitFont.caption, color = tertiary, fontSize = 10.sp)
-                    Text(time, style = FitFont.caption, color = tertiary, fontSize = 10.sp, maxLines = 1)
+                    // Left group fills the row (pushing the pill hard right); the title truncates
+                    // inside it so a short title never leaves the pill stranded mid-row.
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            title,
+                            style = FitFont.body2.copy(fontSize = 10.sp, fontWeight = FontWeight.Medium),
+                            color = titleColor,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                        Text(" · ", style = FitFont.caption, color = tertiary, fontSize = 10.sp)
+                        Text(time, style = FitFont.caption, color = tertiary, fontSize = 10.sp, maxLines = 1)
+                    }
                     if (pillText != null && pillStatus != null) {
-                        Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.width(4.dp))
                         FitCalEventPill(pillText, pillStatus)
                     }
                 }
