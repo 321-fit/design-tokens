@@ -520,7 +520,13 @@ private fun DashedVerticalStripe(color: Color) {
 data class FitTimelineEvent(
     val startMinute: Int,
     val durationMin: Int,
-    val view: @Composable () -> Unit
+    val view: @Composable () -> Unit,
+    /**
+     * When true the tile is drawn edge-to-edge (ignoring the time-label gutter + side insets) as a
+     * background band behind the grid — used for the off-hours wash so "outside working hours" reads
+     * as a full-width state-of-the-day, not a boxed event. Regular events keep the normal inset.
+     */
+    val fullBleed: Boolean = false,
 )
 
 @Composable
