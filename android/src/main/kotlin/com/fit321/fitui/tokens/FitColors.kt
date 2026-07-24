@@ -120,7 +120,10 @@ object FitColors {
         val bgBrandTinted: Color,
         // Destructive
         val destructiveBgSubtle: Color,
-        val destructiveBgTinted: Color
+        val destructiveBgTinted: Color,
+        // Calendar off-hours wash — flat tonal band for "outside working hours" (event-statuses
+        // § 5b). Distinct from the hatch, which now means only "busy" (travel/blocked).
+        val bgOffHours: Color
     ) {
         // Compatibility aliases — pre-existing names retained so existing FitUI components keep working
         val cardBg: Color get() = surfaceDefault
@@ -155,7 +158,8 @@ object FitColors {
                 bgBrandSubtle    = Color(0xFF05E0A6).copy(alpha = 0.12f),
                 bgBrandTinted    = Color(0xFF05E0A6).copy(alpha = 0.18f),
                 destructiveBgSubtle = Color(0xFFF05C5B).copy(alpha = 0.12f),
-                destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.18f)
+                destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.18f),
+                bgOffHours = Color(0x59000000) // black @35% — darkens the band on the dark canvas
             )
 
             val light = Theme(
@@ -165,28 +169,32 @@ object FitColors {
                 surfaceHigh = Gray.white,
                 surfaceHigher = Gray.g50,
                 textPrimary = Gray.g900,
-                textSecondary = Gray.g500,
+                textSecondary = Gray.g600,
                 textTertiary = Gray.g500,
                 textPlaceholder = Gray.g400,
                 textDisabled = Gray.g300,
                 textOnBrand = Blue.b700,
                 textError = Red.r700,
-                divider = Gray.g100,
+                divider = Gray.g200,
                 borderFocus = Blue.b600,
                 borderError = Red.r700,
                 bgDisabled = Gray.g200,
-                bgErrorSubtle    = Color(0xFFF05C5B).copy(alpha = 0.08f),
-                bgErrorTinted    = Color(0xFFF05C5B).copy(alpha = 0.12f),
-                bgSuccessSubtle  = Color(0xFF05E0A6).copy(alpha = 0.08f),
-                bgSuccessTinted  = Color(0xFF05E0A6).copy(alpha = 0.12f),
-                bgWarningSubtle  = Color(0xFFF7C948).copy(alpha = 0.10f),
-                bgWarningTinted  = Color(0xFFF7C948).copy(alpha = 0.16f),
-                bgInfoSubtle     = Color(0xFF03B2E2).copy(alpha = 0.08f),
-                bgInfoTinted     = Color(0xFF03B2E2).copy(alpha = 0.12f),
-                bgBrandSubtle    = Color(0xFF05E0A6).copy(alpha = 0.08f),
-                bgBrandTinted    = Color(0xFF05E0A6).copy(alpha = 0.12f),
-                destructiveBgSubtle = Color(0xFFF05C5B).copy(alpha = 0.08f),
-                destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.12f)
+                // Light tints derive from the DARKER accent step at a HIGHER alpha so a tinted
+                // surface actually moves off the #F2F2F7 canvas (a bright 500-step at 8% reads
+                // white). Synced with tokens/color-semantic.json (dfa9494); dark stays 500 @low.
+                bgErrorSubtle    = Red.r400.copy(alpha = 0.16f),
+                bgErrorTinted    = Red.r400.copy(alpha = 0.22f),
+                bgSuccessSubtle  = Teal.t600.copy(alpha = 0.16f),
+                bgSuccessTinted  = Teal.t600.copy(alpha = 0.24f),
+                bgWarningSubtle  = Yellow.y600.copy(alpha = 0.18f),
+                bgWarningTinted  = Yellow.y600.copy(alpha = 0.26f),
+                bgInfoSubtle     = Blue.b600.copy(alpha = 0.16f),
+                bgInfoTinted     = Blue.b600.copy(alpha = 0.24f),
+                bgBrandSubtle    = Teal.t600.copy(alpha = 0.16f),
+                bgBrandTinted    = Teal.t600.copy(alpha = 0.24f),
+                destructiveBgSubtle = Red.r400.copy(alpha = 0.16f),
+                destructiveBgTinted = Red.r400.copy(alpha = 0.22f),
+                bgOffHours = Color(0x1A3C3C43) // #3C3C43 @10% — subtle cool wash on #F2F2F7
             )
         }
     }

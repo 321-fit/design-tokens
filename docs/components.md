@@ -689,16 +689,16 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - `compact`: height ≤ 45pt — 2 rows: title / `{recipient} · {time}`
 - `standard`: height ≥ 46pt — 3 rows: title / `{recipient} · {time}` / `📍 {location}`
 
-**Variants (type × status combos):**
-- personal — surface-high bg + 3pt teal-500 solid stripe
-- group — blue-500 12% bg + 3pt blue-500 solid stripe
-- external — gray-700 / gray-200 bg, opacity 0.7, 3pt text-tertiary solid stripe
+**Variants (type × status combos)** — two axes per [event-statuses.md § 5b](../../project-spec/specs/event-statuses.md#5b-calendar-visual-language-updated-2026-07-24): **fill/tint = TYPE**, **border = ACTION**. All tints are theme-aware (read the `bg.*-{subtle,tinted}` tokens — a light tint is the darker accent step at higher alpha, not the same bright accent):
+- personal — **teal tint (`bg.brand-subtle`, both themes)** + 3pt teal-500 solid stripe
+- group — **blue tint (`bg.info-subtle`)** + 3pt blue-500 solid stripe
+- external — gray-700 / gray-200 bg, opacity 0.7, 3pt text-tertiary solid stripe (neutral surface = not-a-training)
 - crossRole(role) — surface-high bg, opacity 0.75, 3pt **dashed** text-tertiary stripe, role-tag badge anchored bottom-right (no status pill — actions belong to the other role)
-- custom — surface-high bg, opacity 1.0 (your own event — no muting), 3pt **solid** text-tertiary stripe, no role tag, **no status pill** (custom events are stateless — they don't participate in the 6-state lifecycle per event-statuses.md). Default title "My time" when caller passes empty title. Render distinct from cross-role (which uses dashed stripe + opacity) and from external (which uses solid stripe + opacity).
-- Statuses overlay the type:
-    - request / review — yellow-600 10% bg + 1pt yellow-600 perimeter
-    - awaiting — gray-400/500 perimeter + subtle bg
-    - missed — red-400 perimeter + 10% red bg
+- custom — surface-high bg, opacity 1.0 (your own event — no muting), 3pt **solid** text-tertiary stripe, no role tag, **no status pill** (custom events are stateless — they don't participate in the 6-state lifecycle per event-statuses.md). Default title "My time" when caller passes empty title.
+- Actionable / terminal statuses override the type fill (act-on-it = own tint + solid perimeter); awaiting has NO fill (dashed border alone = you-wait); planned / finished keep the type tint:
+    - request / review — `bg.warning-subtle` fill + 1pt yellow-600 solid perimeter
+    - awaiting — **1pt yellow-600 DASHED perimeter, no fill** (was a gray perimeter that read as Planned)
+    - missed — `bg.error-subtle` fill + red-400 perimeter
     - finished — opacity 0.5
 
 **Sub-elements:**

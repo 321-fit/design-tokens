@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
@@ -231,14 +232,18 @@ fun FitCalEvent(
     val tier = FitCalEventTier.from(height)
     val isCrossRole = type is FitCalEventType.CrossRole
 
+    // Two axes (event-statuses.md § 5b): fill/tint = TYPE (teal personal / blue group / neutral
+    // surface = not-a-training), border = ACTION. Actionable/terminal statuses (request, review,
+    // missed) override the type fill with their own tint; awaiting has NO fill (dashed border
+    // alone carries "you wait"); planned/finished keep the type tint. All theme-aware via tokens.
     val cardBg: Color = when {
-        status == FitCalEventStatus.Request || status == FitCalEventStatus.Review ->
-            FitColors.Yellow.y600.copy(alpha = 0.10f)
-        status == FitCalEventStatus.Missed ->
-            FitColors.error.copy(alpha = 0.10f)
-        type is FitCalEventType.External   -> theme.surfaceHigher
-        type is FitCalEventType.Group      -> FitColors.brandPrimary.copy(alpha = 0.12f)
-        else                               -> theme.surfaceHigh
+        status == FitCalEventStatus.Request || status == FitCalEventStatus.Review -> theme.bgWarningSubtle
+        status == FitCalEventStatus.Missed   -> theme.bgErrorSubtle
+        status == FitCalEventStatus.Awaiting -> theme.surfaceHigh
+        type is FitCalEventType.External     -> theme.surfaceHigher
+        type is FitCalEventType.Group        -> theme.bgInfoSubtle
+        type is FitCalEventType.Personal     -> theme.bgBrandSubtle
+        else                                 -> theme.surfaceHigh   // custom / cross-role = not-a-training
     }
     val leftAccent: Color = when (type) {
         is FitCalEventType.Personal  -> FitColors.Teal.t500
@@ -247,9 +252,11 @@ fun FitCalEvent(
         is FitCalEventType.CrossRole -> theme.textTertiary
         is FitCalEventType.Custom    -> theme.textTertiary   // solid; cross-role uses dashed
     }
+    // Awaiting = yellow DASHED, no fill (you wait); request/review/missed = solid perimeter.
+    val awaitingDashed = status == FitCalEventStatus.Awaiting
     val borderColor: Color? = when (status) {
         FitCalEventStatus.Request, FitCalEventStatus.Review -> FitColors.Yellow.y600
-        FitCalEventStatus.Awaiting -> theme.textTertiary
+        FitCalEventStatus.Awaiting -> FitColors.Yellow.y600
         FitCalEventStatus.Missed   -> FitColors.error
         else -> null
     }
@@ -281,9 +288,13 @@ fun FitCalEvent(
                     .clip(RoundedCornerShape(FitRadius.md))
                     .background(cardBg)
                     .then(
-                        if (borderColor != null)
-                            Modifier.border(1.dp, borderColor, RoundedCornerShape(FitRadius.md))
-                        else Modifier
+                        when {
+                            awaitingDashed && borderColor != null ->
+                                Modifier.dashedRoundedBorder(1.dp, borderColor, FitRadius.md)
+                            borderColor != null ->
+                                Modifier.border(1.dp, borderColor, RoundedCornerShape(FitRadius.md))
+                            else -> Modifier
+                        }
                     )
             ) {
                 // Left stripe
@@ -452,6 +463,28 @@ private fun RowScope.FitCalEventContent(
             }
         }
     }
+}
+
+/** Dashed rounded perimeter — the "awaiting" (you-wait) border; Compose `border` has no dash. */
+private fun Modifier.dashedRoundedBorder(
+    width: androidx.compose.ui.unit.Dp,
+    color: Color,
+    radius: androidx.compose.ui.unit.Dp,
+): Modifier = this.drawBehind {
+    val w = width.toPx()
+    val stroke = androidx.compose.ui.graphics.drawscope.Stroke(
+        width = w,
+        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+            floatArrayOf(3.dp.toPx(), 3.dp.toPx()), 0f,
+        ),
+    )
+    drawRoundRect(
+        color = color,
+        topLeft = androidx.compose.ui.geometry.Offset(w / 2, w / 2),
+        size = androidx.compose.ui.geometry.Size(size.width - w, size.height - w),
+        cornerRadius = androidx.compose.ui.geometry.CornerRadius(radius.toPx()),
+        style = stroke,
+    )
 }
 
 @Composable
