@@ -245,12 +245,19 @@ fun FitCalEvent(
         type is FitCalEventType.Personal     -> theme.bgBrandSubtle
         else                                 -> theme.surfaceHigh   // custom / cross-role = not-a-training
     }
-    val leftAccent: Color = when (type) {
-        is FitCalEventType.Personal  -> FitColors.Teal.t500
-        is FitCalEventType.Group     -> FitColors.brandPrimary
-        is FitCalEventType.External  -> theme.textTertiary
-        is FitCalEventType.CrossRole -> theme.textTertiary
-        is FitCalEventType.Custom    -> theme.textTertiary   // solid; cross-role uses dashed
+    // The left stripe follows the ACTION when there is one — an actionable/terminal status paints
+    // the stripe its own colour (yellow / red) so the whole tile reads one signal, not a teal
+    // stripe fighting a yellow border. Planned / finished fall back to the TYPE colour.
+    val leftAccent: Color = when (status) {
+        FitCalEventStatus.Request, FitCalEventStatus.Review, FitCalEventStatus.Awaiting -> FitColors.Yellow.y600
+        FitCalEventStatus.Missed -> FitColors.error
+        else -> when (type) {
+            is FitCalEventType.Personal  -> FitColors.Teal.t500
+            is FitCalEventType.Group     -> FitColors.brandPrimary
+            is FitCalEventType.External  -> theme.textTertiary
+            is FitCalEventType.CrossRole -> theme.textTertiary
+            is FitCalEventType.Custom    -> theme.textTertiary   // solid; cross-role uses dashed
+        }
     }
     // Awaiting = yellow DASHED, no fill (you wait); request/review/missed = solid perimeter.
     val awaitingDashed = status == FitCalEventStatus.Awaiting
