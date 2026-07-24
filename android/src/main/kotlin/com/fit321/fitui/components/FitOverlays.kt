@@ -157,28 +157,24 @@ enum class FitCalEventPillStatus { Request, Review, Awaiting, Missed }
 
 @Composable
 fun FitCalEventPill(text: String, status: FitCalEventPillStatus) {
-    // Two axes (event-statuses.md § 5b): filled yellow = act on it (request/review), OUTLINED
-    // yellow = you-wait (awaiting), filled red = missed. Awaiting must not be a solid gray pill —
-    // that read as an ordinary tag rather than "pending on the other party".
+    // All status pills are filled with white text (matches the dashboard). The request-vs-awaiting
+    // distinction is carried by the tile itself — the dashed border + yellow left stripe for
+    // awaiting — not by the pill fill, so the pill stays legible (white on yellow / white on red).
     val accent = when (status) {
         FitCalEventPillStatus.Request, FitCalEventPillStatus.Review -> FitColors.Yellow.y600
         FitCalEventPillStatus.Awaiting -> FitColors.Yellow.y600
         FitCalEventPillStatus.Missed -> FitColors.error
     }
-    val outlined = status == FitCalEventPillStatus.Awaiting
     Box(
         modifier = Modifier
             .clip(CircleShape)
-            .then(
-                if (outlined) Modifier.border(1.dp, accent, CircleShape)
-                else Modifier.background(accent),
-            )
+            .background(accent)
             .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
         Text(
             text,
             style = FitFont.pill,
-            color = if (outlined) accent else Color.White,
+            color = Color.White,
             maxLines = 1,
             softWrap = false,
         )
