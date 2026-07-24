@@ -38,8 +38,8 @@
       },
       "secondary": {
         "dark":  { "value": "{color.gray.200}" },
-        "light": { "value": "{color.gray.500}" },
-        "comment": "Supporting text — descriptions, labels"
+        "light": { "value": "{color.gray.600}" },
+        "comment": "Supporting text — descriptions, labels. Light is gray.600, one step darker than tertiary: both used to be gray.500, so light had no three-step ramp at all"
       },
       "tertiary": {
         "dark":  { "value": "{color.gray.400}" },
@@ -69,8 +69,8 @@
     },
     "divider": {
       "dark":  { "value": "{color.gray.700}" },
-      "light": { "value": "{color.gray.100}" },
-      "comment": "1px borders, dividers between rows"
+      "light": { "value": "{color.gray.200}" },
+      "comment": "1px borders, dividers between rows. Light is gray.200 — gray.100 sat at 1.12:1 against the canvas, i.e. invisible"
     },
     "bg": {
       "disabled": {
@@ -80,52 +80,52 @@
       },
       "error-subtle": {
         "dark":  { "value": "rgba(240,92,91,0.12)" },
-        "light": { "value": "rgba(240,92,91,0.08)" },
+        "light": { "value": "rgba(240,92,91,0.16)" },
         "comment": "Error banner / faint surface — used for inline validation banners"
       },
       "error-tinted": {
         "dark":  { "value": "rgba(240,92,91,0.18)" },
-        "light": { "value": "rgba(240,92,91,0.12)" },
+        "light": { "value": "rgba(240,92,91,0.22)" },
         "comment": "Error highlight — pill, chip, badge bg with stronger presence than subtle"
       },
       "success-subtle": {
         "dark":  { "value": "rgba(5,224,166,0.12)" },
-        "light": { "value": "rgba(5,224,166,0.08)" },
+        "light": { "value": "rgba(8,180,143,0.16)" },
         "comment": "Success faint surface — confirmation banner, paid-status row"
       },
       "success-tinted": {
         "dark":  { "value": "rgba(5,224,166,0.18)" },
-        "light": { "value": "rgba(5,224,166,0.12)" },
+        "light": { "value": "rgba(8,180,143,0.24)" },
         "comment": "Success highlight — completion pill, active state on success"
       },
       "warning-subtle": {
         "dark":  { "value": "rgba(247,201,72,0.12)" },
-        "light": { "value": "rgba(247,201,72,0.10)" },
+        "light": { "value": "rgba(222,145,29,0.18)" },
         "comment": "Warning faint surface — heads-up banner, soft alert"
       },
       "warning-tinted": {
         "dark":  { "value": "rgba(247,201,72,0.20)" },
-        "light": { "value": "rgba(247,201,72,0.16)" },
-        "comment": "Warning highlight — yellow needs slightly higher alpha to read on light bg"
+        "light": { "value": "rgba(222,145,29,0.26)" },
+        "comment": "Warning highlight — light drops to yellow.600; yellow.400 is too light to separate from the canvas at any alpha"
       },
       "info-subtle": {
         "dark":  { "value": "rgba(3,178,226,0.12)" },
-        "light": { "value": "rgba(3,178,226,0.08)" },
+        "light": { "value": "rgba(10,147,189,0.16)" },
         "comment": "Info faint surface — informational banner, neutral tip"
       },
       "info-tinted": {
         "dark":  { "value": "rgba(3,178,226,0.18)" },
-        "light": { "value": "rgba(3,178,226,0.12)" },
+        "light": { "value": "rgba(10,147,189,0.24)" },
         "comment": "Info highlight — pill, badge for info-state"
       },
       "brand-subtle": {
         "dark":  { "value": "rgba(5,224,166,0.12)" },
-        "light": { "value": "rgba(5,224,166,0.08)" },
+        "light": { "value": "rgba(8,180,143,0.16)" },
         "comment": "Brand faint surface — premium / featured row, brand-themed banner. Uses brand.secondary (teal) to avoid colliding with bg.info-* which uses brand.primary (blue)."
       },
       "brand-tinted": {
         "dark":  { "value": "rgba(5,224,166,0.18)" },
-        "light": { "value": "rgba(5,224,166,0.12)" },
+        "light": { "value": "rgba(8,180,143,0.24)" },
         "comment": "Brand highlight — active/selected card surface, brand pill bg. Mirrors selectionGradient and border.selection (teal.600)."
       }
     },
@@ -153,12 +153,12 @@
       "primary":   { "value": "{color.red.400}", "comment": "Destructive filled button bg / text on outlined (constant — destructive accent identical across themes)" },
       "bg-tinted": {
         "dark":  { "value": "rgba(240,92,91,0.18)" },
-        "light": { "value": "rgba(240,92,91,0.12)" },
+        "light": { "value": "rgba(240,92,91,0.22)" },
         "comment": "Destructive Medium tier bg — split mirrors bg.error-tinted opacities"
       },
       "bg-subtle": {
         "dark":  { "value": "rgba(240,92,91,0.12)" },
-        "light": { "value": "rgba(240,92,91,0.08)" },
+        "light": { "value": "rgba(240,92,91,0.16)" },
         "comment": "Destructive Low-hover / banner bg — split mirrors bg.error-subtle opacities"
       }
     }

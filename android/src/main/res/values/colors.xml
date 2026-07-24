@@ -2,7 +2,7 @@
 
 <!--
   Do not edit directly
-  Generated on Tue, 28 Apr 2026 16:32:19 GMT
+  Generated on Fri, 24 Jul 2026 20:00:16 GMT
 -->
 <resources>
   <color name="fit_color_gray_50">#fff7f7f8</color>
@@ -23,6 +23,11 @@
   <color name="fit_color_blue_600">#ff0a93bd</color>
   <color name="fit_color_blue_700">#ff06789d</color>
   <color name="fit_color_blue_900">#ff00334d</color>
+  <color name="fit_color_violet_100">#ffede9fe</color>
+  <color name="fit_color_violet_400">#ffa78bfa</color>
+  <color name="fit_color_violet_500">#ff8b5cf6</color>
+  <color name="fit_color_violet_600">#ff7c3aed</color>
+  <color name="fit_color_violet_700">#ff6d28d9</color>
   <color name="fit_color_teal_200">#ff87f7cc</color>
   <color name="fit_color_teal_400">#ff22f7b7</color>
   <color name="fit_color_teal_500">#ff05e0a6</color>
@@ -74,7 +79,7 @@
   <color name="fit_color_text_primary_dark">#ffffffff</color>
   <color name="fit_color_text_primary_light">#ff1f2123</color>
   <color name="fit_color_text_secondary_dark">#ffcccfd2</color>
-  <color name="fit_color_text_secondary_light">#ff757e87</color>
+  <color name="fit_color_text_secondary_light">#ff5b6269</color>
   <color name="fit_color_text_tertiary_dark">#ff979ea5</color>
   <color name="fit_color_text_tertiary_light">#ff757e87</color>
   <color name="fit_color_text_placeholder_dark">#ff757e87</color>
@@ -86,29 +91,29 @@
   <color name="fit_color_text_error_dark">#fff05c5b</color>
   <color name="fit_color_text_error_light">#ffab081f</color>
   <color name="fit_color_divider_dark">#ff3b4044</color>
-  <color name="fit_color_divider_light">#ffe4e6e7</color>
+  <color name="fit_color_divider_light">#ffcccfd2</color>
   <color name="fit_color_bg_disabled_dark">#ff3b4044</color>
   <color name="fit_color_bg_disabled_light">#ffcccfd2</color>
   <color name="fit_color_bg_error_subtle_dark">#1ff05c5b</color>
-  <color name="fit_color_bg_error_subtle_light">#14f05c5b</color>
+  <color name="fit_color_bg_error_subtle_light">#29f05c5b</color>
   <color name="fit_color_bg_error_tinted_dark">#2ef05c5b</color>
-  <color name="fit_color_bg_error_tinted_light">#1ff05c5b</color>
+  <color name="fit_color_bg_error_tinted_light">#38f05c5b</color>
   <color name="fit_color_bg_success_subtle_dark">#1f05e0a6</color>
-  <color name="fit_color_bg_success_subtle_light">#1405e0a6</color>
+  <color name="fit_color_bg_success_subtle_light">#2908b48f</color>
   <color name="fit_color_bg_success_tinted_dark">#2e05e0a6</color>
-  <color name="fit_color_bg_success_tinted_light">#1f05e0a6</color>
+  <color name="fit_color_bg_success_tinted_light">#3d08b48f</color>
   <color name="fit_color_bg_warning_subtle_dark">#1ff7c948</color>
-  <color name="fit_color_bg_warning_subtle_light">#1af7c948</color>
+  <color name="fit_color_bg_warning_subtle_light">#2ede911d</color>
   <color name="fit_color_bg_warning_tinted_dark">#33f7c948</color>
-  <color name="fit_color_bg_warning_tinted_light">#29f7c948</color>
+  <color name="fit_color_bg_warning_tinted_light">#42de911d</color>
   <color name="fit_color_bg_info_subtle_dark">#1f03b2e2</color>
-  <color name="fit_color_bg_info_subtle_light">#1403b2e2</color>
+  <color name="fit_color_bg_info_subtle_light">#290a93bd</color>
   <color name="fit_color_bg_info_tinted_dark">#2e03b2e2</color>
-  <color name="fit_color_bg_info_tinted_light">#1f03b2e2</color>
+  <color name="fit_color_bg_info_tinted_light">#3d0a93bd</color>
   <color name="fit_color_bg_brand_subtle_dark">#1f05e0a6</color>
-  <color name="fit_color_bg_brand_subtle_light">#1405e0a6</color>
+  <color name="fit_color_bg_brand_subtle_light">#2908b48f</color>
   <color name="fit_color_bg_brand_tinted_dark">#2e05e0a6</color>
-  <color name="fit_color_bg_brand_tinted_light">#1f05e0a6</color>
+  <color name="fit_color_bg_brand_tinted_light">#3d08b48f</color>
   <color name="fit_color_border_divider_dark">#ff3b4044</color>
   <color name="fit_color_border_divider_light">#ffe4e6e7</color>
   <color name="fit_color_border_focus_dark">#ff03b2e2</color>
@@ -118,8 +123,8 @@
   <color name="fit_color_border_selection">#ff08b48f</color><!-- Selected-state border (chips, radio) — constant across themes, matches brand.secondary line -->
   <color name="fit_color_destructive_primary">#fff05c5b</color><!-- Destructive filled button bg / text on outlined (constant — destructive accent identical across themes) -->
   <color name="fit_color_destructive_bg_tinted_dark">#2ef05c5b</color>
-  <color name="fit_color_destructive_bg_tinted_light">#1ff05c5b</color>
+  <color name="fit_color_destructive_bg_tinted_light">#38f05c5b</color>
   <color name="fit_color_destructive_bg_subtle_dark">#1ff05c5b</color>
-  <color name="fit_color_destructive_bg_subtle_light">#14f05c5b</color>
+  <color name="fit_color_destructive_bg_subtle_light">#29f05c5b</color>
   
 </resources>

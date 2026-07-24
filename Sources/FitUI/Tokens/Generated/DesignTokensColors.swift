@@ -4,34 +4,34 @@
 //
 
 // Do not edit directly
-// Generated on Tue, 28 Apr 2026 16:32:19 GMT
+// Generated on Fri, 24 Jul 2026 20:00:16 GMT
 
 
 import SwiftUI
 
 public class DesignTokensColors {
     public static let colorBgBrandSubtleDark = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.12)
-    public static let colorBgBrandSubtleLight = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.08)
+    public static let colorBgBrandSubtleLight = UIColor(red: 0.031, green: 0.706, blue: 0.561, alpha: 0.16)
     public static let colorBgBrandTintedDark = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.18)
-    public static let colorBgBrandTintedLight = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.12)
+    public static let colorBgBrandTintedLight = UIColor(red: 0.031, green: 0.706, blue: 0.561, alpha: 0.24)
     public static let colorBgDisabledDark = UIColor(red: 0.231, green: 0.251, blue: 0.267, alpha: 1)
     public static let colorBgDisabledLight = UIColor(red: 0.800, green: 0.812, blue: 0.824, alpha: 1)
     public static let colorBgErrorSubtleDark = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.12)
-    public static let colorBgErrorSubtleLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.08)
+    public static let colorBgErrorSubtleLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.16)
     public static let colorBgErrorTintedDark = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.18)
-    public static let colorBgErrorTintedLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.12)
+    public static let colorBgErrorTintedLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.22)
     public static let colorBgInfoSubtleDark = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 0.12)
-    public static let colorBgInfoSubtleLight = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 0.08)
+    public static let colorBgInfoSubtleLight = UIColor(red: 0.039, green: 0.576, blue: 0.741, alpha: 0.16)
     public static let colorBgInfoTintedDark = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 0.18)
-    public static let colorBgInfoTintedLight = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 0.12)
+    public static let colorBgInfoTintedLight = UIColor(red: 0.039, green: 0.576, blue: 0.741, alpha: 0.24)
     public static let colorBgSuccessSubtleDark = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.12)
-    public static let colorBgSuccessSubtleLight = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.08)
+    public static let colorBgSuccessSubtleLight = UIColor(red: 0.031, green: 0.706, blue: 0.561, alpha: 0.16)
     public static let colorBgSuccessTintedDark = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.18)
-    public static let colorBgSuccessTintedLight = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 0.12)
+    public static let colorBgSuccessTintedLight = UIColor(red: 0.031, green: 0.706, blue: 0.561, alpha: 0.24)
     public static let colorBgWarningSubtleDark = UIColor(red: 0.969, green: 0.788, blue: 0.282, alpha: 0.12)
-    public static let colorBgWarningSubtleLight = UIColor(red: 0.969, green: 0.788, blue: 0.282, alpha: 0.1)
+    public static let colorBgWarningSubtleLight = UIColor(red: 0.871, green: 0.569, blue: 0.114, alpha: 0.18)
     public static let colorBgWarningTintedDark = UIColor(red: 0.969, green: 0.788, blue: 0.282, alpha: 0.2)
-    public static let colorBgWarningTintedLight = UIColor(red: 0.969, green: 0.788, blue: 0.282, alpha: 0.16)
+    public static let colorBgWarningTintedLight = UIColor(red: 0.871, green: 0.569, blue: 0.114, alpha: 0.26)
     public static let colorBlue300 = UIColor(red: 0.310, green: 0.867, blue: 0.988, alpha: 1)
     public static let colorBlue400 = UIColor(red: 0.133, green: 0.800, blue: 0.969, alpha: 1)
     public static let colorBlue500 = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 1)
@@ -48,12 +48,12 @@ public class DesignTokensColors {
     public static let colorBrandPrimary = UIColor(red: 0.012, green: 0.698, blue: 0.886, alpha: 1) /* Primary brand blue (constant — brand mark unchanged across themes) */
     public static let colorBrandSecondary = UIColor(red: 0.020, green: 0.878, blue: 0.651, alpha: 1) /* Secondary brand teal (constant — used for selection / accent / brand-tint surfaces) */
     public static let colorDestructiveBgSubtleDark = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.12)
-    public static let colorDestructiveBgSubtleLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.08)
+    public static let colorDestructiveBgSubtleLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.16)
     public static let colorDestructiveBgTintedDark = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.18)
-    public static let colorDestructiveBgTintedLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.12)
+    public static let colorDestructiveBgTintedLight = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 0.22)
     public static let colorDestructivePrimary = UIColor(red: 0.941, green: 0.361, blue: 0.357, alpha: 1) /* Destructive filled button bg / text on outlined (constant — destructive accent identical across themes) */
     public static let colorDividerDark = UIColor(red: 0.231, green: 0.251, blue: 0.267, alpha: 1)
-    public static let colorDividerLight = UIColor(red: 0.894, green: 0.902, blue: 0.906, alpha: 1)
+    public static let colorDividerLight = UIColor(red: 0.800, green: 0.812, blue: 0.824, alpha: 1)
     public static let colorExternalAppleIndigo = UIColor(red: 0.345, green: 0.337, blue: 0.839, alpha: 1) /* Apple system indigo */
     public static let colorExternalAppleOrange = UIColor(red: 1.000, green: 0.584, blue: 0.000, alpha: 1) /* Apple system orange */
     public static let colorExternalAppleRed = UIColor(red: 1.000, green: 0.231, blue: 0.188, alpha: 1) /* Apple system red */
@@ -116,9 +116,14 @@ public class DesignTokensColors {
     public static let colorTextPrimaryDark = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1)
     public static let colorTextPrimaryLight = UIColor(red: 0.122, green: 0.129, blue: 0.137, alpha: 1)
     public static let colorTextSecondaryDark = UIColor(red: 0.800, green: 0.812, blue: 0.824, alpha: 1)
-    public static let colorTextSecondaryLight = UIColor(red: 0.459, green: 0.494, blue: 0.529, alpha: 1)
+    public static let colorTextSecondaryLight = UIColor(red: 0.357, green: 0.384, blue: 0.412, alpha: 1)
     public static let colorTextTertiaryDark = UIColor(red: 0.592, green: 0.620, blue: 0.647, alpha: 1)
     public static let colorTextTertiaryLight = UIColor(red: 0.459, green: 0.494, blue: 0.529, alpha: 1)
+    public static let colorViolet100 = UIColor(red: 0.929, green: 0.914, blue: 0.996, alpha: 1)
+    public static let colorViolet400 = UIColor(red: 0.655, green: 0.545, blue: 0.980, alpha: 1)
+    public static let colorViolet500 = UIColor(red: 0.545, green: 0.361, blue: 0.965, alpha: 1)
+    public static let colorViolet600 = UIColor(red: 0.486, green: 0.227, blue: 0.929, alpha: 1)
+    public static let colorViolet700 = UIColor(red: 0.427, green: 0.157, blue: 0.851, alpha: 1)
     public static let colorYellow100 = UIColor(red: 1.000, green: 0.953, blue: 0.769, alpha: 1)
     public static let colorYellow400 = UIColor(red: 0.969, green: 0.788, blue: 0.282, alpha: 1)
     public static let colorYellow50 = UIColor(red: 1.000, green: 0.973, blue: 0.859, alpha: 1)

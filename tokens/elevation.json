@@ -12,8 +12,8 @@
     },
     "2": {
       "dark":  { "value": "0 0 12px rgba(0,0,0,0.07)" },
-      "light": { "value": "0 0 12px rgba(0,0,0,0.07)" },
-      "comment": "Card subtle shadow — profile card, standalone panel"
+      "light": { "value": "0 1px 3px rgba(0,0,0,0.10), 0 6px 16px rgba(0,0,0,0.08)" },
+      "comment": "Card edge. Light uses two layers — a 1px contact shadow that draws the edge plus a soft ambient one for depth; the single 12px/7% blur read as a smudge, not a lift. Dark keeps the flat blur: there the edge comes from the surface step, not the shadow."
     },
     "3": {
       "dark":  { "value": "0 4px 16px rgba(0,0,0,0.3)" },

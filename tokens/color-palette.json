@@ -22,6 +22,14 @@
       "700": { "value": "#06789D" },
       "900": { "value": "#00334D" }
     },
+    "violet": {
+      "100": { "value": "#EDE9FE" },
+      "400": { "value": "#A78BFA" },
+      "500": { "value": "#8B5CF6" },
+      "600": { "value": "#7C3AED" },
+      "700": { "value": "#6D28D9" },
+      "comment": "Training-type differentiation for self-paced (personal=teal, group=blue, self-paced=violet). Added to the prototype 2026-07-01 as a local stopgap; promoted to the token source 2026-07-24 — the CSS build was silently dropping it on every regeneration."
+    },
     "teal": {
       "200": { "value": "#87F7CC" },
       "400": { "value": "#22F7B7" },
