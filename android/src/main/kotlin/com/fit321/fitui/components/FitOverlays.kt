@@ -69,7 +69,9 @@ fun FitSheet(
     content: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
-    val sheetState = rememberModalBottomSheetState()
+    // Content sheets open straight to full height — a half-expanded first stop makes a short
+    // sheet peek and forces a second drag to see its CTA.
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var rendered by remember { mutableStateOf(false) }
 
     LaunchedEffect(isVisible) {
@@ -155,18 +157,31 @@ enum class FitCalEventPillStatus { Request, Review, Awaiting, Missed }
 
 @Composable
 fun FitCalEventPill(text: String, status: FitCalEventPillStatus) {
-    val bg = when (status) {
+    // Two axes (event-statuses.md § 5b): filled yellow = act on it (request/review), OUTLINED
+    // yellow = you-wait (awaiting), filled red = missed. Awaiting must not be a solid gray pill —
+    // that read as an ordinary tag rather than "pending on the other party".
+    val accent = when (status) {
         FitCalEventPillStatus.Request, FitCalEventPillStatus.Review -> FitColors.Yellow.y600
-        FitCalEventPillStatus.Awaiting -> FitColors.Gray.g500
+        FitCalEventPillStatus.Awaiting -> FitColors.Yellow.y600
         FitCalEventPillStatus.Missed -> FitColors.error
     }
+    val outlined = status == FitCalEventPillStatus.Awaiting
     Box(
         modifier = Modifier
             .clip(CircleShape)
-            .background(bg)
-            .padding(horizontal = 6.dp, vertical = 2.dp)
+            .then(
+                if (outlined) Modifier.border(1.dp, accent, CircleShape)
+                else Modifier.background(accent),
+            )
+            .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
-        Text(text, style = FitFont.pill, color = Color.White, maxLines = 1, softWrap = false)
+        Text(
+            text,
+            style = FitFont.pill,
+            color = if (outlined) accent else Color.White,
+            maxLines = 1,
+            softWrap = false,
+        )
     }
 }
 

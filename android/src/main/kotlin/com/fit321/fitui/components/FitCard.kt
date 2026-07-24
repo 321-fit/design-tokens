@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import com.fit321.fitui.tokens.FitElevation
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -50,13 +50,12 @@ fun FitCard(
     val isLight = theme.screenBg != FitColors.Gray.g900
     val shape = RoundedCornerShape(FitRadius.card)
 
-    val shadowed = if (isLight) Modifier.shadow(4.dp, shape) else Modifier
     val clickableMod = if (onClick != null) Modifier.clickable { onClick() } else Modifier
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .then(shadowed)
+            .then(with(FitElevation) { Modifier.fitCardElevation(isLight, shape) })
             .clip(shape)
             .background(theme.surfaceDefault)
             .then(clickableMod)
