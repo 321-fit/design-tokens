@@ -196,12 +196,13 @@ fun FitSnackbar(
         enter = fadeIn() + slideInVertically { it / 2 },
         exit = fadeOut()
     ) {
+        val theme = LocalFitTheme.current
         Row(
             modifier = Modifier
                 .padding(horizontal = FitSpacing.sp5)
                 .clip(CircleShape)
-                .background(FitColors.Gray.black)
-                .border(1.dp, Color.White.copy(alpha = 0.08f), CircleShape)
+                .background(theme.surfaceLow)
+                .border(1.dp, theme.divider, CircleShape)
                 .padding(horizontal = FitSpacing.sp4, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
@@ -211,7 +212,7 @@ fun FitSnackbar(
                     Modifier.size(6.dp).clip(CircleShape).background(FitColors.Yellow.y400)
                 )
             }
-            Text(message, style = FitFont.body2, color = Color.White, modifier = Modifier.weight(1f))
+            Text(message, style = FitFont.body2, color = theme.textPrimary, modifier = Modifier.weight(1f))
             if (actionLabel != null && onAction != null) {
                 Text(
                     actionLabel,
