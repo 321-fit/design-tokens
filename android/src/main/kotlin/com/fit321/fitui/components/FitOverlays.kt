@@ -175,6 +175,46 @@ fun FitCalEventPill(text: String, status: FitCalEventPillStatus) {
 // ============================================================================
 
 @Composable
+fun FitSnackbarContent(
+    message: String,
+    modifier: Modifier = Modifier,
+    dotColor: Color? = null,
+    actionLabel: String? = null,
+    onAction: (() -> Unit)? = null
+) {
+    val theme = LocalFitTheme.current
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(CircleShape)
+            .background(theme.surfaceLow)
+            .border(1.dp, theme.divider, CircleShape)
+            .padding(horizontal = FitSpacing.sp4, vertical = FitSpacing.sp2_5)
+    ) {
+        Row(
+            modifier = Modifier.align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1_5)
+        ) {
+            if (dotColor != null) {
+                Box(Modifier.size(6.dp).clip(CircleShape).background(dotColor))
+            }
+            Text(message, style = FitFont.body2, color = theme.textPrimary)
+        }
+        if (actionLabel != null && onAction != null) {
+            Text(
+                actionLabel,
+                style = FitFont.body2.copy(fontWeight = FontWeight.Medium),
+                color = FitColors.Teal.t500,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .clickable { onAction() }
+            )
+        }
+    }
+}
+
+@Composable
 fun FitSnackbar(
     isVisible: Boolean,
     onDismiss: () -> Unit,
@@ -196,32 +236,13 @@ fun FitSnackbar(
         enter = fadeIn() + slideInVertically { it / 2 },
         exit = fadeOut()
     ) {
-        val theme = LocalFitTheme.current
-        Row(
-            modifier = Modifier
-                .padding(horizontal = FitSpacing.sp5)
-                .clip(CircleShape)
-                .background(theme.surfaceLow)
-                .border(1.dp, theme.divider, CircleShape)
-                .padding(horizontal = FitSpacing.sp4, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
-        ) {
-            if (showDot) {
-                Box(
-                    Modifier.size(6.dp).clip(CircleShape).background(FitColors.Yellow.y400)
-                )
-            }
-            Text(message, style = FitFont.body2, color = theme.textPrimary, modifier = Modifier.weight(1f))
-            if (actionLabel != null && onAction != null) {
-                Text(
-                    actionLabel,
-                    style = FitFont.body2.copy(fontWeight = FontWeight.Medium),
-                    color = FitColors.Teal.t500,
-                    modifier = Modifier.clickable { onAction() }
-                )
-            }
-        }
+        FitSnackbarContent(
+            message = message,
+            modifier = Modifier.padding(horizontal = FitSpacing.sp5),
+            dotColor = if (showDot) FitColors.Yellow.y400 else null,
+            actionLabel = actionLabel,
+            onAction = onAction
+        )
     }
 }
 
