@@ -747,9 +747,11 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 - `status: enum { request, review, awaiting, missed }`
 
 **States:**
-- request/review — yellow-600 bg, white text (filled = act on it)
-- awaiting — **transparent bg, 1pt yellow-600 border, yellow-600 text** (outlined = you wait). Was a gray-500 fill; it read as a neutral badge on a tile that also looked Planned. Horizontal padding drops 1pt to absorb the border.
+- request/review — yellow-600 bg, white text
+- awaiting — **yellow-600 bg, white text** (shipped Compose, #17). It is deliberately identical to request: the request-vs-awaiting distinction is carried by the *tile* (dashed perimeter + no fill), so the 11pt pill stays legible instead of relying on a 1pt outline. It is no longer the old gray-500 fill, which read as a neutral badge.
 - missed — red-400 bg, white text
+
+> **Open divergence:** the web prototype currently draws the awaiting pill *outlined* (transparent bg, 1pt yellow-600 border, yellow-600 text) — see `project-spec/prototypes/lib/fit-ui.css`. Native shipped filled per the legibility argument above. One of the two has to move; the tile grammar (dashed, no fill) is identical on both and is not in question.
 
 **Used:** inside FitCalEvent title row, inside FitSheet status header.
 
