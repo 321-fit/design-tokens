@@ -123,7 +123,12 @@ object FitColors {
         val destructiveBgTinted: Color,
         // Calendar off-hours wash — flat tonal band for "outside working hours" (event-statuses
         // § 5b). Distinct from the hatch, which now means only "busy" (travel/blocked).
-        val bgOffHours: Color
+        val bgOffHours: Color,
+        // Inner-shadow colour drawn at the off-hours band's top + bottom edges — makes the zone
+        // read as a RECESSED well ("switched off"), not just a tinted band. Emulates the
+        // prototype's `box-shadow: inset …` (a real backdrop blur is skipped: it's API 31+ and the
+        // recession alone carries the meaning). Higher alpha on dark, faint on light.
+        val offHoursEdge: Color
     ) {
         // Compatibility aliases — pre-existing names retained so existing FitUI components keep working
         val cardBg: Color get() = surfaceDefault
@@ -159,7 +164,8 @@ object FitColors {
                 bgBrandTinted    = Color(0xFF05E0A6).copy(alpha = 0.18f),
                 destructiveBgSubtle = Color(0xFFF05C5B).copy(alpha = 0.12f),
                 destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.18f),
-                bgOffHours = Color(0x59000000) // black @35% — darkens the band on the dark canvas
+                bgOffHours = Color(0x59000000), // black @35% — darkens the band on the dark canvas
+                offHoursEdge = Color(0x8C000000) // black @55% — recessed-well inner shadow (dark)
             )
 
             val light = Theme(
@@ -194,7 +200,8 @@ object FitColors {
                 bgBrandTinted    = Teal.t600.copy(alpha = 0.24f),
                 destructiveBgSubtle = Red.r400.copy(alpha = 0.16f),
                 destructiveBgTinted = Red.r400.copy(alpha = 0.22f),
-                bgOffHours = Color(0x1A3C3C43) // #3C3C43 @10% — subtle cool wash on #F2F2F7
+                bgOffHours = Color(0x1A3C3C43), // #3C3C43 @10% — subtle cool wash on #F2F2F7
+                offHoursEdge = Color(0x24000000) // black @14% — recessed-well inner shadow (light)
             )
         }
     }
