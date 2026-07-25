@@ -165,7 +165,7 @@ object FitColors {
                 destructiveBgSubtle = Color(0xFFF05C5B).copy(alpha = 0.12f),
                 destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.18f),
                 bgOffHours = Color(0x59000000), // black @35% — darkens the band on the dark canvas
-                offHoursEdge = Color(0x8C000000) // black @55% — recessed-well inner shadow (dark)
+                offHoursEdge = Color(0x59000000) // black @35% — soft recessed-well edge (dark)
             )
 
             val light = Theme(
@@ -201,7 +201,7 @@ object FitColors {
                 destructiveBgSubtle = Red.r400.copy(alpha = 0.16f),
                 destructiveBgTinted = Red.r400.copy(alpha = 0.22f),
                 bgOffHours = Color(0x1A3C3C43), // #3C3C43 @10% — subtle cool wash on #F2F2F7
-                offHoursEdge = Color(0x24000000) // black @14% — recessed-well inner shadow (light)
+                offHoursEdge = Color(0x1A000000) // black @10% — soft recessed-well edge (light)
             )
         }
     }
