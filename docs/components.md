@@ -707,6 +707,10 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - location row — 11pt tertiary + pin glyph, only on standard tier
 - FitRoleTag — bottom-right corner badge on cross-role tiles (tier ≥ compact)
 
+**Drag states:**
+- `dragging` — lifted: raised z-order + drop shadow, no colour change
+- `dragging` + `invalid` — hovering a target that refuses the drop (occupied, blocked, or outside available hours): red-tinted fill (`bg.error-subtle`), 1pt red-400 perimeter, red-400 title and meta. Same grammar as the booking grid's invalid selection block, so "red block = it can't go there" is learned once. The reason is named by the snackbar, not by the tile.
+
 **3pt hairline gap (Apple Calendar style):**
 Every tile reserves a 3pt transparent strip at the bottom so back-to-back events don't visually merge. The visible card lives inside the outer container with `padding(.bottom, 3)` — outer still occupies the full inline height so neighbours don't reflow.
 
@@ -743,8 +747,8 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 - `status: enum { request, review, awaiting, missed }`
 
 **States:**
-- request/review — yellow-600 bg, white text
-- awaiting — gray-500 bg, white text
+- request/review — yellow-600 bg, white text (filled = act on it)
+- awaiting — **transparent bg, 1pt yellow-600 border, yellow-600 text** (outlined = you wait). Was a gray-500 fill; it read as a neutral badge on a tile that also looked Planned. Horizontal padding drops 1pt to absorb the border.
 - missed — red-400 bg, white text
 
 **Used:** inside FitCalEvent title row, inside FitSheet status header.
@@ -756,7 +760,7 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 ---
 
 ### FitTimeline
-**Purpose:** 24-hour vertical grid container for calendar view.
+**Purpose:** 24-hour vertical grid container for calendar view. See [event-statuses.md § 5b](../../project-spec/specs/event-statuses.md#5b-calendar-visual-language-updated-2026-07-24) for the reasoning behind everything below.
 
 **Required props:**
 - `events: [CalEvent]`
@@ -764,18 +768,26 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 
 **Optional props:**
 - `currentTime: Time?` (draws "now" line)
-- `unavailableHours: [Int]`
+- `offHours: [TimeRange]` — outside the coach's published availability
+- `blocked: [TimeRange]` — taken *inside* working hours (external calendar event, time off)
+- `dragging: Bool = false` — the grid is in drag-targeting mode
+
+**The grid is ALWAYS 00:00–24:00.** Day height must never depend on availability — a grid that starts at the first available hour changes shape per coach and per day. On appear, scroll to the now-line when it falls inside the working band, otherwise to the first available hour; that is what makes a full 24h grid free of cost.
 
 **Sub-elements:**
-- Hour — 96px tall, border-top divider, hour label 10px tertiary
-- NowLine — 2px brand-primary with 8×8 dot at left edge
-- UnavailableBlock — red-tinted diagonal stripe pattern
+- Hour — 96pt tall, border-top divider, hour label 10pt tertiary. The rule runs to the **trailing screen edge** (leading is offset by the time gutter, Apple Calendar convention): the ruler is chrome, not content.
+- NowLine — 2pt brand-primary with 8×8 dot at the leading edge
+- **OffHoursBand** — outside availability. Flat tonal wash (`rgba(0,0,0,0.35)` dark / `rgba(60,60,67,0.10)` light), **full-bleed past the container's horizontal padding to the true screen edge, no corner radius** — a background belongs to the surface, only content respects the gutter. Inside the band the hour rules fade to ~35% of the divider and both edges carry an inner shadow, so the band reads as a **recessed well** rather than a differently-coloured strip: "disabled" is loss of definition plus depth, not a hue. A 12pt 500 tertiary label ("Outside your hours") is centred on **each contiguous band** — hidden when the band is under 32pt. Hour labels sit *under* the band (they recede with it) at opacity 0.75 dark / 0.6 light, raised to pay for the wash above them.
+  - Optional enhancement: ≤ 1pt backdrop blur under the band. **Never load-bearing** — the faded rules and recessed edges carry the meaning, so absence on Android < API 31 (`Modifier.blur`) costs nothing. Do not exceed 1pt: at 1.6pt a 10pt hour label smudges into an unreadable blob, and those labels are how the user navigates.
+- **BlockedBand** — taken inside working hours. Diagonal hatch (gray-700 dark / gray-300 light at 0.3), **inset and rounded like a card**. Hatch means "busy" and nothing else; shape carries the difference from OffHoursBand (full-bleed band = a state of the day, inset rounded block = an object occupying a slot).
 
-**States:** default. Events re-layout on selected day change.
+**States:**
+- default — events re-layout on selected day change
+- `dragging` — off-hours bands deepen and drop their labels (a tile parked over a band would otherwise have the caption reading through its semi-transparent fill). The bands **never turn red**: flooding half the day with an error colour is alarm without information and competes with the tile the user is looking at. The verdict rides on the dragged FitCalEvent instead (see its `invalid` state).
 
-**Used:** calendar main view.
+**Used:** calendar main view (coach + athlete). **Athlete calendars pass no `offHours`** — an athlete has no availability, so there is nothing to grey out; the bands belong to the coach calendar and to booking grids, where the counterparty's hours constrain the choice.
 
-**iOS/Android notes:** Each event positioned absolutely; hour height 96px (matches prototype tokens.json update).
+**iOS/Android notes:** Each event positioned absolutely; hour height 96pt. The full-bleed band needs to escape the container padding — negative horizontal insets on iOS, `layout` / negative offset on Compose. Legend of every state: [calendar-legend.html](https://321-fit.github.io/project-spec/prototypes/flows/shared/calendar-legend.html).
 
 **Status:** ❌ Swift missing. Compose: to build.
 
