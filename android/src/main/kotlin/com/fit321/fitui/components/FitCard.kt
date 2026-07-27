@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.fit321.fitui.tokens.FitElevation
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -41,6 +44,10 @@ import com.fit321.fitui.tokens.FitSpacing
 @Composable
 fun FitCard(
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(FitRadius.card),
+    surface: Color? = null,
+    contentPadding: PaddingValues = PaddingValues(FitSpacing.sp5),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(FitSpacing.sp3),
     title: String? = null,
     onEdit: (() -> Unit)? = null,
     onClick: (() -> Unit)? = null,
@@ -48,7 +55,6 @@ fun FitCard(
 ) {
     val theme = LocalFitTheme.current
     val isLight = theme.screenBg != FitColors.Gray.g900
-    val shape = RoundedCornerShape(FitRadius.card)
 
     val clickableMod = if (onClick != null) Modifier.clickable { onClick() } else Modifier
 
@@ -57,10 +63,10 @@ fun FitCard(
             .fillMaxWidth()
             .then(with(FitElevation) { Modifier.fitCardElevation(isLight, shape) })
             .clip(shape)
-            .background(theme.surfaceDefault)
+            .background(surface ?: theme.surfaceDefault)
             .then(clickableMod)
-            .padding(FitSpacing.sp5),
-        verticalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
+            .padding(contentPadding),
+        verticalArrangement = verticalArrangement
     ) {
         if (title != null) {
             Row(verticalAlignment = Alignment.CenterVertically) {
