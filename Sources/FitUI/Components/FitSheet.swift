@@ -110,17 +110,30 @@ private struct SheetTopRoundedShape: Shape {
 
 // MARK: - FitSheetStatusHeader
 //
-// Status declaration for event sheets: 18pt descriptor + optional inline pill.
+// Status declaration for event sheets: 18pt descriptor + optional inline pill +
+// optional trailing actions.
+//
+// The `actions` slot is the right-hand action area — icon-sized affordances that belong
+// to the sheet as a whole rather than to a single state (Message, the `⋯` action hub).
+// The footer stays reserved for the state's primary response; anything always-available
+// goes here. Pass FitIconBtn / menu buttons; they lay out in a tighter row than the
+// descriptor/pill spacing so a pair of icon buttons doesn't read as two separate groups.
 
-public struct FitSheetStatusHeader: View {
+public struct FitSheetStatusHeader<Actions: View>: View {
     let descriptor: String
     let pill: FitCalEventPillData?
+    let actions: Actions
 
     @Environment(\.fitTheme) private var theme
 
-    public init(descriptor: String, pill: FitCalEventPillData? = nil) {
+    public init(
+        descriptor: String,
+        pill: FitCalEventPillData? = nil,
+        @ViewBuilder actions: () -> Actions
+    ) {
         self.descriptor = descriptor
         self.pill = pill
+        self.actions = actions()
     }
 
     public var body: some View {
@@ -133,8 +146,18 @@ public struct FitSheetStatusHeader: View {
             if let pill = pill {
                 FitCalEventPill(text: pill.text, status: pill.status)
             }
+
+            HStack(spacing: FitSpacing.sp2) {
+                actions
+            }
         }
         .padding(.bottom, 28)
+    }
+}
+
+extension FitSheetStatusHeader where Actions == EmptyView {
+    public init(descriptor: String, pill: FitCalEventPillData? = nil) {
+        self.init(descriptor: descriptor, pill: pill) { EmptyView() }
     }
 }
 

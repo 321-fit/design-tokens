@@ -131,8 +131,21 @@ private fun FitSheetDragHandle() {
     }
 }
 
+/**
+ * Sheet status header: descriptor + optional status pill + optional trailing actions.
+ *
+ * [actions] is the right-hand action slot — icon-sized affordances that belong to the
+ * sheet as a whole rather than to a single state (Message, the `⋯` action hub). Keep the
+ * footer for the state's primary response; anything always-available goes here. Pass
+ * [FitIconBtn] / [FitContextMenuTrigger] children; they lay out in a tighter row than the
+ * descriptor/pill spacing so a pair of 32dp buttons doesn't read as two separate groups.
+ */
 @Composable
-fun FitSheetStatusHeader(descriptor: String, pill: (@Composable () -> Unit)? = null) {
+fun FitSheetStatusHeader(
+    descriptor: String,
+    pill: (@Composable () -> Unit)? = null,
+    actions: (@Composable RowScope.() -> Unit)? = null
+) {
     val theme = LocalFitTheme.current
     Row(
         modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp),
@@ -146,6 +159,13 @@ fun FitSheetStatusHeader(descriptor: String, pill: (@Composable () -> Unit)? = n
             modifier = Modifier.weight(1f)
         )
         pill?.invoke()
+        if (actions != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2),
+                content = actions
+            )
+        }
     }
 }
 
@@ -371,12 +391,14 @@ data class FitContextMenuItem(
 fun FitContextMenuTrigger(
     items: List<FitContextMenuItem>,
     icon: ImageVector = Icons.Default.MoreVert,
+    style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    contentDescription: String? = null,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
-        FitIconBtn(icon = icon) { expanded = true }
+        FitIconBtn(icon = icon, style = style, contentDescription = contentDescription) { expanded = true }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }

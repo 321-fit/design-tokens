@@ -41,11 +41,21 @@ import com.fit321.fitui.tokens.FitSpacing
 
 enum class FitIconBtnColor { Primary, Brand, Error, Success }
 
+/**
+ * Plate style. [Filled] is the default 32dp circle on `surface.high`. [Ghost] drops the
+ * plate — for buttons that sit on an already-busy surface (a sheet header next to a
+ * descriptor and a status pill), where a filled circle competes with the content it
+ * belongs to. Mirrors `.fit-sheet-menu-btn` in the prototype kit.
+ */
+enum class FitIconBtnStyle { Filled, Ghost }
+
 @Composable
 fun FitIconBtn(
     icon: ImageVector,
     color: FitIconBtnColor = FitIconBtnColor.Primary,
     tintedBg: Boolean = false,
+    style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    contentDescription: String? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -56,14 +66,16 @@ fun FitIconBtn(
         FitIconBtnColor.Error -> FitColors.error
         FitIconBtnColor.Success -> FitColors.success
     }
-    val bgColor = if (tintedBg) {
-        when (color) {
+    val bgColor = when {
+        style == FitIconBtnStyle.Ghost -> Color.Transparent
+        tintedBg -> when (color) {
             FitIconBtnColor.Error -> FitColors.error.copy(alpha = 0.10f)
             FitIconBtnColor.Brand -> FitColors.brandPrimary.copy(alpha = 0.10f)
             FitIconBtnColor.Success -> FitColors.success.copy(alpha = 0.12f)
             FitIconBtnColor.Primary -> theme.surfaceHigh
         }
-    } else theme.surfaceHigh
+        else -> theme.surfaceHigh
+    }
 
     Box(
         modifier = modifier
@@ -73,7 +85,7 @@ fun FitIconBtn(
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(FitSize.iconMd))
+        Icon(icon, contentDescription = contentDescription, tint = iconColor, modifier = Modifier.size(FitSize.iconMd))
     }
 }
 

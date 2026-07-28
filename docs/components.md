@@ -53,10 +53,13 @@ Every component lists **purpose · required props · optional props · variants 
 **Optional props:**
 - `color: enum { primary (default), brand, error, success }`
 - `tintedBg: Bool = false` — adds background tint matching color
+- `style: enum { filled (default), ghost }` — `ghost` drops the plate entirely (transparent bg)
+- `contentDescription: String?` — accessibility label (Compose)
 
 **Variants:**
 - **default** — translucent blur bg (`rgba(117,126,135,0.3)` + 4px blur) in dark, subtle `surface-high` solid bg in light. Icon color = `text-primary` (matching back chevron). SVG stroke `1.8` (UI rule per `feedback_icon_system`; back chevron uses `2` for nav).
 - `tintedBg: true` with `color: error` — used for header trash icons (10% red bg + red stroke).
+- `style: ghost` — no plate. For buttons sitting **inside** an already-busy surface, where a filled circle competes with the content it belongs to: the sheet-header action slot (Message, `⋯`) next to a descriptor and a status pill. CSS equivalent: `.fit-sheet-menu-btn` (transparent, `surface-high` only on `:active`).
 
 **States:** default, pressed (scale 0.95)
 
@@ -385,13 +388,13 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 **Optional props:**
 - `title: String?`
 - `subtitle: String?`
-- `statusHeader: SheetStatusHeader?` — (descriptor: String, pill: Badge?)
+- `statusHeader: SheetStatusHeader?` — (descriptor: String, pill: Badge?, actions: slot?)
 - `variant: enum { standard (pad-bottom 40), compact (pad-bottom 28) }`
 - `footerVariant: String?` — for event sheets, selects footer from `ev-planned/ev-request/ev-awaiting/ev-review/ev-missed/ev-finished`
 
 **Sub-elements:**
 - `SheetHandle` — 36×4 rounded bar
-- `SheetStatusHeader` — descriptor (18px 500) + optional FitCalEventPill
+- `SheetStatusHeader` — descriptor (18px 500) + optional FitCalEventPill + optional trailing **actions slot**
 - `SheetTitle` — 18px 500
 - `SheetItem` — flex row with divider, 16px font
 - `SheetWarning` — icon + text, colored bg

@@ -12,11 +12,21 @@ public enum FitIconBtnColor {
     case success   // green-500 icon
 }
 
+/// Plate style. `.filled` is the default 32pt circle on `surface.high`. `.ghost` drops the
+/// plate — for buttons sitting on an already-busy surface (a sheet header next to a
+/// descriptor and a status pill), where a filled circle competes with the content it
+/// belongs to. Mirrors `.fit-sheet-menu-btn` in the prototype kit.
+public enum FitIconBtnStyle {
+    case filled
+    case ghost
+}
+
 public struct FitIconBtn: View {
     let systemName: String?
     let imageName: String?
     let color: FitIconBtnColor
     let tintedBg: Bool
+    let style: FitIconBtnStyle
     let action: () -> Void
 
     @Environment(\.fitTheme) private var theme
@@ -25,12 +35,14 @@ public struct FitIconBtn: View {
         systemName: String,
         color: FitIconBtnColor = .primary,
         tintedBg: Bool = false,
+        style: FitIconBtnStyle = .filled,
         action: @escaping () -> Void
     ) {
         self.systemName = systemName
         self.imageName = nil
         self.color = color
         self.tintedBg = tintedBg
+        self.style = style
         self.action = action
     }
 
@@ -38,12 +50,14 @@ public struct FitIconBtn: View {
         image: String,
         color: FitIconBtnColor = .primary,
         tintedBg: Bool = false,
+        style: FitIconBtnStyle = .filled,
         action: @escaping () -> Void
     ) {
         self.systemName = nil
         self.imageName = image
         self.color = color
         self.tintedBg = tintedBg
+        self.style = style
         self.action = action
     }
 
@@ -83,6 +97,7 @@ public struct FitIconBtn: View {
     }
 
     private var backgroundColor: Color {
+        if style == .ghost { return .clear }
         if tintedBg {
             switch color {
             case .primary: return theme.surfaceHigh
