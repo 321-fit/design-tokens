@@ -128,7 +128,16 @@ object FitColors {
         // read as a RECESSED well ("switched off"), not just a tinted band. Emulates the
         // prototype's `box-shadow: inset …` (a real backdrop blur is skipped: it's API 31+ and the
         // recession alone carries the meaning). Higher alpha on dark, faint on light.
-        val offHoursEdge: Color
+        val offHoursEdge: Color,
+        // Calendar tile fill for a status that NEEDS the viewer (request / review). Deliberately
+        // not `bgWarningSubtle`: that one is the general heads-up surface (banners, alerts) and
+        // sits on yellow.400 in dark, which reads brighter than a calendar tile should. This one
+        // stays on yellow.600 in both themes, per `.fit-cal-event.request` in the kit.
+        val bgCalActionSubtle: Color,
+        // Calendar tile fill for AWAITING — a tentative card. Dark: transparent, so the dashed
+        // perimeter floats over the grid and can't be mistaken for a booked tile. Light: a 70%
+        // white body, because on the #F2F2F7 canvas a transparent card dissolves entirely.
+        val bgCalTentative: Color
     ) {
         // Compatibility aliases — pre-existing names retained so existing FitUI components keep working
         val cardBg: Color get() = surfaceDefault
@@ -165,7 +174,9 @@ object FitColors {
                 destructiveBgSubtle = Color(0xFFF05C5B).copy(alpha = 0.12f),
                 destructiveBgTinted = Color(0xFFF05C5B).copy(alpha = 0.18f),
                 bgOffHours = Color(0x59000000), // black @35% — darkens the band on the dark canvas
-                offHoursEdge = Color(0x59000000) // black @35% — soft recessed-well edge (dark)
+                offHoursEdge = Color(0x59000000), // black @35% — soft recessed-well edge (dark)
+                bgCalActionSubtle = Yellow.y600.copy(alpha = 0.10f),
+                bgCalTentative = Color.Transparent
             )
 
             val light = Theme(
@@ -201,7 +212,9 @@ object FitColors {
                 destructiveBgSubtle = Red.r400.copy(alpha = 0.16f),
                 destructiveBgTinted = Red.r400.copy(alpha = 0.22f),
                 bgOffHours = Color(0x1A3C3C43), // #3C3C43 @10% — subtle cool wash on #F2F2F7
-                offHoursEdge = Color(0x1A000000) // black @10% — soft recessed-well edge (light)
+                offHoursEdge = Color(0x1A000000), // black @10% — soft recessed-well edge (light)
+                bgCalActionSubtle = Yellow.y600.copy(alpha = 0.20f),
+                bgCalTentative = Gray.white.copy(alpha = 0.70f)
             )
         }
     }

@@ -131,8 +131,21 @@ private fun FitSheetDragHandle() {
     }
 }
 
+/**
+ * Sheet status header: descriptor + optional status pill + optional trailing actions.
+ *
+ * [actions] is the right-hand action slot — icon-sized affordances that belong to the
+ * sheet as a whole rather than to a single state (Message, the `⋯` action hub). Keep the
+ * footer for the state's primary response; anything always-available goes here. Pass
+ * [FitIconBtn] / [FitContextMenuTrigger] children; they lay out in a tighter row than the
+ * descriptor/pill spacing so a pair of 32dp buttons doesn't read as two separate groups.
+ */
 @Composable
-fun FitSheetStatusHeader(descriptor: String, pill: (@Composable () -> Unit)? = null) {
+fun FitSheetStatusHeader(
+    descriptor: String,
+    pill: (@Composable () -> Unit)? = null,
+    actions: (@Composable RowScope.() -> Unit)? = null
+) {
     val theme = LocalFitTheme.current
     Row(
         modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp),
@@ -146,6 +159,13 @@ fun FitSheetStatusHeader(descriptor: String, pill: (@Composable () -> Unit)? = n
             modifier = Modifier.weight(1f)
         )
         pill?.invoke()
+        if (actions != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2),
+                content = actions
+            )
+        }
     }
 }
 
@@ -157,24 +177,40 @@ enum class FitCalEventPillStatus { Request, Review, Awaiting, Missed }
 
 @Composable
 fun FitCalEventPill(text: String, status: FitCalEventPillStatus) {
-    // All status pills are filled with white text (matches the dashboard). The request-vs-awaiting
-    // distinction is carried by the tile itself — the dashed border + yellow left stripe for
-    // awaiting — not by the pill fill, so the pill stays legible (white on yellow / white on red).
+    // Fill weight carries "is this on me?", not just "which state":
+    //   Request / Review — the coach owes an answer → FILLED yellow, white text.
+    //   Awaiting         — nobody owes you anything, you're waiting → OUTLINED, same hue,
+    //                      opposite weight. Mirrors the tile's dashed border.
+    //   Missed           — filled red.
+    // Same rule in both themes; the outline reads on light and dark alike because the hue,
+    // not a surface fill, is doing the work. Canon: event-statuses.md § status pills.
     val accent = when (status) {
         FitCalEventPillStatus.Request, FitCalEventPillStatus.Review -> FitColors.Yellow.y600
         FitCalEventPillStatus.Awaiting -> FitColors.Yellow.y600
         FitCalEventPillStatus.Missed -> FitColors.error
     }
+    val outlined = status == FitCalEventPillStatus.Awaiting
     Box(
         modifier = Modifier
             .clip(CircleShape)
-            .background(accent)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+            .then(
+                if (outlined) {
+                    Modifier.border(1.dp, accent, CircleShape)
+                } else {
+                    Modifier.background(accent)
+                }
+            )
+            // The outlined variant drops 1px of padding so the border sits inside the same
+            // overall pill size as the filled one — a row of pills stays on one baseline.
+            .padding(
+                horizontal = if (outlined) 5.dp else 6.dp,
+                vertical = if (outlined) 1.dp else 2.dp,
+            ),
     ) {
         Text(
             text,
             style = FitFont.pill,
-            color = Color.White,
+            color = if (outlined) accent else Color.White,
             maxLines = 1,
             softWrap = false,
         )
@@ -371,12 +407,14 @@ data class FitContextMenuItem(
 fun FitContextMenuTrigger(
     items: List<FitContextMenuItem>,
     icon: ImageVector = Icons.Default.MoreVert,
+    style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    contentDescription: String? = null,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
-        FitIconBtn(icon = icon) { expanded = true }
+        FitIconBtn(icon = icon, style = style, contentDescription = contentDescription) { expanded = true }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }

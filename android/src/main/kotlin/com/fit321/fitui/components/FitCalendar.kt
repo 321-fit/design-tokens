@@ -26,10 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathOperation
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -245,9 +253,10 @@ fun FitCalEvent(
     // alone carries "you wait"); planned/finished keep the type tint. All theme-aware via tokens.
     val cardBg: Color = when {
         neutralFill -> theme.surfaceHigh
-        status == FitCalEventStatus.Request || status == FitCalEventStatus.Review -> theme.bgWarningSubtle
+        status == FitCalEventStatus.Request || status == FitCalEventStatus.Review -> theme.bgCalActionSubtle
         status == FitCalEventStatus.Missed   -> theme.bgErrorSubtle
-        status == FitCalEventStatus.Awaiting -> theme.surfaceHigh
+        // Transparent in dark, 70% white in light — a tentative card, not a booked one.
+        status == FitCalEventStatus.Awaiting -> theme.bgCalTentative
         type is FitCalEventType.External     -> theme.surfaceHigher
         type is FitCalEventType.Group        -> theme.bgInfoSubtle
         type is FitCalEventType.Personal     -> theme.bgBrandSubtle
@@ -303,6 +312,14 @@ fun FitCalEvent(
                     .clip(RoundedCornerShape(FitRadius.md))
                     .background(cardBg)
                     .then(
+                        // The accent hugs the card's rounded corners instead of stopping at the
+                        // straight part of the left edge — the same shape CSS produces from
+                        // `border-left: 3px` + `border-radius`. Drawn as the left slice of a
+                        // rounded-rect stroke: a plain 3dp rectangle gets bitten off by the clip
+                        // at both corners and reads as a bar pasted onto the tile.
+                        if (isCrossRole) Modifier else Modifier.leftAccentStripe(leftAccent, FitRadius.md)
+                    )
+                    .then(
                         when {
                             awaitingDashed && borderColor != null ->
                                 Modifier.dashedRoundedBorder(1.dp, borderColor, FitRadius.md)
@@ -312,16 +329,12 @@ fun FitCalEvent(
                         }
                     )
             ) {
-                // Left stripe
+                // Left stripe — cross-role keeps its dashed bar; every other type has the accent
+                // painted by leftAccentStripe above, so the row only reserves its width.
                 if (isCrossRole) {
                     DashedVerticalStripe(theme.textTertiary)
                 } else {
-                    Box(
-                        modifier = Modifier
-                            .width(3.dp)
-                            .fillMaxHeight()
-                            .background(leftAccent)
-                    )
+                    Spacer(modifier = Modifier.width(STRIPE_WIDTH))
                 }
                 FitCalEventContent(
                     title = title,
@@ -507,6 +520,46 @@ private fun Modifier.dashedRoundedBorder(
         cornerRadius = androidx.compose.ui.geometry.CornerRadius(radius.toPx()),
         style = stroke,
     )
+}
+
+/** Width of the calendar tile's left accent — matches `border-left: 3px` in the kit. */
+private val STRIPE_WIDTH = 3.dp
+
+/**
+ * Paints the tile's left accent the way `border-left: 3px` + `border-radius` renders in CSS:
+ * full width down the straight edge, then **tapering to nothing** as it sweeps around the
+ * top-left and bottom-left arcs to meet the (zero-width) top and bottom borders.
+ *
+ * That taper is why this isn't a uniform stroke. It's the area between two shapes — the card's
+ * outline, and the same outline inset by the stripe width on the LEFT ONLY. Insetting one side
+ * makes the corner radius elliptical (`rx = r - w`, `ry = r`), and the gap between the circular
+ * outer arc and that elliptical inner arc is exactly the wedge: `w` wide where the arc is
+ * vertical, zero where it turns horizontal.
+ */
+private fun Modifier.leftAccentStripe(color: Color, radius: Dp): Modifier = drawBehind {
+    val w = STRIPE_WIDTH.toPx()
+    val r = radius.toPx()
+    val outerRadius = CornerRadius(r, r)
+    val innerCorner = CornerRadius((r - w).coerceAtLeast(0f), r)
+
+    val outer = Path().apply {
+        addRoundRect(RoundRect(Rect(Offset.Zero, size), outerRadius))
+    }
+    val inner = Path().apply {
+        addRoundRect(
+            RoundRect(
+                rect = Rect(left = w, top = 0f, right = size.width, bottom = size.height),
+                topLeft = innerCorner,
+                topRight = outerRadius,
+                bottomRight = outerRadius,
+                bottomLeft = innerCorner,
+            )
+        )
+    }
+    val wedge = Path().apply { op(outer, inner, PathOperation.Difference) }
+    // Belt and braces: the difference is already confined to the left band, but clipping keeps
+    // any hairline seam on the right corners from ever showing.
+    clipRect(right = r) { drawPath(wedge, color) }
 }
 
 @Composable

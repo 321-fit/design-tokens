@@ -53,10 +53,13 @@ Every component lists **purpose · required props · optional props · variants 
 **Optional props:**
 - `color: enum { primary (default), brand, error, success }`
 - `tintedBg: Bool = false` — adds background tint matching color
+- `style: enum { filled (default), ghost }` — `ghost` drops the plate entirely (transparent bg)
+- `contentDescription: String?` — accessibility label (Compose)
 
 **Variants:**
 - **default** — translucent blur bg (`rgba(117,126,135,0.3)` + 4px blur) in dark, subtle `surface-high` solid bg in light. Icon color = `text-primary` (matching back chevron). SVG stroke `1.8` (UI rule per `feedback_icon_system`; back chevron uses `2` for nav).
 - `tintedBg: true` with `color: error` — used for header trash icons (10% red bg + red stroke).
+- `style: ghost` — no plate. For buttons sitting **inside** an already-busy surface, where a filled circle competes with the content it belongs to: the sheet-header action slot (Message, `⋯`) next to a descriptor and a status pill. CSS equivalent: `.fit-sheet-menu-btn` (transparent, `surface-high` only on `:active`).
 
 **States:** default, pressed (scale 0.95)
 
@@ -385,13 +388,13 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 **Optional props:**
 - `title: String?`
 - `subtitle: String?`
-- `statusHeader: SheetStatusHeader?` — (descriptor: String, pill: Badge?)
+- `statusHeader: SheetStatusHeader?` — (descriptor: String, pill: Badge?, actions: slot?)
 - `variant: enum { standard (pad-bottom 40), compact (pad-bottom 28) }`
 - `footerVariant: String?` — for event sheets, selects footer from `ev-planned/ev-request/ev-awaiting/ev-review/ev-missed/ev-finished`
 
 **Sub-elements:**
 - `SheetHandle` — 36×4 rounded bar
-- `SheetStatusHeader` — descriptor (18px 500) + optional FitCalEventPill
+- `SheetStatusHeader` — descriptor (18px 500) + optional FitCalEventPill + optional trailing **actions slot**
 - `SheetTitle` — 18px 500
 - `SheetItem` — flex row with divider, 16px font
 - `SheetWarning` — icon + text, colored bg
@@ -696,10 +699,16 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - crossRole(role) — surface-high bg, opacity 0.75, 3pt **dashed** text-tertiary stripe, role-tag badge anchored bottom-right (no status pill — actions belong to the other role)
 - custom — surface-high bg, opacity 1.0 (your own event — no muting), 3pt **solid** text-tertiary stripe, no role tag, **no status pill** (custom events are stateless — they don't participate in the 6-state lifecycle per event-statuses.md). Default title "My time" when caller passes empty title.
 - Actionable / terminal statuses override the type fill (act-on-it = own tint + solid perimeter); awaiting has NO fill (dashed border alone = you-wait); planned / finished keep the type tint:
-    - request / review — `bg.warning-subtle` fill + 1pt yellow-600 solid perimeter
-    - awaiting — **1pt yellow-600 DASHED perimeter, no fill** (was a gray perimeter that read as Planned)
+    - request / review — `bg.cal-action-subtle` fill + 1pt yellow-600 solid perimeter
+    - awaiting — **1pt yellow-600 DASHED perimeter + `bg.cal-tentative` fill** (transparent in dark, 70% white in light)
     - missed — `bg.error-subtle` fill + red-400 perimeter
     - finished — opacity 0.5
+
+**Why the calendar has its own two tint tokens** (`bgCalActionSubtle`, `bgCalTentative`) instead of reusing `bg.warning-subtle` / `surface-high`:
+- `bg.warning-subtle` is the general heads-up surface (banners, alerts) and sits on **yellow.400** in dark — brighter than a calendar tile should read next to a teal or blue one. The calendar tint stays on **yellow.600** in both themes: `0.10` dark / `0.20` light, matching `.fit-cal-event.request` in the kit.
+- Awaiting is a *tentative card*, so it cannot use a surface fill: dark = **transparent**, letting the dashed perimeter float over the grid; light = **70% white**, because on the `#F2F2F7` canvas a transparent card dissolves into the background entirely. `surface-high` gave a solid card in both themes, which read as an ordinary booked tile.
+
+**Left accent stripe:** the 3pt accent is painted as the **left slice of a rounded-rect stroke**, not as a rectangle inside the clipped card — so the colour follows the top-left and bottom-left corner arcs, exactly as `border-left: 3px` + `border-radius` renders in CSS. A plain rectangle gets bitten off by the corner clip and reads as a bar pasted onto the tile. Cross-role keeps its dashed vertical bar.
 
 **Sub-elements:**
 - title row — title (12pt 500, 10pt on tiny) + optional FitCalEventPill (hidden on cross-role)
@@ -746,18 +755,18 @@ Every tile reserves a 3pt transparent strip at the bottom so back-to-back events
 **Required props:**
 - `status: enum { request, review, awaiting, missed }`
 
-**States:**
-- request/review — yellow-600 bg, white text
-- awaiting — **yellow-600 bg, white text** (shipped Compose, #17). It is deliberately identical to request: the request-vs-awaiting distinction is carried by the *tile* (dashed perimeter + no fill), so the 11pt pill stays legible instead of relying on a 1pt outline. It is no longer the old gray-500 fill, which read as a neutral badge.
-- missed — red-400 bg, white text
+**States:** fill weight carries *"is this on me?"*, not just which state:
+- request / review — **filled** yellow-600, white text. Someone owes an answer.
+- awaiting — **outlined**: transparent bg, 1pt yellow-600 border, yellow-600 text. Same hue as request, opposite weight — you are only waiting. Horizontal/vertical padding drops 1px (5/1 instead of 6/2) so the border sits inside the same overall pill size and a row of pills keeps one baseline. Mirrors the tile's dashed perimeter.
+- missed — **filled** red-400, white text.
 
-> **Open divergence:** the web prototype currently draws the awaiting pill *outlined* (transparent bg, 1pt yellow-600 border, yellow-600 text) — see `project-spec/prototypes/lib/fit-ui.css`. Native shipped filled per the legibility argument above. One of the two has to move; the tile grammar (dashed, no fill) is identical on both and is not in question.
+The earlier all-filled version (#17) is retired: it made a passive wait shout as loudly as a request, which is the one distinction this pill exists to draw. Canon: `.fit-cal-event-pill--*` in `fit-ui.css` + event-statuses.md § status pills.
 
 **Used:** inside FitCalEvent title row, inside FitSheet status header.
 
-**iOS/Android notes:** 11px 500 font (documented exception — Apple Caption 2), 2/6 padding, 99px radius.
+**iOS/Android notes:** 11px 500 font (documented exception — Apple Caption 2), 2/6 padding filled · 1/5 outlined, 99px radius.
 
-**Status:** ❌ Swift missing. Compose: to build.
+**Status:** ✅ Compose (`components/FitOverlays.kt`), ✅ CSS. ⚠️ Swift still on the old spec (grey `awaiting` fill) — iOS is paused, so parity is a tracked follow-up, not a gap in this change.
 
 ---
 
