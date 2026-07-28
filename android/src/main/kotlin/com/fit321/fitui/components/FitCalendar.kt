@@ -28,9 +28,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
@@ -524,24 +526,40 @@ private fun Modifier.dashedRoundedBorder(
 private val STRIPE_WIDTH = 3.dp
 
 /**
- * Paints the tile's left accent as the left slice of a rounded-rect stroke, so the colour
- * follows the top-left and bottom-left arcs instead of stopping where the curve begins.
+ * Paints the tile's left accent the way `border-left: 3px` + `border-radius` renders in CSS:
+ * full width down the straight edge, then **tapering to nothing** as it sweeps around the
+ * top-left and bottom-left arcs to meet the (zero-width) top and bottom borders.
  *
- * Clipping to a band as wide as the corner radius is what limits the stroke to the left edge
- * plus its two arcs; the rest of the perimeter is left to the status border (or to nothing).
+ * That taper is why this isn't a uniform stroke. It's the area between two shapes — the card's
+ * outline, and the same outline inset by the stripe width on the LEFT ONLY. Insetting one side
+ * makes the corner radius elliptical (`rx = r - w`, `ry = r`), and the gap between the circular
+ * outer arc and that elliptical inner arc is exactly the wedge: `w` wide where the arc is
+ * vertical, zero where it turns horizontal.
  */
 private fun Modifier.leftAccentStripe(color: Color, radius: Dp): Modifier = drawBehind {
-    val strokePx = STRIPE_WIDTH.toPx()
-    val radiusPx = radius.toPx()
-    clipRect(right = radiusPx) {
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(strokePx / 2f, strokePx / 2f),
-            size = Size(size.width - strokePx, size.height - strokePx),
-            cornerRadius = CornerRadius(radiusPx - strokePx / 2f),
-            style = Stroke(width = strokePx),
+    val w = STRIPE_WIDTH.toPx()
+    val r = radius.toPx()
+    val outerRadius = CornerRadius(r, r)
+    val innerCorner = CornerRadius((r - w).coerceAtLeast(0f), r)
+
+    val outer = Path().apply {
+        addRoundRect(RoundRect(Rect(Offset.Zero, size), outerRadius))
+    }
+    val inner = Path().apply {
+        addRoundRect(
+            RoundRect(
+                rect = Rect(left = w, top = 0f, right = size.width, bottom = size.height),
+                topLeft = innerCorner,
+                topRight = outerRadius,
+                bottomRight = outerRadius,
+                bottomLeft = innerCorner,
+            )
         )
     }
+    val wedge = Path().apply { op(outer, inner, PathOperation.Difference) }
+    // Belt and braces: the difference is already confined to the left band, but clipping keeps
+    // any hairline seam on the right corners from ever showing.
+    clipRect(right = r) { drawPath(wedge, color) }
 }
 
 @Composable
