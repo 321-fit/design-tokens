@@ -387,7 +387,15 @@ fun FitEmptyState(
         )
         if (actionLabel != null && onAction != null) {
             Spacer(Modifier.height(FitSpacing.sp5))
-            FitButton(actionLabel, size = FitButtonSize.Md, onClick = onAction)
+            // A centred pill that hugs its label, matching `.fit-empty-state`'s `width:auto`
+            // button. Stretched edge-to-edge it read as a detached footer bar rather than part
+            // of the empty state.
+            FitButton(
+                actionLabel,
+                size = FitButtonSize.Md,
+                onClick = onAction,
+                fillWidth = false,
+            )
         }
     }
 }

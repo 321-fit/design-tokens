@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import com.fit321.fitui.tokens.FitSpacing
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,12 @@ fun FitButton(
     style: FitButtonStyle = FitButtonStyle.Primary,
     size: FitButtonSize = FitButtonSize.Lg,
     modifier: Modifier = Modifier,
+    /**
+     * Stretch to the full width of the parent (the default, for footer CTAs), or hug the label.
+     * An empty state's action is a centred pill in the design — `width:auto` in `fit-ui.css` —
+     * which was unreachable while the fill was applied unconditionally after [modifier].
+     */
+    fillWidth: Boolean = true,
     onClick: () -> Unit
 ) {
     val theme = LocalFitTheme.current
@@ -81,11 +88,14 @@ fun FitButton(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
             .height(height)
             .clip(CircleShape)
             .then(bgModifier)
             .then(borderModifier)
+            // Only meaningful when hugging the label: a full-width button centres its text and
+            // needs none. `.fit-btn` in fit-ui.css pads an auto-width button by 24px.
+            .then(if (fillWidth) Modifier else Modifier.padding(horizontal = FitSpacing.sp6))
             .clickable(enabled = style != FitButtonStyle.Disabled) { onClick() }
             .alpha(if (style == FitButtonStyle.Disabled) 0.7f else 1f),
         contentAlignment = Alignment.Center
