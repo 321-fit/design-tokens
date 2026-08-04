@@ -8,6 +8,7 @@ import com.fit321.fitui.tokens.FitSpacing
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -86,20 +87,22 @@ fun FitButton(
         else -> Modifier
     }
 
-    Box(
-        modifier = modifier
-            .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
-            .height(height)
-            .clip(CircleShape)
-            .then(bgModifier)
-            .then(borderModifier)
-            // Only meaningful when hugging the label: a full-width button centres its text and
-            // needs none. `.fit-btn` in fit-ui.css pads an auto-width button by 24px.
-            .then(if (fillWidth) Modifier else Modifier.padding(horizontal = FitSpacing.sp6))
-            .clickable(enabled = style != FitButtonStyle.Disabled) { onClick() }
-            .alpha(if (style == FitButtonStyle.Disabled) 0.7f else 1f),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(title, color = fg, style = textStyle)
+    key(style) {
+        Box(
+            modifier = modifier
+                .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
+                .height(height)
+                .clip(CircleShape)
+                .then(bgModifier)
+                .then(borderModifier)
+                // Only meaningful when hugging the label: a full-width button centres its text and
+                // needs none. `.fit-btn` in fit-ui.css pads an auto-width button by 24px.
+                .then(if (fillWidth) Modifier else Modifier.padding(horizontal = FitSpacing.sp6))
+                .clickable(enabled = style != FitButtonStyle.Disabled) { onClick() }
+                .alpha(if (style == FitButtonStyle.Disabled) 0.7f else 1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(title, color = fg, style = textStyle)
+        }
     }
 }
