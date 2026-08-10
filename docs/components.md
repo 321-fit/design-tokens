@@ -1051,7 +1051,9 @@ The earlier all-filled version (#17) is retired: it made a passive wait shout as
 **Purpose:** Horizontal 4-column readout (Rating / Reviews / Sessions / Price from) used on coach profile in both athlete-view (`s-coach-v2`) and coach-view (`s-coach-profile`). Read-only, system-computed values. One column may be visually accented (e.g. price-from in teal).
 
 **Required props:**
-- `items: [Item]` — variable-length but typically 4 columns. Each `Item` carries `value: String`, `label: String`, `accent: Bool = false`.
+- `items: [Item]` — variable-length but typically 4 columns. Each `Item` carries `value: String`, `label: String`, `accent: Bool = false`, and an optional `tone`.
+
+**Tone:** `neutral` (default) · `accent` (teal — the good number: a price, a total earned) · `warning` (yellow) · `danger` (red — money owed, an overdue count). `accent: true` still resolves to `.accent`, so existing call sites are unchanged. A debt rendered in brand green reads as praise for money the coach has not been paid — that is what the tone exists to prevent.
 
 **Sub-elements:** flex row with equal-width columns + 1px vertical dividers (`theme.divider`). Each column: value (18pt 600 `theme.textPrimary`, or `Teal.t500` if `accent`) + label (12pt `theme.textTertiary`). Container: 12px×16px padding (vertical × horizontal), 12px corner radius, `theme.surfaceHigh` background. CSS class `.fit-stat-strip` + `-col`, `-value`, `-value--accent`, `-label`, `-divider`.
 
@@ -1059,7 +1061,7 @@ The earlier all-filled version (#17) is retired: it made a passive wait shout as
 
 **Used:** coach profile (athlete-view + coach-view); future athlete dashboards may reuse.
 
-**iOS/Android notes:** Use `FitStatStripItem` (Swift) / `FitStatStripItem` (Compose) data classes. Compose enforces a 32dp tall divider column (vertically centered) to match the CSS divider height; iOS expands the `Rectangle` to fill row height. Accent color is `FitColors.Teal.t500` on both platforms — not theme-aware (price is a brand-accent signal, deliberate).
+**iOS/Android notes:** Use `FitStatStripItem` (Swift `Item` / Compose data class) with `FitStatStripTone` / `FitStatStrip.Tone`. Compose enforces a 32dp tall divider column (vertically centered) to match the CSS divider height; iOS expands the `Rectangle` to fill row height. Accent color is `FitColors.Teal.t500` on both platforms — not theme-aware (price is a brand-accent signal, deliberate).
 
 **Status:** ✅ Swift (`Sources/FitUI/Components/FitStatStrip.swift`), ✅ Compose (`components/FitStatStrip.kt`), ✅ CSS (`.fit-stat-strip` + sub-elements).
 

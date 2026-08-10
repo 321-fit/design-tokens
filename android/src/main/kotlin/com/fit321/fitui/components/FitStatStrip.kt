@@ -31,10 +31,18 @@ import com.fit321.fitui.tokens.FitSpacing
 // Mirrors Swift `FitStatStrip`. See `docs/components.md` § FitStatStrip.
 // ============================================================================
 
+/**
+ * Which way a column reads. `Accent` is the good number (a price, a total earned);
+ * `Warning` is the one the reader owes something about — a debt in brand green says
+ * "well done" about money the coach has not been paid.
+ */
+enum class FitStatStripTone { Neutral, Accent, Warning, Danger }
+
 data class FitStatStripItem(
     val value: String,
     val label: String,
-    val accent: Boolean = false
+    val accent: Boolean = false,
+    val tone: FitStatStripTone = if (accent) FitStatStripTone.Accent else FitStatStripTone.Neutral
 )
 
 @Composable
@@ -60,7 +68,12 @@ fun FitStatStrip(
                 Text(
                     item.value,
                     style = FitFont.body1.copy(fontSize = 18.sp, fontWeight = FontWeight.SemiBold),
-                    color = if (item.accent) FitColors.Teal.t500 else theme.textPrimary
+                    color = when (item.tone) {
+                        FitStatStripTone.Accent -> FitColors.Teal.t500
+                        FitStatStripTone.Warning -> FitColors.Yellow.y400
+                        FitStatStripTone.Danger -> FitColors.Red.r400
+                        FitStatStripTone.Neutral -> theme.textPrimary
+                    }
                 )
                 Text(
                     item.label,
