@@ -87,6 +87,8 @@ fun FitInput(
                 value = value,
                 onValueChange = onValueChange,
                 enabled = enabled,
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
                 textStyle = FitFont.body1.copy(color = theme.textPrimary),
                 cursorBrush = androidx.compose.ui.graphics.SolidColor(FitColors.brandPrimary),
                 visualTransformation = if (showSecure) PasswordVisualTransformation() else VisualTransformation.None,
