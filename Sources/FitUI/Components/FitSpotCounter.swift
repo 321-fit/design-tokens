@@ -29,17 +29,12 @@ public struct FitSpotCounter: View {
 
     public var body: some View {
         ZStack(alignment: .leading) {
-            // Track
-            RoundedRectangle(cornerRadius: FitRadius.md)
-                .fill(theme.surfaceHigh)
-
-            // Fill
-            GeometryReader { proxy in
-                let ratio = max(0, min(1, Double(available) / Double(total)))
-                RoundedRectangle(cornerRadius: FitRadius.md)
-                    .fill(FitColors.Teal.t500)
-                    .frame(width: proxy.size.width * ratio)
-            }
+            // The bar itself is FitProgressBar: this component adds capacity semantics
+            // and the centred label on top, and must not carry a second copy of it.
+            FitProgressBar(
+                progress: Double(available) / Double(total),
+                height: compact ? 8 : 12
+            )
 
             if showLabel {
                 Text(label)

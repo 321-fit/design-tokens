@@ -1,25 +1,18 @@
 package com.fit321.fitui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
-import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
-import com.fit321.fitui.tokens.FitRadius
 
 // ============================================================================
 // FitSpotCounter — group training capacity bar.
@@ -40,20 +33,10 @@ fun FitSpotCounter(
     val ratio = safeAvail.toFloat() / safeTotal.toFloat()
     val height = if (compact) 8.dp else 12.dp
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(height)
-            .clip(RoundedCornerShape(FitRadius.md))
-            .background(theme.surfaceHigh)
-    ) {
-        // Fill
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(ratio)
-                .background(FitColors.Teal.t500)
-        )
+    Box(modifier = modifier.height(height)) {
+        // The bar itself is [FitProgressBar]: this component adds capacity semantics and
+        // the centred label on top of it, and must not carry a second copy of the drawing.
+        FitProgressBar(progress = ratio, height = height, modifier = Modifier.fillMaxWidth())
         if (showLabel) {
             Box(
                 modifier = Modifier.fillMaxSize(),

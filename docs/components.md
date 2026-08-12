@@ -1361,8 +1361,31 @@ Title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line
 
 ---
 
+### FitProgressBar
+**Purpose:** The bare determinate bar — track + proportional fill, no label. Anywhere a row already carries its own counter line ("6 of 20 used · 14 left") and only needs the bar underneath it: package buyers, pack cards, pack detail summaries.
+
+**Required props:**
+- `progress: Double/Float` — fraction, clamped to `[0, 1]` rather than drawn out of range
+
+**Optional props:**
+- `tone: FitProgressTone = .brand` — `brand` (teal, ordinary progress) · `warning` (yellow — the measured thing is running out and someone should act) · `neutral` (`theme.textTertiary`)
+- `track: FitProgressTrack = .surface` — `surface` (`theme.surfaceHigh`) for a bar on the screen background; **`divider`** for one inside a plain list row, where `surfaceHigh` sits so close to the background that an empty bar disappears and "0 of 5 used" loses its picture
+- `height = 4` — 4px is the in-row default; capacity bars use 8/12, the packages buyer row uses 6
+
+**Sub-elements:** track (`theme.surfaceHigh`, `radius-md`); fill (tone color, `radius-md`, width = `progress`).
+
+**States:** empty (**nothing** is drawn — a zero-width rounded fill still paints its caps and reads as "a little bit done"), partial, full.
+
+**Used:** `FitSpotCounter` is built on it; package Buyers rows and pack cards (session packages).
+
+**iOS/Android notes:** Tone → color mapping is identical on both platforms; `warning` is `FitColors.warning`, not a red. Swift measures with `GeometryReader`, Compose with `fillMaxWidth(ratio)`.
+
+**Status:** ✅ Swift (`Sources/FitUI/Components/FitProgressBar.swift`), ✅ Compose (`components/FitProgressBar.kt`), ⬜ CSS (prototype uses page-local `.pkg-bar` / `.pk-prog` — promote when a third web consumer appears).
+
+---
+
 ### FitSpotCounter
-**Purpose:** Group-training capacity bar — 12px tall fill bar with proportional teal fill and centered "X of Y spots" label. Used on group session cards / event sheets (33 prototype callsites).
+**Purpose:** Group-training capacity bar — 12px tall fill bar with proportional teal fill and centered "X of Y spots" label. Used on group session cards / event sheets (33 prototype callsites). **Draws via [FitProgressBar]** — it adds the capacity semantics and the label, and deliberately holds no second copy of the bar.
 
 **Required props:**
 - `available: Int`
