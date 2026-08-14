@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
@@ -38,6 +39,22 @@ fun FitIconPlate(
     tone: FitIconPlateTone = FitIconPlateTone.Neutral,
     size: FitIconPlateSize = FitIconPlateSize.Md,
     modifier: Modifier = Modifier
+) = FitIconPlate(tone = tone, size = size, modifier = modifier) { tint, iconSize ->
+    Icon(imageVector = icon, contentDescription = null, tint = tint, modifier = Modifier.size(iconSize))
+}
+
+/**
+ * Plate with a caller-supplied glyph.
+ *
+ * The tone decides the tint, so the slot is handed it rather than left to guess: a plate
+ * whose background says "error" and whose drawable stays grey is worse than no plate.
+ */
+@Composable
+fun FitIconPlate(
+    tone: FitIconPlateTone = FitIconPlateTone.Neutral,
+    size: FitIconPlateSize = FitIconPlateSize.Md,
+    modifier: Modifier = Modifier,
+    icon: @Composable (tint: Color, size: Dp) -> Unit
 ) {
     val theme = LocalFitTheme.current
     val shape = RoundedCornerShape(FitRadius.sm)
@@ -57,11 +74,6 @@ fun FitIconPlate(
             .background(bg, shape),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = fg,
-            modifier = Modifier.size(size.iconDp.dp)
-        )
+        icon(fg, size.iconDp.dp)
     }
 }

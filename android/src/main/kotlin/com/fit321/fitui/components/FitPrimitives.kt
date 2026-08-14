@@ -26,8 +26,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -110,12 +112,14 @@ fun FitAvatar(
     bg: Brush = FitColors.brandGradient,
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
+    imageUrl: String? = null,
     modifier: Modifier = Modifier
 ) {
     val shapeValue = when (shape) {
         FitAvatarShape.Circle -> CircleShape
         FitAvatarShape.Rect10 -> RoundedCornerShape(10.dp)
     }
+    val alpha = if (isPaid) 0.5f else 1f
     Box(
         modifier = modifier
             .size(size.px)
@@ -123,11 +127,23 @@ fun FitAvatar(
             .background(bg, shapeValue),
         contentAlignment = Alignment.Center
     ) {
+        // Initials stay underneath rather than behind a conditional: they are the
+        // placeholder while the photo loads and the fallback if it never does, which
+        // is what AsyncImage does on the SwiftUI side.
         Text(
             initials.take(2).uppercase(),
-            color = Color.White.copy(alpha = if (isPaid) 0.5f else 1f),
+            color = Color.White.copy(alpha = alpha),
             style = FitFont.body1.copy(fontSize = size.fontSp.sp(), fontWeight = FontWeight.Medium)
         )
+        if (!imageUrl.isNullOrBlank()) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = alpha,
+                modifier = Modifier.matchParentSize().clip(shapeValue)
+            )
+        }
     }
 }
 
