@@ -71,6 +71,14 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+**Icon slot (Android).** As with [FitChip], an overload takes `@Composable (tint: Color, size: Dp) -> Unit`
+in place of the `ImageVector`, for hosts that ship their own drawables.
+
+**`background` (Android).** A plate colour stated by the caller wins over `tintedBg`. The
+tinted variants here are computed alphas (`error.copy(alpha = .10f)`), which this repo's own
+rule says belong in `bg.<status>-subtle` tokens — a caller holding that token should be able
+to pass it rather than inherit an alpha that reads differently on white and on gray.800.
+
 ### FitIconPlate
 **Purpose:** Decorative leading icon container — rounded square with tinted background + centered icon. Used wherever a row / card needs a visual category accent (Dashboard action cards, Settings rows, empty-state CTAs, list category accents). Non-interactive — for tappable plates use `FitIconBtn` with `tintedBg: true`.
 

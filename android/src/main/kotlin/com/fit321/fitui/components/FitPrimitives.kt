@@ -61,6 +61,33 @@ fun FitIconBtn(
     contentDescription: String? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
+) = FitIconBtn(
+    color = color,
+    tintedBg = tintedBg,
+    style = style,
+    modifier = modifier,
+    onClick = onClick,
+) { tint, size ->
+    Icon(icon, contentDescription = contentDescription, tint = tint, modifier = Modifier.size(size))
+}
+
+/**
+ * Icon button whose glyph the caller draws — see the note on [FitChip].
+ *
+ * The slot is handed the tint and size the button would have used, so a drawable passed in
+ * still follows [color] and still sits at the right size. A caller that needs a different
+ * colour can ignore the tint, which is what a host with its own semantics for the glyph
+ * ends up doing until the two agree.
+ */
+@Composable
+fun FitIconBtn(
+    color: FitIconBtnColor = FitIconBtnColor.Primary,
+    tintedBg: Boolean = false,
+    style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    background: Color? = null,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    icon: @Composable (tint: Color, size: Dp) -> Unit
 ) {
     val theme = LocalFitTheme.current
     val iconColor = when (color) {
@@ -70,6 +97,10 @@ fun FitIconBtn(
         FitIconBtnColor.Success -> FitColors.success
     }
     val bgColor = when {
+        // A plate colour the caller states wins: the tinted variants below are computed
+        // alphas, and a host with a `bg.<status>-subtle` token has the value this file
+        // should have been using in the first place.
+        background != null -> background
         style == FitIconBtnStyle.Ghost -> Color.Transparent
         tintedBg -> when (color) {
             FitIconBtnColor.Error -> FitColors.error.copy(alpha = 0.10f)
@@ -88,7 +119,7 @@ fun FitIconBtn(
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Icon(icon, contentDescription = contentDescription, tint = iconColor, modifier = Modifier.size(FitSize.iconMd))
+        icon(iconColor, FitSize.iconMd)
     }
 }
 
