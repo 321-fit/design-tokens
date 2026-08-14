@@ -281,12 +281,18 @@ owes for.
 - `title: String`
 
 **Optional props:**
-- `showBack: Bool = false`
+- `showBack: Bool = true` (Android; the button still needs an `onBack` to appear)
 - `onBack: (() -> Void)?`
 - `rightActions: [HeaderAction] = []`
+- `trailing` (iOS `@ViewBuilder`, Android `(@Composable () -> Unit)?`) — an arbitrary end
+  control. Takes precedence over `rightActions`: a header ends in a menu, a badge or a text
+  action at least as often as in a row of glyphs
+- `maxLines` / `overflow` / `backTestTag` (Android)
 
 **Sub-elements:**
-- `FitHeaderBack` — 32×32 circular back button, 16×16 chevron-left SVG
+- `FitHeaderBack` — 32×32 circular back button, 16×16 chevron-left SVG (Android ships the
+  drawable as `ic_fit_chevron_left`; it is not a Material glyph)
+- Title — reserves 48dp on both sides so a long one cannot slide under the buttons
 - Title — 17px semibold (Apple HIG Headline token)
 
 **States:** default.

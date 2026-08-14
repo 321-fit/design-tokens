@@ -28,6 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -41,13 +45,20 @@ import com.fit321.fitui.tokens.FitSpacing
 
 data class FitHeaderAction(val icon: ImageVector, val onClick: () -> Unit)
 
+/** Room kept on both sides of the centred title so a long one cannot slide under the buttons. */
+private val TitleSideReserve = 48.dp
+
 @Composable
 fun FitHeader(
     title: String,
-    showBack: Boolean = false,
+    modifier: Modifier = Modifier,
+    showBack: Boolean = true,
     onBack: (() -> Unit)? = null,
     rightActions: List<FitHeaderAction> = emptyList(),
-    modifier: Modifier = Modifier
+    backTestTag: String? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
+    trailing: (@Composable () -> Unit)? = null
 ) {
     val theme = LocalFitTheme.current
     Box(
@@ -57,32 +68,48 @@ fun FitHeader(
             .background(theme.screenBg)
             .padding(horizontal = FitSpacing.sp4, vertical = FitSpacing.sp2)
     ) {
-        // Left
         if (showBack && onBack != null) {
             Box(
                 modifier = Modifier
+                    .align(Alignment.CenterStart)
                     .size(FitSize.iconBtnSize)
                     .clip(CircleShape)
-                    .background(theme.surfaceHigh.copy(alpha = 0.3f))
+                    .background(theme.surfaceHigh)
                     .clickable { onBack() }
-                    .align(Alignment.CenterStart),
+                    .then(if (backTestTag != null) Modifier.testTag(backTestTag) else Modifier),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.ArrowBack, null, tint = theme.textPrimary, modifier = Modifier.size(FitSize.iconMd))
+                Icon(
+                    painter = painterResource(R.drawable.ic_fit_chevron_left),
+                    contentDescription = null,
+                    tint = theme.textPrimary,
+                    modifier = Modifier.size(FitSize.iconMd)
+                )
             }
         }
 
-        // Title (centered)
         Text(
             title,
             style = FitFont.navTitle,
             color = theme.textPrimary,
-            modifier = Modifier.align(Alignment.Center)
+            maxLines = maxLines,
+            overflow = overflow,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = TitleSideReserve)
         )
 
-        // Right actions
-        if (rightActions.isNotEmpty()) {
-            Row(
+        // A caller-built trailing wins over the icon list: a header ends in a menu, a badge
+        // or a text action at least as often as it ends in a row of glyphs.
+        when {
+            trailing != null -> Box(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                contentAlignment = Alignment.Center
+            ) {
+                trailing()
+            }
+
+            rightActions.isNotEmpty() -> Row(
                 modifier = Modifier.align(Alignment.CenterEnd),
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
             ) {
