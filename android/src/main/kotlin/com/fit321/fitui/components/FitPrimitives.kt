@@ -115,11 +115,13 @@ fun FitAvatar(
     isPaid: Boolean = false,
     imageUrl: String? = null,
     textColor: Color = Color.White,
+    fontWeight: FontWeight = FontWeight.Medium,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size.px,
     fontSize = size.fontSp.sp(),
+    fontWeight = fontWeight,
     bg = bg,
     shape = shape,
     isPaid = isPaid,
@@ -136,7 +138,9 @@ fun FitAvatar(
  * alternative to offering them is a consumer rebuilding the avatar to change one number,
  * which is how the initials, the fallback and the paid state drift apart.
  *
- * The initials default to 0.35 of the diameter — what the scale itself uses at its ends.
+ * Initials default to 0.36 of the diameter. The scale's own steps run 0.42 · 0.38 · 0.35 ·
+ * 0.33 · 0.35, averaging 0.365, so this sits closer to the scale as a whole than the ratio
+ * of any single step does.
  */
 @Composable
 fun FitAvatar(
@@ -147,12 +151,14 @@ fun FitAvatar(
     isPaid: Boolean = false,
     imageUrl: String? = null,
     textColor: Color = Color.White,
-    fontSize: TextUnit = (size.value * 0.35f).sp,
+    fontSize: TextUnit = (size.value * 0.36f).sp,
+    fontWeight: FontWeight = FontWeight.Medium,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size,
     fontSize = fontSize,
+    fontWeight = fontWeight,
     bg = bg,
     shape = shape,
     isPaid = isPaid,
@@ -166,6 +172,7 @@ private fun FitAvatarImpl(
     initials: String,
     diameter: Dp,
     fontSize: TextUnit,
+    fontWeight: FontWeight,
     bg: Brush,
     shape: FitAvatarShape,
     isPaid: Boolean,
@@ -191,7 +198,7 @@ private fun FitAvatarImpl(
         Text(
             initials.take(2).uppercase(),
             color = textColor.copy(alpha = alpha),
-            style = FitFont.body1.copy(fontSize = fontSize, fontWeight = FontWeight.Medium)
+            style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
         )
         if (!imageUrl.isNullOrBlank()) {
             AsyncImage(
