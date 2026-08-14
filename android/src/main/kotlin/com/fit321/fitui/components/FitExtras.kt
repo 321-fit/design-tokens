@@ -88,16 +88,22 @@ fun FitInput(
                 onValueChange = onValueChange,
                 enabled = enabled,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                // Fills the 56dp row, not just the line of text. A text field sized to its
+                // own content leaves ~16dp of dead pixels above and below inside a box that
+                // looks entirely tappable: aiming at the top of the field did nothing, which
+                // reads as the screen ignoring you rather than as a small target.
+                modifier = Modifier.fillMaxSize(),
                 textStyle = FitFont.body1.copy(color = theme.textPrimary),
                 cursorBrush = androidx.compose.ui.graphics.SolidColor(FitColors.brandPrimary),
                 visualTransformation = if (showSecure) PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardOptions = KeyboardOptions(keyboardType = kbType),
                 decorationBox = { inner ->
-                    if (value.isEmpty() && placeholder != null) {
-                        Text(placeholder, style = FitFont.body1, color = theme.textPlaceholder)
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
+                        if (value.isEmpty() && placeholder != null) {
+                            Text(placeholder, style = FitFont.body1, color = theme.textPlaceholder)
+                        }
+                        inner()
                     }
-                    inner()
                 }
             )
         }
