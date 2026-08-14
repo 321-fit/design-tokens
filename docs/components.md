@@ -158,6 +158,11 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 
 **States:** default; `paid` variant (opacity 0.5) when participant has paid cash.
 
+**Payment badge** (`FitParticipantPayment`): `cash` · `card` · **`pack`** · `none`. `pack`
+is its own state and never folded into "paid": a coach settling up has to tell money in
+their hand from a credit that was spent, or the total they are chasing counts seats nobody
+owes for.
+
 **Used:** client cards, event sheet avatar, review queue, clients list, coach profile hero.
 
 **iOS/Android notes:** Text is Rubik 500, centered. Image fallback to initials if URL load fails.

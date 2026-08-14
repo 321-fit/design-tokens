@@ -237,6 +237,13 @@ fun FitSettingsCard(
 enum class FitParticipantPayment {
     Cash,
     Card,
+
+    /**
+     * Covered by a session-pack credit. Its own state rather than "paid": the coach has to
+     * be able to tell money in their hand from a credit that was spent, or the amount they
+     * are chasing counts seats nobody owes for.
+     */
+    Pack,
     None
 }
 
@@ -350,6 +357,7 @@ fun FitParticipant(
                 when (payment) {
                     FitParticipantPayment.Cash -> FitBadge("Cash", FitBadgeStyle.Neutral)
                     FitParticipantPayment.Card -> FitBadge("Card", FitBadgeStyle.Neutral)
+                    FitParticipantPayment.Pack -> FitBadge("Pack", FitBadgeStyle.Neutral)
                     FitParticipantPayment.None -> {}
                 }
             }

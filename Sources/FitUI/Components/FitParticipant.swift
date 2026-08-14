@@ -13,6 +13,10 @@ import SwiftUI
 public enum FitParticipantPayment {
     case cash
     case card
+
+    /// Covered by a session-pack credit. Its own state rather than "paid": the coach has
+    /// to be able to tell money in their hand from a credit that was spent.
+    case pack
     case none
 }
 
@@ -142,6 +146,8 @@ public struct FitParticipant: View {
                         FitBadge("Cash", style: .neutral)
                     } else if case .card = payment {
                         FitBadge("Card", style: .neutral)
+                    } else if case .pack = payment {
+                        FitBadge("Pack", style: .neutral)
                     }
                 }
             }
