@@ -25,8 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -113,7 +114,64 @@ fun FitAvatar(
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
     imageUrl: String? = null,
+    textColor: Color = Color.White,
     modifier: Modifier = Modifier
+) = FitAvatarImpl(
+    initials = initials,
+    diameter = size.px,
+    fontSize = size.fontSp.sp(),
+    bg = bg,
+    shape = shape,
+    isPaid = isPaid,
+    imageUrl = imageUrl,
+    textColor = textColor,
+    modifier = modifier
+)
+
+/**
+ * Avatar at a size the scale does not carry.
+ *
+ * Prefer [FitAvatarSize] — it is the scale the screens are drawn against. This overload
+ * exists because real layouts do land on sizes between the steps (44, 56, 64), and the
+ * alternative to offering them is a consumer rebuilding the avatar to change one number,
+ * which is how the initials, the fallback and the paid state drift apart.
+ *
+ * The initials default to 0.35 of the diameter — what the scale itself uses at its ends.
+ */
+@Composable
+fun FitAvatar(
+    initials: String,
+    size: Dp,
+    bg: Brush = FitColors.brandGradient,
+    shape: FitAvatarShape = FitAvatarShape.Circle,
+    isPaid: Boolean = false,
+    imageUrl: String? = null,
+    textColor: Color = Color.White,
+    fontSize: TextUnit = (size.value * 0.35f).sp,
+    modifier: Modifier = Modifier
+) = FitAvatarImpl(
+    initials = initials,
+    diameter = size,
+    fontSize = fontSize,
+    bg = bg,
+    shape = shape,
+    isPaid = isPaid,
+    imageUrl = imageUrl,
+    textColor = textColor,
+    modifier = modifier
+)
+
+@Composable
+private fun FitAvatarImpl(
+    initials: String,
+    diameter: Dp,
+    fontSize: TextUnit,
+    bg: Brush,
+    shape: FitAvatarShape,
+    isPaid: Boolean,
+    imageUrl: String?,
+    textColor: Color,
+    modifier: Modifier
 ) {
     val shapeValue = when (shape) {
         FitAvatarShape.Circle -> CircleShape
@@ -122,7 +180,7 @@ fun FitAvatar(
     val alpha = if (isPaid) 0.5f else 1f
     Box(
         modifier = modifier
-            .size(size.px)
+            .size(diameter)
             .clip(shapeValue)
             .background(bg, shapeValue),
         contentAlignment = Alignment.Center
@@ -132,8 +190,8 @@ fun FitAvatar(
         // is what AsyncImage does on the SwiftUI side.
         Text(
             initials.take(2).uppercase(),
-            color = Color.White.copy(alpha = alpha),
-            style = FitFont.body1.copy(fontSize = size.fontSp.sp(), fontWeight = FontWeight.Medium)
+            color = textColor.copy(alpha = alpha),
+            style = FitFont.body1.copy(fontSize = fontSize, fontWeight = FontWeight.Medium)
         )
         if (!imageUrl.isNullOrBlank()) {
             AsyncImage(
