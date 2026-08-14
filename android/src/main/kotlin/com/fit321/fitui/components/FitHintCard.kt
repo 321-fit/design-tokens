@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -38,6 +40,21 @@ fun FitHintCard(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+) = FitHintCard(
+    title = title,
+    subtitle = subtitle,
+    onClick = onClick,
+    modifier = modifier,
+) { tint, size -> Icon(icon, null, tint = tint, modifier = Modifier.size(size)) }
+
+/** [FitHintCard] with a caller-supplied glyph — see the note on [FitChip]. */
+@Composable
+fun FitHintCard(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    leading: @Composable (tint: Color, size: Dp) -> Unit,
 ) {
     val theme = LocalFitTheme.current
     val shape = RoundedCornerShape(14.dp)
@@ -69,9 +86,9 @@ fun FitHintCard(
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3),
     ) {
         FitIconPlate(
-            icon = icon,
             tone = FitIconPlateTone.Info,
             size = FitIconPlateSize.MdLg,
+            icon = leading,
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(

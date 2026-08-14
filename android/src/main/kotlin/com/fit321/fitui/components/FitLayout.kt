@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -168,13 +170,19 @@ fun FitNavbar(
 // ============================================================================
 
 @Composable
-fun FitCardRow(icon: ImageVector, text: String) {
+fun FitCardRow(icon: ImageVector, text: String) = FitCardRow(text = text) { tint, size ->
+    Icon(icon, null, tint = tint, modifier = Modifier.size(size))
+}
+
+/** [FitCardRow] with a caller-supplied glyph — see the note on [FitChip]. */
+@Composable
+fun FitCardRow(text: String, leading: @Composable (tint: Color, size: Dp) -> Unit) {
     val theme = LocalFitTheme.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2)
     ) {
-        Icon(icon, null, tint = theme.textSecondary, modifier = Modifier.size(FitSize.iconMd))
+        leading(theme.textSecondary, FitSize.iconMd)
         Text(text, style = FitFont.body2, color = theme.textSecondary)
     }
 }

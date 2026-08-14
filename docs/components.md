@@ -120,6 +120,11 @@ Every component lists **purpose · required props · optional props · variants 
 
 ---
 
+**Icon slot (Android).** Alongside the `ImageVector` signature there is an overload taking
+`@Composable (tint: Color, size: Dp) -> Unit`, so a host can pass its own drawable. The tint
+and size are handed in rather than left to the caller: a plate whose background says "error"
+with a grey glyph inside is worse than no plate.
+
 ### FitBadge
 **Purpose:** Tag/status pill — 12px font, pill shape, color variants.
 
@@ -153,8 +158,17 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 **Optional props:**
 - `size: enum { xs (24), sm (32), md (40, default), lg (48), xl (80) }`
 - `bg: enum { brand (gradient), gray, surfaceHigher }`
-- `image: URL?`
+- `image: URL?` (iOS) / `imageUrl: String?` (Android) — the photo; initials stay underneath
+  as the placeholder while it loads and the fallback if it never does
+- `textColor` (Android) — initials colour, white by default; a `bg` that is not the brand
+  gradient usually needs it
 - `shape: enum { circle (default), rect10 }` — rect10 for session/template icons
+
+**Off-scale sizes (Android).** `size` also accepts a raw `Dp`. The enum is the scale screens
+are drawn against and stays the default choice, but layouts do land between its steps (44, 56,
+64), and the alternative to offering them is a consumer rebuilding the avatar to change one
+number — after which the initials, the photo fallback and the paid state drift apart. Initials
+default to 0.35 of the diameter, the ratio the scale itself uses at 40 and 80.
 
 **States:** default; `paid` variant (opacity 0.5) when participant has paid cash.
 
@@ -595,6 +609,11 @@ owes for.
 
 ## MEDIA
 
+**Icon slot (Android).** Alongside the `ImageVector` signature there is an overload taking
+`@Composable (tint: Color, size: Dp) -> Unit`, so a host can pass its own drawable. The tint
+and size are handed in rather than left to the caller: a plate whose background says "error"
+with a grey glyph inside is worse than no plate.
+
 ### FitVideoUploadCard
 **Purpose:** 16:9 state-aware video upload card. Owns the full lifecycle of a direct-upload video integration (Mux): picker entry, upload progress, server-side processing, ready-with-thumbnail, error recovery. Coach intro video on Personal Data is the primary consumer; reusable for any place that needs "pick from device → direct-upload → wait for processing → play" in our app.
 
@@ -858,6 +877,11 @@ The earlier all-filled version (#17) is retired: it made a passive wait shout as
 
 ---
 
+**Icon slot (Android).** Alongside the `ImageVector` signature there is an overload taking
+`@Composable (tint: Color, size: Dp) -> Unit`, so a host can pass its own drawable. The tint
+and size are handed in rather than left to the caller: a plate whose background says "error"
+with a grey glyph inside is worse than no plate.
+
 ### FitSettingsCard
 **Purpose:** Settings / location / space row with icon + title + subtitle + chevron + optional "Default" badge.
 
@@ -887,6 +911,11 @@ The earlier all-filled version (#17) is retired: it made a passive wait shout as
 **Status:** ✅ Swift, ✅ Compose, ✅ CSS.
 
 ---
+
+**Icon slot (Android).** Alongside the `ImageVector` signature there is an overload taking
+`@Composable (tint: Color, size: Dp) -> Unit`, so a host can pass its own drawable. The tint
+and size are handed in rather than left to the caller: a plate whose background says "error"
+with a grey glyph inside is worse than no plate.
 
 ### FitParticipant
 **Purpose:** User-or-entity row with leading avatar/icon + name + subtitle + trailing affordance + optional state tint. Pervasive across event sheets, clients lists, accounts list, integration providers, balance cash toggle.
@@ -927,6 +956,12 @@ The earlier all-filled version (#17) is retired: it made a passive wait shout as
 **Optional props:**
 - `icon: Icon?` (iOS `systemImage`) / `icon: ImageVector?` (Android)
 - `size: enum { sm (h=40), md (h=48, default), lg (h=56) } = .md`
+
+**Icon slot.** Android also takes `leading: @Composable () -> Unit` instead of `icon`, the
+counterpart of the `@ViewBuilder` slots the SwiftUI side already uses. A host that ships its
+own drawables cannot express them as an `ImageVector` and would otherwise rebuild the chip to
+change one glyph. The slot is required in that overload — with a default the two signatures
+are ambiguous at every call that passes neither.
 
 **Variants (`size`):**
 - `sm` — 40px height, `body2` font (14pt), used inline in compact filter rows

@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
@@ -57,6 +58,29 @@ fun FitSelectRow(
     trailing: FitSelectRowTrailing = FitSelectRowTrailing.Chevron,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
+) = FitSelectRow(
+    label = label,
+    isSelected = isSelected,
+    trailing = trailing,
+    onClick = onClick,
+    modifier = modifier,
+    leading = {
+        if (icon != null) {
+            val theme = LocalFitTheme.current
+            Icon(icon, null, tint = theme.textSecondary, modifier = Modifier.size(FitSize.iconLg))
+        }
+    }
+)
+
+/** [FitSelectRow] with a caller-supplied leading glyph — see the note on [FitChip]. */
+@Composable
+fun FitSelectRow(
+    label: String,
+    isSelected: Boolean,
+    trailing: FitSelectRowTrailing = FitSelectRowTrailing.Chevron,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    leading: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
     Row(
@@ -83,9 +107,7 @@ fun FitSelectRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
-        if (icon != null) {
-            Icon(icon, null, tint = theme.textSecondary, modifier = Modifier.size(FitSize.iconLg))
-        }
+        leading()
         Text(
             label,
             style = FitFont.body1,
@@ -150,6 +172,38 @@ fun FitSettingsCard(
     destructive: Boolean = false,
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
+) = FitSettingsCard(
+    title = title,
+    subtitle = subtitle,
+    addressOrSubtitle = addressOrSubtitle,
+    context = context,
+    isDefault = isDefault,
+    trailing = trailing,
+    destructive = destructive,
+    onClick = onClick,
+    modifier = modifier,
+    leading = { tint, size -> Icon(icon, null, tint = tint, modifier = Modifier.size(size)) }
+)
+
+/**
+ * [FitSettingsCard] with a caller-supplied leading glyph — see the note on [FitChip].
+ *
+ * The slot is handed the tint and size the row would have used, so a drawable passed in
+ * still turns red on a destructive row and still shrinks inside the plate contexts,
+ * rather than every caller re-deriving both.
+ */
+@Composable
+fun FitSettingsCard(
+    title: String,
+    subtitle: String? = null,
+    addressOrSubtitle: String? = null,
+    context: FitSettingsCardContext = FitSettingsCardContext.Settings,
+    isDefault: Boolean = false,
+    trailing: FitSettingsTrailing = FitSettingsTrailing.Chevron,
+    destructive: Boolean = false,
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    leading: @Composable (tint: Color, size: Dp) -> Unit
 ) {
     val theme = LocalFitTheme.current
     val titleColor = if (destructive) FitColors.error else theme.textPrimary
@@ -171,13 +225,7 @@ fun FitSettingsCard(
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {
         when (context) {
-            FitSettingsCardContext.Settings ->
-                Icon(
-                    icon,
-                    null,
-                    tint = titleColor,
-                    modifier = Modifier.size(FitSize.settingsCardIcon)
-                )
+            FitSettingsCardContext.Settings -> leading(titleColor, FitSize.settingsCardIcon)
 
             FitSettingsCardContext.Location, FitSettingsCardContext.Space ->
                 Box(
@@ -187,7 +235,7 @@ fun FitSettingsCard(
                         .background(theme.surfaceHigher),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(icon, null, tint = titleColor, modifier = Modifier.size(FitSize.iconLg))
+                    leading(titleColor, FitSize.iconLg)
                 }
         }
 
@@ -248,7 +296,8 @@ enum class FitParticipantPayment {
 }
 
 sealed class FitParticipantLeading {
-    data class Avatar(val initials: String) : FitParticipantLeading()
+    /** [imageUrl] is the participant's photo; the initials show while it loads and if it fails. */
+    data class Avatar(val initials: String, val imageUrl: String? = null) : FitParticipantLeading()
     data class IconPlate(
         val icon: ImageVector,
         val tone: FitIconPlateTone = FitIconPlateTone.Neutral
@@ -337,7 +386,12 @@ fun FitParticipant(
         // Leading
         when (val l = leading) {
             is FitParticipantLeading.Avatar ->
-                FitAvatar(initials = l.initials, size = FitAvatarSize.Lg, isPaid = isPaid)
+                FitAvatar(
+                    initials = l.initials,
+                    size = FitAvatarSize.Lg,
+                    isPaid = isPaid,
+                    imageUrl = l.imageUrl
+                )
 
             is FitParticipantLeading.IconPlate ->
                 FitIconPlate(icon = l.icon, tone = l.tone, size = FitIconPlateSize.Lg)
@@ -429,6 +483,36 @@ fun FitChip(
     icon: ImageVector? = null,
     size: FitChipSize = FitChipSize.Md,
     modifier: Modifier = Modifier
+) = FitChip(
+    label = label,
+    isSelected = isSelected,
+    onClick = onClick,
+    size = size,
+    modifier = modifier,
+    leading = {
+        if (icon != null) {
+            val theme = LocalFitTheme.current
+            Icon(icon, null, tint = theme.textPrimary, modifier = Modifier.size(FitSize.iconMd))
+        }
+    }
+)
+
+/**
+ * Chip whose leading glyph is supplied by the caller.
+ *
+ * The [ImageVector] overload above covers Material glyphs; a host that ships its own
+ * drawables (or a tinted image) has nowhere to put them otherwise, and ends up
+ * rebuilding the chip to change one icon. Mirrors the `@ViewBuilder icon:` slot the
+ * SwiftUI components already take.
+ */
+@Composable
+fun FitChip(
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    size: FitChipSize = FitChipSize.Md,
+    modifier: Modifier = Modifier,
+    leading: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
     Row(
@@ -450,9 +534,7 @@ fun FitChip(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2)
     ) {
-        if (icon != null) {
-            Icon(icon, null, tint = theme.textPrimary, modifier = Modifier.size(FitSize.iconMd))
-        }
+        leading()
         val style = if (size == FitChipSize.Sm) FitFont.body2 else FitFont.body1
         Text(label, style = style, color = theme.textPrimary)
     }

@@ -51,4 +51,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
     implementation("androidx.compose.animation:animation:1.6.8")
+    // Avatars take a URL, mirroring SwiftUI's AsyncImage in FitAvatar. Coil reads the
+    // consumer app's ImageLoader, so a host that registers extra decoders keeps them.
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }
