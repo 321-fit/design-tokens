@@ -138,7 +138,9 @@ fun FitAvatar(
  * alternative to offering them is a consumer rebuilding the avatar to change one number,
  * which is how the initials, the fallback and the paid state drift apart.
  *
- * The initials default to 0.35 of the diameter — what the scale itself uses at its ends.
+ * Initials default to 0.36 of the diameter. The scale's own steps run 0.42 · 0.38 · 0.35 ·
+ * 0.33 · 0.35, averaging 0.365, so this sits closer to the scale as a whole than the ratio
+ * of any single step does.
  */
 @Composable
 fun FitAvatar(
@@ -149,7 +151,7 @@ fun FitAvatar(
     isPaid: Boolean = false,
     imageUrl: String? = null,
     textColor: Color = Color.White,
-    fontSize: TextUnit = (size.value * 0.35f).sp,
+    fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(

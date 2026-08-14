@@ -168,7 +168,8 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 are drawn against and stays the default choice, but layouts do land between its steps (44, 56,
 64), and the alternative to offering them is a consumer rebuilding the avatar to change one
 number — after which the initials, the photo fallback and the paid state drift apart. Initials
-default to 0.35 of the diameter, the ratio the scale itself uses at 40 and 80.
+default to 0.36 of the diameter: the scale's own steps run 0.42 · 0.38 · 0.35 · 0.33 · 0.35,
+which averages 0.365, so one rounded ratio fits the scale better than any single step's does.
 
 **States:** default; `paid` variant (opacity 0.5) when participant has paid cash.
 
