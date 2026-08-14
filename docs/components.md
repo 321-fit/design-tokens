@@ -160,8 +160,8 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - `bg: enum { brand (gradient), gray, surfaceHigher }`
 - `image: URL?` (iOS) / `imageUrl: String?` (Android) — the photo; initials stay underneath
   as the placeholder while it loads and the fallback if it never does
-- `textColor` (Android) — initials colour, white by default; a `bg` that is not the brand
-  gradient usually needs it
+- `textColor` / `fontWeight` (Android) — initials colour and weight; a `bg` that is not the
+  brand gradient usually needs the first, a large avatar sometimes the second
 - `shape: enum { circle (default), rect10 }` — rect10 for session/template icons
 
 **Off-scale sizes (Android).** `size` also accepts a raw `Dp`. The enum is the scale screens
