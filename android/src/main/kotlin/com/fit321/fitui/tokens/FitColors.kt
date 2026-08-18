@@ -41,6 +41,16 @@ object FitColors {
         val t600 = Color(0xFF08B48F)
     }
 
+    // Self-paced is the third training type, and the palette had no hue left for it:
+    // green sits too close to teal, yellow and red are spoken for by status.
+    object Violet {
+        val v100 = Color(0xFFEDE9FE)
+        val v400 = Color(0xFFA78BFA)
+        val v500 = Color(0xFF8B5CF6)
+        val v600 = Color(0xFF7C3AED)
+        val v700 = Color(0xFF6D28D9)
+    }
+
     object Red {
         val r50  = Color(0xFFFFF0F0)
         val r400 = Color(0xFFF05C5B)
@@ -79,6 +89,20 @@ object FitColors {
             Blue.b600.copy(alpha = 0.2f),
             Teal.t500.copy(alpha = 0.2f)
         )
+    )
+
+    // Per-type header tints: one hue each, so a card says what kind of training it is
+    // before its label is read. Kept translucent — they sit behind header content.
+    val personalTypeGradient: Brush = Brush.linearGradient(
+        colors = listOf(Teal.t600.copy(alpha = 0.22f), Teal.t500.copy(alpha = 0.16f))
+    )
+
+    val groupTypeGradient: Brush = Brush.linearGradient(
+        colors = listOf(Blue.b600.copy(alpha = 0.22f), Blue.b500.copy(alpha = 0.16f))
+    )
+
+    val selfPacedTypeGradient: Brush = Brush.linearGradient(
+        colors = listOf(Violet.v600.copy(alpha = 0.22f), Violet.v500.copy(alpha = 0.16f))
     )
 
     // ==== Semantic ====

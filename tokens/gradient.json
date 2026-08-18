@@ -11,6 +11,18 @@
     "selection-overlay": {
       "value":   "linear-gradient(to right, rgba(10,147,189,0.2), rgba(5,224,166,0.2))",
       "comment": "Sidebar active state, selection chip, selected calendars — translucent brand gradient"
+    },
+    "type-personal": {
+      "value":   "linear-gradient(135deg, rgba(8,180,143,0.22), rgba(5,224,166,0.16))",
+      "comment": "Training-type header tint — personal (teal). Translucent: it sits behind card-header content and must stay subtle in both themes"
+    },
+    "type-group": {
+      "value":   "linear-gradient(135deg, rgba(10,147,189,0.22), rgba(3,178,226,0.16))",
+      "comment": "Training-type header tint — group (blue)"
+    },
+    "type-selfpaced": {
+      "value":   "linear-gradient(135deg, rgba(124,58,237,0.22), rgba(139,92,246,0.16))",
+      "comment": "Training-type header tint — self-paced (violet)"
     }
   }
 }

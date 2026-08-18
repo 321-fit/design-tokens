@@ -92,7 +92,9 @@ fun FitIconBtn(
 ) {
     val theme = LocalFitTheme.current
     val iconColor = when (color) {
-        FitIconBtnColor.Primary -> theme.textSecondary
+        // Header icons carry the same weight as the back chevron so the header reads as one
+        // group — `.fit-icon-btn { color: var(--fit-text-primary) }`.
+        FitIconBtnColor.Primary -> theme.textPrimary
         FitIconBtnColor.Brand -> FitColors.brandPrimary
         FitIconBtnColor.Error -> FitColors.error
         FitIconBtnColor.Success -> FitColors.success
@@ -109,6 +111,11 @@ fun FitIconBtn(
             FitIconBtnColor.Success -> FitColors.success.copy(alpha = 0.12f)
             FitIconBtnColor.Primary -> theme.surfaceHigh
         }
+        // Dark draws the translucent plate the prototype blurs over the photo behind it
+        // (`rgba(117,126,135,0.3)`); light keeps the opaque surface (`.fit-light .fit-icon-btn`).
+        // The blur itself has no cheap Compose equivalent — a backdrop filter would mean
+        // rendering the layer underneath — so the plate carries the effect on its own.
+        theme === FitColors.Theme.dark -> IconBtnPlateDark
         else -> theme.surfaceHigh
     }
 
@@ -123,6 +130,8 @@ fun FitIconBtn(
         icon(iconColor, FitSize.iconMd)
     }
 }
+
+private val IconBtnPlateDark = Color(0xFF757E87).copy(alpha = 0.3f)
 
 // ============================================================================
 // FitAvatar — initials in 5 sizes, circle or rounded rect
