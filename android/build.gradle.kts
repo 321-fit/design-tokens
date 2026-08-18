@@ -17,7 +17,7 @@ base {
 
 android {
     namespace = "com.fit321.designtokens"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -41,30 +41,16 @@ android {
     kotlin {
         sourceSets["main"].kotlin.srcDirs("src/main/kotlin")
     }
-
-    lint {
-        // Compose 1.6.8 ships a `ui-lint` whose kotlinx-metadata reads Kotlin metadata up to
-        // 2.0.0, and this module compiles with Kotlin 2.1.21 (metadata 2.1.0). The detector
-        // behind these three checks parses that metadata to see whether a Modifier factory
-        // references its receiver, so it throws on the first one it meets and takes the whole
-        // `lintAnalyzeDebug` task down — here and in every consumer wired to this composite
-        // build. Drop the disable once Compose moves in lockstep with the app's BOM.
-        disable += setOf(
-            "ModifierFactoryExtensionFunction",
-            "ModifierFactoryReturnType",
-            "ModifierFactoryUnreferencedReceiver",
-        )
-    }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.compose.ui:ui:1.6.8")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
-    implementation("androidx.compose.foundation:foundation:1.6.8")
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.material:material-icons-extended:1.6.8")
-    implementation("androidx.compose.animation:animation:1.6.8")
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.6")
+    implementation("androidx.compose.foundation:foundation:1.7.6")
+    implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("androidx.compose.animation:animation:1.7.6")
     // Avatars take a URL, mirroring SwiftUI's AsyncImage in FitAvatar. Coil reads the
     // consumer app's ImageLoader, so a host that registers extra decoders keeps them.
     implementation("io.coil-kt:coil-compose:2.7.0")
