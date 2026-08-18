@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -215,10 +216,13 @@ private fun FitAvatarImpl(
         FitAvatarShape.Circle -> CircleShape
         FitAvatarShape.Rect10 -> RoundedCornerShape(10.dp)
     }
-    val alpha = if (isPaid) 0.5f else 1f
     Box(
         modifier = modifier
             .size(diameter)
+            // Settled participants fade whole, background included — `.fit-participant.paid
+            // .fit-avatar { opacity: .5 }`. Fading only the content would leave a photo
+            // half-transparent over an opaque brand gradient, which tints the face.
+            .alpha(if (isPaid) 0.5f else 1f)
             .clip(shapeValue)
             .background(bg, shapeValue),
         contentAlignment = Alignment.Center
@@ -228,7 +232,7 @@ private fun FitAvatarImpl(
         // is what AsyncImage does on the SwiftUI side.
         Text(
             initials.take(2).uppercase(),
-            color = textColor.copy(alpha = alpha),
+            color = textColor,
             style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
         )
         if (!imageUrl.isNullOrBlank()) {
@@ -236,7 +240,6 @@ private fun FitAvatarImpl(
                 model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                alpha = alpha,
                 modifier = Modifier.matchParentSize().clip(shapeValue)
             )
         }
