@@ -41,6 +41,20 @@ android {
     kotlin {
         sourceSets["main"].kotlin.srcDirs("src/main/kotlin")
     }
+
+    lint {
+        // Compose 1.6.8 ships a `ui-lint` whose kotlinx-metadata reads Kotlin metadata up to
+        // 2.0.0, and this module compiles with Kotlin 2.1.21 (metadata 2.1.0). The detector
+        // behind these three checks parses that metadata to see whether a Modifier factory
+        // references its receiver, so it throws on the first one it meets and takes the whole
+        // `lintAnalyzeDebug` task down — here and in every consumer wired to this composite
+        // build. Drop the disable once Compose moves in lockstep with the app's BOM.
+        disable += setOf(
+            "ModifierFactoryExtensionFunction",
+            "ModifierFactoryReturnType",
+            "ModifierFactoryUnreferencedReceiver",
+        )
+    }
 }
 
 dependencies {
