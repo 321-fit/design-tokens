@@ -2,8 +2,8 @@ import SwiftUI
 
 // MARK: - FitAvatar
 //
-// User representation circle — initials or image — in 5 sizes.
-// See `docs/components.md` FitAvatar.
+// User representation circle — initials or image — in 5 sizes, with an optional
+// corner badge. See `docs/components.md` FitAvatar.
 
 public enum FitAvatarSize {
     case xs   // 24 — inline chip
@@ -51,6 +51,7 @@ public struct FitAvatar: View {
     let shape: FitAvatarShape
     let image: URL?
     let isPaid: Bool
+    let badge: AnyView?
 
     @Environment(\.fitTheme) private var theme
 
@@ -60,7 +61,8 @@ public struct FitAvatar: View {
         bg: FitAvatarBg = .brand,
         shape: FitAvatarShape = .circle,
         image: URL? = nil,
-        isPaid: Bool = false
+        isPaid: Bool = false,
+        badge: AnyView? = nil
     ) {
         self.initials = String(initials.prefix(2)).uppercased()
         self.size = size
@@ -68,14 +70,22 @@ public struct FitAvatar: View {
         self.shape = shape
         self.image = image
         self.isPaid = isPaid
+        self.badge = badge
     }
 
     public var body: some View {
-        content
-            .frame(width: size.px, height: size.px)
-            .background(background)
-            .clipShape(shapeView)
-            .opacity(isPaid ? 0.5 : 1.0)
+        // The badge sits outside the clip shape: inside it, the circle would shave the
+        // chip's corner off.
+        ZStack(alignment: .bottomTrailing) {
+            content
+                .frame(width: size.px, height: size.px)
+                .background(background)
+                .clipShape(shapeView)
+                .opacity(isPaid ? 0.5 : 1.0)
+            if let badge = badge {
+                badge
+            }
+        }
     }
 
     @ViewBuilder
@@ -128,4 +138,38 @@ private struct AnyShape: Shape {
     private let pathFn: (CGRect) -> Path
     init<S: Shape>(_ shape: S) { pathFn = { shape.path(in: $0) } }
     func path(in rect: CGRect) -> Path { pathFn(rect) }
+}
+
+// MARK: - FitAvatarBadge
+//
+// The chip that sits in an avatar's bottom corner — edit, camera, add. The ring in the
+// screen background keeps it reading as detached from the photo underneath.
+
+public struct FitAvatarBadge<Content: View>: View {
+    let size: CGFloat
+    let ringWidth: CGFloat
+    let content: Content
+
+    @Environment(\.fitTheme) private var theme
+
+    public init(
+        size: CGFloat = 28,
+        ringWidth: CGFloat = 2,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.size = size
+        self.ringWidth = ringWidth
+        self.content = content()
+    }
+
+    public var body: some View {
+        ZStack {
+            Circle().fill(theme.screenBg)
+            Circle()
+                .fill(theme.surfaceHigh)
+                .padding(ringWidth)
+            content
+        }
+        .frame(width: size, height: size)
+    }
 }

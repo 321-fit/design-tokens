@@ -170,6 +170,7 @@ fun FitAvatar(
     textColor: Color = Color.White,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
+    badge: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -182,6 +183,7 @@ fun FitAvatar(
     imageUrl = imageUrl,
     textColor = textColor,
     kind = kind,
+    badge = badge,
     modifier = modifier
 )
 
@@ -209,6 +211,7 @@ fun FitAvatar(
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
+    badge: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -221,11 +224,66 @@ fun FitAvatar(
     imageUrl = imageUrl,
     textColor = textColor,
     kind = kind,
+    badge = badge,
     modifier = modifier
 )
 
 @Composable
 private fun FitAvatarImpl(
+    initials: String,
+    diameter: Dp,
+    fontSize: TextUnit,
+    fontWeight: FontWeight,
+    bg: Brush,
+    shape: FitAvatarShape,
+    isPaid: Boolean,
+    imageUrl: String?,
+    textColor: Color,
+    kind: FitAvatarKind,
+    badge: (@Composable () -> Unit)?,
+    modifier: Modifier
+) {
+    if (badge == null) {
+        FitAvatarPlate(
+            initials = initials,
+            diameter = diameter,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            bg = bg,
+            shape = shape,
+            isPaid = isPaid,
+            imageUrl = imageUrl,
+            textColor = textColor,
+            kind = kind,
+            modifier = modifier
+        )
+        return
+    }
+    // The plate clips to its shape, so a badge drawn inside it would be shaved by the
+    // circle. The wrapper is unclipped and only as large as the plate, which keeps the
+    // badge whole while the avatar still measures as one avatar.
+    Box {
+        FitAvatarPlate(
+            initials = initials,
+            diameter = diameter,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            bg = bg,
+            shape = shape,
+            isPaid = isPaid,
+            imageUrl = imageUrl,
+            textColor = textColor,
+            kind = kind,
+            modifier = modifier
+        )
+        Box(modifier = Modifier.align(Alignment.BottomEnd)) {
+            badge()
+        }
+    }
+}
+
+@Composable
+private fun FitAvatarPlate(
     initials: String,
     diameter: Dp,
     fontSize: TextUnit,
@@ -282,8 +340,38 @@ private fun FitAvatarImpl(
     }
 }
 
+/**
+ * The chip that sits in an avatar's bottom corner — edit, camera, add.
+ *
+ * It carries a ring in the screen background so the chip reads as detached from the
+ * photo underneath it rather than painted onto it, which is what every screen that
+ * hand-rolled this pattern was doing.
+ */
+@Composable
+fun FitAvatarBadge(
+    modifier: Modifier = Modifier,
+    size: Dp = 28.dp,
+    ringWidth: Dp = 2.dp,
+    ring: Color = LocalFitTheme.current.screenBg,
+    plate: Color = LocalFitTheme.current.surfaceHigh,
+    content: @Composable () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(ring)
+            .padding(ringWidth)
+            .clip(CircleShape)
+            .background(plate),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
+}
+
 // ============================================================================
-// FitCheckbox — 28dp square with check
+// FitCheckbox — 22dp square with check
 // ============================================================================
 
 @Composable

@@ -171,6 +171,10 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - `textColor` / `fontWeight` (Android) — initials colour and weight; a `bg` that is not the
   brand gradient usually needs the first, a large avatar sometimes the second
 - `shape: enum { circle (default), rect10 }` — rect10 for session/template icons
+- `badge` — slot for the chip in the bottom corner (edit, camera, add). Rendered outside the
+  clip shape, so the circle cannot shave it. Pair it with `FitAvatarBadge`, which draws the
+  chip itself: a `screen-bg` ring around a `surface-high` plate, 28 by default, caller
+  supplies the glyph. Compose takes a composable lambda, Swift an `AnyView`.
 
 **Off-scale sizes (Android).** `size` also accepts a raw `Dp`. The enum is the scale screens
 are drawn against and stays the default choice, but layouts do land between its steps (44, 56,
