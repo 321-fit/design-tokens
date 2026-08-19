@@ -163,11 +163,11 @@ enum class FitAvatarKind { Face, Group }
 fun FitAvatar(
     initials: String,
     size: FitAvatarSize = FitAvatarSize.Md,
-    bg: Brush = FitColors.brandGradient,
+    bg: Brush? = null,
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
     imageUrl: String? = null,
-    textColor: Color = Color.White,
+    textColor: Color? = null,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
     badge: FitAvatarBadge = FitAvatarBadge.None,
@@ -203,11 +203,11 @@ fun FitAvatar(
 fun FitAvatar(
     initials: String,
     size: Dp,
-    bg: Brush = FitColors.brandGradient,
+    bg: Brush? = null,
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
     imageUrl: String? = null,
-    textColor: Color = Color.White,
+    textColor: Color? = null,
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
@@ -234,11 +234,11 @@ private fun FitAvatarImpl(
     diameter: Dp,
     fontSize: TextUnit,
     fontWeight: FontWeight,
-    bg: Brush,
+    bg: Brush?,
     shape: FitAvatarShape,
     isPaid: Boolean,
     imageUrl: String?,
-    textColor: Color,
+    textColor: Color?,
     kind: FitAvatarKind,
     badge: FitAvatarBadge,
     modifier: Modifier
@@ -286,11 +286,11 @@ private fun FitAvatarPlate(
     diameter: Dp,
     fontSize: TextUnit,
     fontWeight: FontWeight,
-    bg: Brush,
+    bg: Brush?,
     shape: FitAvatarShape,
     isPaid: Boolean,
     imageUrl: String?,
-    textColor: Color,
+    textColor: Color?,
     kind: FitAvatarKind,
     modifier: Modifier
 ) {
@@ -298,7 +298,15 @@ private fun FitAvatarPlate(
         FitAvatarShape.Circle -> CircleShape
         FitAvatarShape.Rect10 -> RoundedCornerShape(10.dp)
     }
-    val plate = if (kind == FitAvatarKind.Group) SolidColor(LocalFitTheme.current.bgBrandSubtle) else bg
+    // Group has its own defaults rather than its own hardcoded colours: a cohort tile is
+    // brand-tinted unless the screen says otherwise, and screens do — a faceless client
+    // placeholder is a plain surface plate with the same glyph on it.
+    val plate = bg ?: if (kind == FitAvatarKind.Group) {
+        SolidColor(LocalFitTheme.current.bgBrandSubtle)
+    } else {
+        FitColors.brandGradient
+    }
+    val ink = textColor ?: if (kind == FitAvatarKind.Group) FitColors.brandSecondary else Color.White
     Box(
         modifier = modifier
             .size(diameter)
@@ -314,7 +322,7 @@ private fun FitAvatarPlate(
             Icon(
                 painter = painterResource(R.drawable.ic_fit_group),
                 contentDescription = null,
-                tint = FitColors.brandSecondary,
+                tint = ink,
                 modifier = Modifier.size(diameter * 0.5f)
             )
             return@Box
@@ -325,7 +333,7 @@ private fun FitAvatarPlate(
             Icon(
                 painter = painterResource(R.drawable.ic_fit_user),
                 contentDescription = null,
-                tint = textColor,
+                tint = ink,
                 modifier = Modifier.size(diameter * 0.51f)
             )
             return@Box
@@ -335,7 +343,7 @@ private fun FitAvatarPlate(
         // is what AsyncImage does on the SwiftUI side.
         Text(
             initials.take(2).uppercase(),
-            color = textColor,
+            color = ink,
             style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
         )
         if (!imageUrl.isNullOrBlank()) {
