@@ -170,7 +170,7 @@ fun FitAvatar(
     textColor: Color = Color.White,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
-    badge: (@Composable () -> Unit)? = null,
+    badge: FitAvatarBadge = FitAvatarBadge.None,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -211,7 +211,7 @@ fun FitAvatar(
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
-    badge: (@Composable () -> Unit)? = null,
+    badge: FitAvatarBadge = FitAvatarBadge.None,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -240,10 +240,10 @@ private fun FitAvatarImpl(
     imageUrl: String?,
     textColor: Color,
     kind: FitAvatarKind,
-    badge: (@Composable () -> Unit)?,
+    badge: FitAvatarBadge,
     modifier: Modifier
 ) {
-    if (badge == null) {
+    if (badge == FitAvatarBadge.None) {
         FitAvatarPlate(
             initials = initials,
             diameter = diameter,
@@ -276,9 +276,7 @@ private fun FitAvatarImpl(
             kind = kind,
             modifier = modifier
         )
-        Box(modifier = Modifier.align(Alignment.BottomEnd)) {
-            badge()
-        }
+        FitAvatarBadgeChip(badge = badge, modifier = Modifier.align(Alignment.BottomEnd))
     }
 }
 
@@ -341,32 +339,47 @@ private fun FitAvatarPlate(
 }
 
 /**
- * The chip that sits in an avatar's bottom corner — edit, camera, add.
+ * What the chip in an avatar's bottom corner offers.
  *
- * It carries a ring in the screen background so the chip reads as detached from the
- * photo underneath it rather than painted onto it, which is what every screen that
- * hand-rolled this pattern was doing.
+ * A closed set rather than a content slot: every screen that hand-rolled this pattern
+ * wanted one of these two, and each one that supplied its own glyph is how the ring, the
+ * plate and the icon size drifted apart in the first place.
+ */
+enum class FitAvatarBadge { None, Edit, Add }
+
+/**
+ * The chip itself — a ring in the screen background around a surface plate, so it reads as
+ * detached from the photo underneath rather than painted onto it.
  */
 @Composable
-fun FitAvatarBadge(
+private fun FitAvatarBadgeChip(
+    badge: FitAvatarBadge,
     modifier: Modifier = Modifier,
     size: Dp = 28.dp,
-    ringWidth: Dp = 2.dp,
-    ring: Color = LocalFitTheme.current.screenBg,
-    plate: Color = LocalFitTheme.current.surfaceHigh,
-    content: @Composable () -> Unit
+    ringWidth: Dp = 2.dp
 ) {
+    val theme = LocalFitTheme.current
+    val glyph = when (badge) {
+        FitAvatarBadge.Edit -> R.drawable.ic_fit_pencil
+        FitAvatarBadge.Add -> R.drawable.ic_fit_plus
+        FitAvatarBadge.None -> return
+    }
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(ring)
+            .background(theme.screenBg)
             .padding(ringWidth)
             .clip(CircleShape)
-            .background(plate),
+            .background(theme.surfaceHigh),
         contentAlignment = Alignment.Center
     ) {
-        content()
+        Icon(
+            painter = painterResource(glyph),
+            contentDescription = null,
+            tint = theme.textPrimary,
+            modifier = Modifier.size(size * 0.43f)
+        )
     }
 }
 

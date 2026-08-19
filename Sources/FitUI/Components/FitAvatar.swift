@@ -39,6 +39,14 @@ public enum FitAvatarBg {
     case custom(Color)  // override (e.g. sport type color)
 }
 
+// What the chip in an avatar's bottom corner offers. A closed set rather than a content
+// slot — every screen that hand-rolled this pattern wanted one of these two.
+public enum FitAvatarBadge {
+    case none
+    case edit
+    case add
+}
+
 public enum FitAvatarShape {
     case circle       // default
     case rect10       // rounded rect (icon placeholders in skeletons, session templates)
@@ -51,7 +59,7 @@ public struct FitAvatar: View {
     let shape: FitAvatarShape
     let image: URL?
     let isPaid: Bool
-    let badge: AnyView?
+    let badge: FitAvatarBadge
 
     @Environment(\.fitTheme) private var theme
 
@@ -62,7 +70,7 @@ public struct FitAvatar: View {
         shape: FitAvatarShape = .circle,
         image: URL? = nil,
         isPaid: Bool = false,
-        badge: AnyView? = nil
+        badge: FitAvatarBadge = .none
     ) {
         self.initials = String(initials.prefix(2)).uppercased()
         self.size = size
@@ -82,9 +90,7 @@ public struct FitAvatar: View {
                 .background(background)
                 .clipShape(shapeView)
                 .opacity(isPaid ? 0.5 : 1.0)
-            if let badge = badge {
-                badge
-            }
+            badgeChip
         }
     }
 
@@ -119,6 +125,23 @@ public struct FitAvatar: View {
         }
     }
 
+    @ViewBuilder
+    private var badgeChip: some View {
+        switch badge {
+        case .none:
+            EmptyView()
+        case .edit, .add:
+            ZStack {
+                Circle().fill(theme.screenBg)
+                Circle().fill(theme.surfaceHigh).padding(2)
+                Image(systemName: badge == .edit ? "pencil" : "plus")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(theme.textPrimary)
+            }
+            .frame(width: 28, height: 28)
+        }
+    }
+
     private var shapeView: some Shape {
         // Both branches type-erase to AnyShape so the opaque return type is
         // satisfied. @ViewBuilder cannot apply here — Shape isn't a View,
@@ -138,38 +161,4 @@ private struct AnyShape: Shape {
     private let pathFn: (CGRect) -> Path
     init<S: Shape>(_ shape: S) { pathFn = { shape.path(in: $0) } }
     func path(in rect: CGRect) -> Path { pathFn(rect) }
-}
-
-// MARK: - FitAvatarBadge
-//
-// The chip that sits in an avatar's bottom corner — edit, camera, add. The ring in the
-// screen background keeps it reading as detached from the photo underneath.
-
-public struct FitAvatarBadge<Content: View>: View {
-    let size: CGFloat
-    let ringWidth: CGFloat
-    let content: Content
-
-    @Environment(\.fitTheme) private var theme
-
-    public init(
-        size: CGFloat = 28,
-        ringWidth: CGFloat = 2,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.size = size
-        self.ringWidth = ringWidth
-        self.content = content()
-    }
-
-    public var body: some View {
-        ZStack {
-            Circle().fill(theme.screenBg)
-            Circle()
-                .fill(theme.surfaceHigh)
-                .padding(ringWidth)
-            content
-        }
-        .frame(width: size, height: size)
-    }
 }
