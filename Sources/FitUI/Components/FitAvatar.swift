@@ -2,8 +2,8 @@ import SwiftUI
 
 // MARK: - FitAvatar
 //
-// User representation circle — initials or image — in 5 sizes.
-// See `docs/components.md` FitAvatar.
+// User representation circle — initials or image — in 5 sizes, with an optional
+// corner badge. See `docs/components.md` FitAvatar.
 
 public enum FitAvatarSize {
     case xs   // 24 — inline chip
@@ -39,6 +39,14 @@ public enum FitAvatarBg {
     case custom(Color)  // override (e.g. sport type color)
 }
 
+// What the chip in an avatar's bottom corner offers. A closed set rather than a content
+// slot — every screen that hand-rolled this pattern wanted one of these two.
+public enum FitAvatarBadge {
+    case none
+    case edit
+    case add
+}
+
 public enum FitAvatarShape {
     case circle       // default
     case rect10       // rounded rect (icon placeholders in skeletons, session templates)
@@ -51,6 +59,7 @@ public struct FitAvatar: View {
     let shape: FitAvatarShape
     let image: URL?
     let isPaid: Bool
+    let badge: FitAvatarBadge
 
     @Environment(\.fitTheme) private var theme
 
@@ -60,7 +69,8 @@ public struct FitAvatar: View {
         bg: FitAvatarBg = .brand,
         shape: FitAvatarShape = .circle,
         image: URL? = nil,
-        isPaid: Bool = false
+        isPaid: Bool = false,
+        badge: FitAvatarBadge = .none
     ) {
         self.initials = String(initials.prefix(2)).uppercased()
         self.size = size
@@ -68,14 +78,20 @@ public struct FitAvatar: View {
         self.shape = shape
         self.image = image
         self.isPaid = isPaid
+        self.badge = badge
     }
 
     public var body: some View {
-        content
-            .frame(width: size.px, height: size.px)
-            .background(background)
-            .clipShape(shapeView)
-            .opacity(isPaid ? 0.5 : 1.0)
+        // The badge sits outside the clip shape: inside it, the circle would shave the
+        // chip's corner off.
+        ZStack(alignment: .bottomTrailing) {
+            content
+                .frame(width: size.px, height: size.px)
+                .background(background)
+                .clipShape(shapeView)
+                .opacity(isPaid ? 0.5 : 1.0)
+            badgeChip
+        }
     }
 
     @ViewBuilder
@@ -94,10 +110,19 @@ public struct FitAvatar: View {
         }
     }
 
+    @ViewBuilder
     private var initialsLabel: some View {
-        Text(initials)
-            .font(.custom(FitFont.family, size: size.fontSize).weight(.medium))
-            .foregroundColor(.white)
+        if initials.isEmpty {
+            // No photo and no name yet — the picker before anything is filled in. A blank
+            // plate reads as broken, so the avatar falls back to a face.
+            Image(systemName: "person")
+                .font(.system(size: size.px * 0.51, weight: .light))
+                .foregroundColor(.white)
+        } else {
+            Text(initials)
+                .font(.custom(FitFont.family, size: size.fontSize).weight(.medium))
+                .foregroundColor(.white)
+        }
     }
 
     @ViewBuilder
@@ -106,6 +131,23 @@ public struct FitAvatar: View {
         case .brand:            FitColors.brandGradient
         case .gray:             theme.surfaceHigher
         case .custom(let c):    c
+        }
+    }
+
+    @ViewBuilder
+    private var badgeChip: some View {
+        switch badge {
+        case .none:
+            EmptyView()
+        case .edit, .add:
+            ZStack {
+                Circle().fill(theme.screenBg)
+                Circle().fill(theme.surfaceHigh).padding(2)
+                Image(systemName: badge == .edit ? "pencil" : "plus")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(theme.textPrimary)
+            }
+            .frame(width: 28, height: 28)
         }
     }
 

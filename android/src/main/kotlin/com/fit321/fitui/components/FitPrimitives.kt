@@ -163,13 +163,14 @@ enum class FitAvatarKind { Face, Group }
 fun FitAvatar(
     initials: String,
     size: FitAvatarSize = FitAvatarSize.Md,
-    bg: Brush = FitColors.brandGradient,
+    bg: Brush? = null,
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
     imageUrl: String? = null,
-    textColor: Color = Color.White,
+    textColor: Color? = null,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
+    badge: FitAvatarBadge = FitAvatarBadge.None,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -182,6 +183,7 @@ fun FitAvatar(
     imageUrl = imageUrl,
     textColor = textColor,
     kind = kind,
+    badge = badge,
     modifier = modifier
 )
 
@@ -201,14 +203,15 @@ fun FitAvatar(
 fun FitAvatar(
     initials: String,
     size: Dp,
-    bg: Brush = FitColors.brandGradient,
+    bg: Brush? = null,
     shape: FitAvatarShape = FitAvatarShape.Circle,
     isPaid: Boolean = false,
     imageUrl: String? = null,
-    textColor: Color = Color.White,
+    textColor: Color? = null,
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
     kind: FitAvatarKind = FitAvatarKind.Face,
+    badge: FitAvatarBadge = FitAvatarBadge.None,
     modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
@@ -221,6 +224,7 @@ fun FitAvatar(
     imageUrl = imageUrl,
     textColor = textColor,
     kind = kind,
+    badge = badge,
     modifier = modifier
 )
 
@@ -230,11 +234,63 @@ private fun FitAvatarImpl(
     diameter: Dp,
     fontSize: TextUnit,
     fontWeight: FontWeight,
-    bg: Brush,
+    bg: Brush?,
     shape: FitAvatarShape,
     isPaid: Boolean,
     imageUrl: String?,
-    textColor: Color,
+    textColor: Color?,
+    kind: FitAvatarKind,
+    badge: FitAvatarBadge,
+    modifier: Modifier
+) {
+    if (badge == FitAvatarBadge.None) {
+        FitAvatarPlate(
+            initials = initials,
+            diameter = diameter,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            bg = bg,
+            shape = shape,
+            isPaid = isPaid,
+            imageUrl = imageUrl,
+            textColor = textColor,
+            kind = kind,
+            modifier = modifier
+        )
+        return
+    }
+    // The plate clips to its shape, so a badge drawn inside it would be shaved by the
+    // circle. The wrapper is unclipped and only as large as the plate, which keeps the
+    // badge whole while the avatar still measures as one avatar.
+    Box {
+        FitAvatarPlate(
+            initials = initials,
+            diameter = diameter,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            bg = bg,
+            shape = shape,
+            isPaid = isPaid,
+            imageUrl = imageUrl,
+            textColor = textColor,
+            kind = kind,
+            modifier = modifier
+        )
+        FitAvatarBadgeChip(badge = badge, modifier = Modifier.align(Alignment.BottomEnd))
+    }
+}
+
+@Composable
+private fun FitAvatarPlate(
+    initials: String,
+    diameter: Dp,
+    fontSize: TextUnit,
+    fontWeight: FontWeight,
+    bg: Brush?,
+    shape: FitAvatarShape,
+    isPaid: Boolean,
+    imageUrl: String?,
+    textColor: Color?,
     kind: FitAvatarKind,
     modifier: Modifier
 ) {
@@ -242,7 +298,15 @@ private fun FitAvatarImpl(
         FitAvatarShape.Circle -> CircleShape
         FitAvatarShape.Rect10 -> RoundedCornerShape(10.dp)
     }
-    val plate = if (kind == FitAvatarKind.Group) SolidColor(LocalFitTheme.current.bgBrandSubtle) else bg
+    // Group has its own defaults rather than its own hardcoded colours: a cohort tile is
+    // brand-tinted unless the screen says otherwise, and screens do — a faceless client
+    // placeholder is a plain surface plate with the same glyph on it.
+    val plate = bg ?: if (kind == FitAvatarKind.Group) {
+        SolidColor(LocalFitTheme.current.bgBrandSubtle)
+    } else {
+        FitColors.brandGradient
+    }
+    val ink = textColor ?: if (kind == FitAvatarKind.Group) FitColors.brandSecondary else Color.White
     Box(
         modifier = modifier
             .size(diameter)
@@ -258,8 +322,19 @@ private fun FitAvatarImpl(
             Icon(
                 painter = painterResource(R.drawable.ic_fit_group),
                 contentDescription = null,
-                tint = FitColors.brandSecondary,
+                tint = ink,
                 modifier = Modifier.size(diameter * 0.5f)
+            )
+            return@Box
+        }
+        // No photo and no name yet — the picker before anything is filled in. A blank
+        // plate reads as broken, so the avatar falls back to a face.
+        if (initials.isBlank() && imageUrl.isNullOrBlank()) {
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_user),
+                contentDescription = null,
+                tint = ink,
+                modifier = Modifier.size(diameter * 0.51f)
             )
             return@Box
         }
@@ -268,7 +343,7 @@ private fun FitAvatarImpl(
         // is what AsyncImage does on the SwiftUI side.
         Text(
             initials.take(2).uppercase(),
-            color = textColor,
+            color = ink,
             style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
         )
         if (!imageUrl.isNullOrBlank()) {
@@ -282,8 +357,53 @@ private fun FitAvatarImpl(
     }
 }
 
+/**
+ * What the chip in an avatar's bottom corner offers.
+ *
+ * A closed set rather than a content slot: every screen that hand-rolled this pattern
+ * wanted one of these two, and each one that supplied its own glyph is how the ring, the
+ * plate and the icon size drifted apart in the first place.
+ */
+enum class FitAvatarBadge { None, Edit, Add }
+
+/**
+ * The chip itself — a ring in the screen background around a surface plate, so it reads as
+ * detached from the photo underneath rather than painted onto it.
+ */
+@Composable
+private fun FitAvatarBadgeChip(
+    badge: FitAvatarBadge,
+    modifier: Modifier = Modifier,
+    size: Dp = 28.dp,
+    ringWidth: Dp = 2.dp
+) {
+    val theme = LocalFitTheme.current
+    val glyph = when (badge) {
+        FitAvatarBadge.Edit -> R.drawable.ic_fit_pencil
+        FitAvatarBadge.Add -> R.drawable.ic_fit_plus
+        FitAvatarBadge.None -> return
+    }
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(theme.screenBg)
+            .padding(ringWidth)
+            .clip(CircleShape)
+            .background(theme.surfaceHigh),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(glyph),
+            contentDescription = null,
+            tint = theme.textPrimary,
+            modifier = Modifier.size(size * 0.43f)
+        )
+    }
+}
+
 // ============================================================================
-// FitCheckbox — 28dp square with check
+// FitCheckbox — 22dp square with check
 // ============================================================================
 
 @Composable

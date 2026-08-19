@@ -171,6 +171,11 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 - `textColor` / `fontWeight` (Android) — initials colour and weight; a `bg` that is not the
   brand gradient usually needs the first, a large avatar sometimes the second
 - `shape: enum { circle (default), rect10 }` — rect10 for session/template icons
+- `badge: enum { none (default), edit, add }` — the chip in the bottom corner. The kit draws
+  it whole: a `screen-bg` ring around a `surface-high` plate, 28 across, pencil or plus
+  inside. Rendered outside the clip shape, so the circle cannot shave it. Callers pass the
+  case and nothing else — screens supplying their own chip is how the ring, the plate and the
+  glyph size drifted apart across three copies.
 
 **Off-scale sizes (Android).** `size` also accepts a raw `Dp`. The enum is the scale screens
 are drawn against and stays the default choice, but layouts do land between its steps (44, 56,
