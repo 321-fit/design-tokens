@@ -207,6 +207,8 @@ sealed class FitCalEventType {
     object External : FitCalEventType()
     data class CrossRole(val role: FitRole) : FitCalEventType()
     object Custom   : FitCalEventType()   // coach's own calendar block — stateless
+    /** Self-paced — violet, per the training-type colours. Athlete-only: a coach never sees one. */
+    object SelfPaced : FitCalEventType()
 }
 
 enum class FitCalEventStatus { Planned, Request, Awaiting, Review, Missed, Finished }
@@ -260,6 +262,7 @@ fun FitCalEvent(
         type is FitCalEventType.External     -> theme.surfaceHigher
         type is FitCalEventType.Group        -> theme.bgInfoSubtle
         type is FitCalEventType.Personal     -> theme.bgBrandSubtle
+        type is FitCalEventType.SelfPaced    -> FitColors.Violet.v500.copy(alpha = 0.16f)
         else                                 -> theme.surfaceHigh   // custom / cross-role = not-a-training
     }
     // The left stripe follows the ACTION when there is one — an actionable/terminal status paints
@@ -270,6 +273,7 @@ fun FitCalEvent(
         FitCalEventStatus.Missed -> FitColors.error
         else -> when (type) {
             is FitCalEventType.Personal  -> FitColors.Teal.t500
+            is FitCalEventType.SelfPaced -> FitColors.Violet.v500
             is FitCalEventType.Group     -> FitColors.brandPrimary
             is FitCalEventType.External  -> theme.textTertiary
             is FitCalEventType.CrossRole -> theme.textTertiary
