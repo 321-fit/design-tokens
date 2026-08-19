@@ -98,7 +98,7 @@ object FitSize {
     val selectRowDot = 10.dp
 
     // Checkbox
-    val checkboxSize = 28.dp
+    val checkboxSize = 22.dp
 
     // Toggle
     val toggleWidth = 48.dp

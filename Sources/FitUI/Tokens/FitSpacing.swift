@@ -73,7 +73,7 @@ public enum FitSize {
     public static let selectRowDot: CGFloat = 10
 
     // Checkbox
-    public static let checkboxSize: CGFloat = 28
+    public static let checkboxSize: CGFloat = 22
 
     // Toggle
     public static let toggleWidth: CGFloat = 48
