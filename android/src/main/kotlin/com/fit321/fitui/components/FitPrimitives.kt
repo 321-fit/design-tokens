@@ -157,7 +157,8 @@ fun FitAvatar(
     imageUrl: String? = null,
     textColor: Color = Color.White,
     fontWeight: FontWeight = FontWeight.Medium,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: (@Composable () -> Unit)? = null
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size.px,
@@ -168,7 +169,8 @@ fun FitAvatar(
     isPaid = isPaid,
     imageUrl = imageUrl,
     textColor = textColor,
-    modifier = modifier
+    modifier = modifier,
+    content = content
 )
 
 /**
@@ -194,7 +196,8 @@ fun FitAvatar(
     textColor: Color = Color.White,
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: (@Composable () -> Unit)? = null
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size,
@@ -205,7 +208,8 @@ fun FitAvatar(
     isPaid = isPaid,
     imageUrl = imageUrl,
     textColor = textColor,
-    modifier = modifier
+    modifier = modifier,
+    content = content
 )
 
 @Composable
@@ -219,7 +223,8 @@ private fun FitAvatarImpl(
     isPaid: Boolean,
     imageUrl: String?,
     textColor: Color,
-    modifier: Modifier
+    modifier: Modifier,
+    content: (@Composable () -> Unit)? = null
 ) {
     val shapeValue = when (shape) {
         FitAvatarShape.Circle -> CircleShape
@@ -236,6 +241,12 @@ private fun FitAvatarImpl(
             .background(bg, shapeValue),
         contentAlignment = Alignment.Center
     ) {
+        // A slot replaces the identity entirely — a group thread has no face and no
+        // initials, only a glyph on the plate. Passing one skips both branches below.
+        if (content != null) {
+            content()
+            return@Box
+        }
         // Initials stay underneath rather than behind a conditional: they are the
         // placeholder while the photo loads and the fallback if it never does, which
         // is what AsyncImage does on the SwiftUI side.
