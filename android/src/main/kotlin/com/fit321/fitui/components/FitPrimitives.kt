@@ -289,15 +289,19 @@ private fun FitAvatarImpl(
 @Composable
 fun FitCheckbox(
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     label: String? = null,
     enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
+    val rowModifier = if (onCheckedChange != null) {
+        modifier.clickable(enabled = enabled) { onCheckedChange(!checked) }
+    } else {
+        modifier
+    }
     Row(
-        modifier = modifier
-            .clickable(enabled = enabled) { onCheckedChange(!checked) },
+        modifier = rowModifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3)
     ) {

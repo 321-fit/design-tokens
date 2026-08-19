@@ -220,7 +220,7 @@ owes for.
 ---
 
 ### FitCheckbox
-**Purpose:** Square checkbox 28×28 toggle.
+**Purpose:** Square checkbox 22×22 toggle.
 
 **Required props:**
 - `checked: Binding<Bool>`
@@ -231,9 +231,11 @@ owes for.
 
 **States:** unchecked (2px text-tertiary border), checked (teal-600 bg + white check), disabled.
 
-**Used:** payment confirmation, "Mark as paid", opt-in toggles in sheets.
+**Used:** payment confirmation, "Mark as paid", opt-in toggles in sheets, selection lists.
 
-**iOS/Android notes:** 6px radius, SVG check 14×14 stroke 3.
+**iOS/Android notes:** 6px radius, SVG check 14×14 stroke 3. Display-only mode for rows that
+already own the tap: Compose omits `onCheckedChange`, Swift initialises with a plain `Bool`
+instead of a `Binding`.
 
 **Status:** ❌ Swift missing. Compose: to build.
 
@@ -1404,7 +1406,7 @@ Title 15pt 500 text-primary single-line; subtitle 13pt text-tertiary single-line
 - `onIntervalEdit: ((Int) -> Void)?` — index into the intervals array (caller opens the time picker)
 - `validationError: String?` — appended below the intervals as `text-error`, 13pt
 
-**Sub-elements:** header row (`FitCheckbox` 28×28 + day label 16pt 500 — text-primary when active, text-tertiary when inactive); intervals list (visible only when `isActive`); each interval row: `time-input` 56×56 box + "to" + 56×56 box + remove ⊗; "Add interval" button (text + plus icon, brand-primary); error text 13pt `Red.r400`.
+**Sub-elements:** header row (`FitCheckbox` 22×22 + day label 16pt 500 — text-primary when active, text-tertiary when inactive); intervals list (visible only when `isActive`); each interval row: `time-input` 56×56 box + "to" + 56×56 box + remove ⊗; "Add interval" button (text + plus icon, brand-primary); error text 13pt `Red.r400`.
 
 **States:** inactive (header only, day name dimmed), active (intervals visible), with-error (red text below intervals).
 
