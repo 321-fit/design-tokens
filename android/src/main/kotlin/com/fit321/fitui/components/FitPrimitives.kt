@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -147,6 +150,15 @@ enum class FitAvatarSize(val px: Dp, val fontSp: Int) {
 
 enum class FitAvatarShape { Circle, Rect10 }
 
+/**
+ * What the avatar stands for.
+ *
+ * [Face] is a person: initials, covered by their photo when there is one. [Group] is a
+ * conversation or cohort that has no single owner — it carries a glyph on a tinted plate
+ * instead, so `initials` and `imageUrl` are ignored.
+ */
+enum class FitAvatarKind { Face, Group }
+
 @Composable
 fun FitAvatar(
     initials: String,
@@ -157,8 +169,8 @@ fun FitAvatar(
     imageUrl: String? = null,
     textColor: Color = Color.White,
     fontWeight: FontWeight = FontWeight.Medium,
-    modifier: Modifier = Modifier,
-    content: (@Composable () -> Unit)? = null
+    kind: FitAvatarKind = FitAvatarKind.Face,
+    modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size.px,
@@ -169,8 +181,8 @@ fun FitAvatar(
     isPaid = isPaid,
     imageUrl = imageUrl,
     textColor = textColor,
-    modifier = modifier,
-    content = content
+    kind = kind,
+    modifier = modifier
 )
 
 /**
@@ -196,8 +208,8 @@ fun FitAvatar(
     textColor: Color = Color.White,
     fontSize: TextUnit = (size.value * 0.36f).sp,
     fontWeight: FontWeight = FontWeight.Medium,
-    modifier: Modifier = Modifier,
-    content: (@Composable () -> Unit)? = null
+    kind: FitAvatarKind = FitAvatarKind.Face,
+    modifier: Modifier = Modifier
 ) = FitAvatarImpl(
     initials = initials,
     diameter = size,
@@ -208,8 +220,8 @@ fun FitAvatar(
     isPaid = isPaid,
     imageUrl = imageUrl,
     textColor = textColor,
-    modifier = modifier,
-    content = content
+    kind = kind,
+    modifier = modifier
 )
 
 @Composable
@@ -223,13 +235,14 @@ private fun FitAvatarImpl(
     isPaid: Boolean,
     imageUrl: String?,
     textColor: Color,
-    modifier: Modifier,
-    content: (@Composable () -> Unit)? = null
+    kind: FitAvatarKind,
+    modifier: Modifier
 ) {
     val shapeValue = when (shape) {
         FitAvatarShape.Circle -> CircleShape
         FitAvatarShape.Rect10 -> RoundedCornerShape(10.dp)
     }
+    val plate = if (kind == FitAvatarKind.Group) SolidColor(LocalFitTheme.current.bgBrandSubtle) else bg
     Box(
         modifier = modifier
             .size(diameter)
@@ -238,13 +251,16 @@ private fun FitAvatarImpl(
             // half-transparent over an opaque brand gradient, which tints the face.
             .alpha(if (isPaid) 0.5f else 1f)
             .clip(shapeValue)
-            .background(bg, shapeValue),
+            .background(plate, shapeValue),
         contentAlignment = Alignment.Center
     ) {
-        // A slot replaces the identity entirely — a group thread has no face and no
-        // initials, only a glyph on the plate. Passing one skips both branches below.
-        if (content != null) {
-            content()
+        if (kind == FitAvatarKind.Group) {
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_group),
+                contentDescription = null,
+                tint = FitColors.brandSecondary,
+                modifier = Modifier.size(diameter * 0.5f)
+            )
             return@Box
         }
         // Initials stay underneath rather than behind a conditional: they are the
