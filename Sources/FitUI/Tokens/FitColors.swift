@@ -83,6 +83,8 @@ public enum FitColors {
 
     // MARK: - Semantic Colors (theme-agnostic accents)
 
+    /// The plate an avatar falls back to when there is neither a photo nor initials.
+    public static let avatarPlaceholder = Color(hex: "3AAEF0")
     public static let error = Red.r400
     public static let warning = Yellow.y400
     public static let success = Teal.t500

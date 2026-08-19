@@ -106,6 +106,10 @@ object FitColors {
     )
 
     // ==== Semantic ====
+    // The plate an avatar falls back to when there is neither a photo nor initials.
+    // Its own hue rather than a step of the blue ramp: the ramp is cyan, this is the
+    // softer sky the prototypes draw behind a faceless avatar.
+    val avatarPlaceholder = Color(0xFF3AAEF0)
     val error   = Red.r400
     val warning = Yellow.y400
     val success = Teal.t500

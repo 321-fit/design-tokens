@@ -319,6 +319,17 @@ private fun FitAvatarPlate(
             )
             return@Box
         }
+        // No photo and no name yet — the picker before anything is filled in. A blank
+        // plate reads as broken, so the avatar falls back to a face.
+        if (initials.isBlank() && imageUrl.isNullOrBlank()) {
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_user),
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.size(diameter * 0.51f)
+            )
+            return@Box
+        }
         // Initials stay underneath rather than behind a conditional: they are the
         // placeholder while the photo loads and the fallback if it never does, which
         // is what AsyncImage does on the SwiftUI side.

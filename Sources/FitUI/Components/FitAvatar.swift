@@ -110,10 +110,19 @@ public struct FitAvatar: View {
         }
     }
 
+    @ViewBuilder
     private var initialsLabel: some View {
-        Text(initials)
-            .font(.custom(FitFont.family, size: size.fontSize).weight(.medium))
-            .foregroundColor(.white)
+        if initials.isEmpty {
+            // No photo and no name yet — the picker before anything is filled in. A blank
+            // plate reads as broken, so the avatar falls back to a face.
+            Image(systemName: "person")
+                .font(.system(size: size.px * 0.51, weight: .light))
+                .foregroundColor(.white)
+        } else {
+            Text(initials)
+                .font(.custom(FitFont.family, size: size.fontSize).weight(.medium))
+                .foregroundColor(.white)
+        }
     }
 
     @ViewBuilder
