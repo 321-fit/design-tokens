@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -42,15 +44,20 @@ enum class FitInputKeyboard { Default, Number, Email, Url, Phone }
 
 @Composable
 fun FitInput(
-    label: String,
     value: String,
     onValueChange: (String) -> Unit,
+    // Null when the placeholder already names the field. The rule the screens follow is that
+    // the label or the placeholder names it, never both — a label saying "Email" over a
+    // placeholder saying "Email" is the word twice. Labels stay where the placeholder is a
+    // format hint rather than a name.
+    label: String? = null,
     placeholder: String? = null,
     isSecure: Boolean = false,
     isError: Boolean = false,
     errorText: String? = null,
     keyboardType: FitInputKeyboard = FitInputKeyboard.Default,
     enabled: Boolean = true,
+    height: Dp = FitSize.inputHeight,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
@@ -64,15 +71,17 @@ fun FitInput(
     var showSecure by remember { mutableStateOf(isSecure) }
 
     Column(verticalArrangement = Arrangement.spacedBy(FitSpacing.sp2)) {
-        Text(
-            label,
-            style = FitFont.caption.copy(fontWeight = FontWeight.SemiBold),
-            color = theme.textSecondary
-        )
+        if (label != null) {
+            Text(
+                label,
+                style = FitFont.caption.copy(fontWeight = FontWeight.SemiBold),
+                color = theme.textSecondary
+            )
+        }
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(FitSize.inputHeight)
+                .height(height)
                 .clip(RoundedCornerShape(FitRadius.input))
                 .background(theme.surfaceLow)
                 .then(
@@ -98,11 +107,28 @@ fun FitInput(
                 visualTransformation = if (showSecure) PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardOptions = KeyboardOptions(keyboardType = kbType),
                 decorationBox = { inner ->
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
-                        if (value.isEmpty() && placeholder != null) {
-                            Text(placeholder, style = FitFont.body1, color = theme.textPlaceholder)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
+                            if (value.isEmpty() && placeholder != null) {
+                                Text(placeholder, style = FitFont.body1, color = theme.textPlaceholder)
+                            }
+                            inner()
                         }
-                        inner()
+                        // A masked field with no way to unmask it is a field people retype from
+                        // scratch after every slip. The state existed and nothing ever flipped it.
+                        if (isSecure) {
+                            Icon(
+                                painter = painterResource(
+                                    if (showSecure) R.drawable.ic_fit_eye_off else R.drawable.ic_fit_eye
+                                ),
+                                contentDescription = null,
+                                tint = theme.textTertiary,
+                                modifier = Modifier
+                                    .padding(start = FitSpacing.sp2)
+                                    .size(FitSize.iconLg)
+                                    .clickable { showSecure = !showSecure }
+                            )
+                        }
                     }
                 }
             )
