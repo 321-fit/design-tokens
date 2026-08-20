@@ -278,10 +278,13 @@ owes for.
 **Purpose:** Text input with label, placeholder, error, secure mode.
 
 **Required props:**
-- `label: String`
+- none beyond the value binding — see `label` below
 - `text: Binding<String>`
 
 **Optional props:**
+- `label: String?` — omitted when the placeholder already names the field: the label or the
+  placeholder names it, never both. Labels stay where the placeholder is a format hint
+- `height` (Android) — the auth screens run 60 against the default 56
 - `placeholder: String?`
 - `isSecure: Bool = false`
 - `isError: Bool = false`

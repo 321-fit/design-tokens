@@ -6,7 +6,9 @@ import SwiftUI
 // Dark bg: #111213, Light bg: #E4E6E7
 
 public struct FitInput: View {
-    let label: String
+    // Null when the placeholder already names the field. The rule the screens follow is that
+    // the label or the placeholder names it, never both.
+    let label: String?
     @Binding var text: String
     var placeholder: String = ""
     var isSecure: Bool = false
@@ -19,7 +21,7 @@ public struct FitInput: View {
     @FocusState private var isFocused: Bool
 
     public init(
-        _ label: String,
+        _ label: String? = nil,
         text: Binding<String>,
         placeholder: String = "",
         isSecure: Bool = false,
@@ -41,9 +43,11 @@ public struct FitInput: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: FitSpacing.sp2) {
             // Label
-            Text(label)
-                .font(FitFont.body1)
-                .foregroundColor(isError ? FitColors.error : theme.textSecondary)
+            if let label = label {
+                Text(label)
+                    .font(FitFont.body1)
+                    .foregroundColor(isError ? FitColors.error : theme.textSecondary)
+            }
 
             // Input field
             HStack(spacing: FitSpacing.sp2) {
