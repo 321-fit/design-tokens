@@ -112,10 +112,23 @@ A third fill turns a row of actions into a row of warnings.
 
 | role | plate | glyph | label |
 |---|---|---|---|
-| `neutral` | `surface.higher` — one step above whatever it sits on, so it stays a plate on a card as well as on the page | `text.primary` | `text.primary` |
+| `neutral` | **outline** — 1.5px `gray.500`, no fill | `text.primary` | `text.primary` |
 | `primary` | brand gradient | white | `brand.primary` |
 | `danger` | **filled** `destructive.primary` | white | `red.400` |
 | `ask` | transparent, 1.5px `teal.500` outline | `teal.500` | `text.primary` |
+
+**Why neutral is an outline and not a grey fill.** Fill means an *answer*;
+outline means *not-an-answer* — which is exactly what Reschedule is: it proposes
+rather than resolves, the same category as `ask`. The two outlines differ only by
+colour.
+
+It is also the only thing that survives both themes with one value. A grey fill
+has to sit one step *away* from its background, and away is **lighter on dark but
+darker on light** — a rule written once was invisible in one of the two, and
+fixing that theme broke the other. No grey fill clears 3:1 on white in any case:
+the darkest step reaches **1.57**. The outline does — `gray.500` measures **4.13**
+on white, **3.7** on the light page and **3.92** on dark, so it is a single
+constant rather than a theme-split token.
 
 **Why danger is filled** rather than a pale plate with red ink: it has to read as
 destructive *before* the icon is identified, which is that colour's whole job.

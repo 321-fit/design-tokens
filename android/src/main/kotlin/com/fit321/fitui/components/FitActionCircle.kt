@@ -47,8 +47,13 @@ import com.fit321.fitui.tokens.FitColors
  * answer right.
  */
 enum class FitActionCircleRole {
-    /** Neutral peer. The plate sits one surface step above whatever it is on, so it
-     *  stays a plate on a card as well as on the page. */
+    /** Neutral peer — an OUTLINE, not a fill. Fill means an answer; outline means
+     *  not-an-answer, which is what Reschedule is: it proposes rather than resolves.
+     *  It is also the only thing that works in both themes with one value — a grey
+     *  fill must sit one step "away" from its background, and away is lighter on dark
+     *  but darker on light. No grey fill clears 3:1 on white anyway (the darkest
+     *  reaches 1.57); the outline does — gray-500 measures 4.13 on white, 3.7 on the
+     *  light page, 3.92 on dark. */
     Neutral,
 
     /** The expected answer. One per row. */
@@ -111,7 +116,7 @@ fun RowScope.FitActionCircle(
                         FitActionCircleRole.Ask ->
                             Modifier.border(BorderStroke(1.5.dp, FitColors.Teal.t500), CircleShape)
                         FitActionCircleRole.Neutral ->
-                            Modifier.background(theme.surfaceHigher, CircleShape)
+                            Modifier.border(BorderStroke(1.5.dp, FitColors.Gray.g500), CircleShape)
                     }
                 ),
         ) {

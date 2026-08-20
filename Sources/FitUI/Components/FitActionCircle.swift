@@ -18,8 +18,14 @@ import SwiftUI
 // read: refusal left, neutral middle, expected answer right.
 
 public enum FitActionCircleRole {
-    /// Neutral peer — the plate sits one surface step above whatever it is on, so
-    /// it stays a plate on a card as well as on the page.
+    /// Neutral peer — an OUTLINE, not a fill. Fill means an answer; outline means
+    /// not-an-answer, which is what Reschedule is: it proposes rather than resolves.
+    /// It is also the only thing that works in both themes with one value — a grey
+    /// fill has to sit one step "away" from its background, and away is lighter on
+    /// dark but darker on light, so a single rule was invisible in one of the two.
+    /// No grey fill clears 3:1 on white anyway (the darkest reaches 1.57). The
+    /// outline does: gray-500 measures 4.13 on white, 3.7 on the light page, 3.92
+    /// on dark.
     case neutral
     /// The expected answer. One per row.
     case primary
@@ -89,7 +95,7 @@ public struct FitActionCircle: View {
         case .ask:
             Circle().strokeBorder(FitColors.Teal.t500, lineWidth: 1.5)
         case .neutral:
-            Circle().fill(theme.surfaceHigher)
+            Circle().strokeBorder(FitColors.Gray.g500, lineWidth: 1.5)
         }
     }
 
