@@ -79,6 +79,64 @@ tinted variants here are computed alphas (`error.copy(alpha = .10f)`), which thi
 rule says belong in `bg.<status>-subtle` tokens — a caller holding that token should be able
 to pass it rather than inherit an alpha that reads differently on white and on gray.800.
 
+### FitActionCircle
+
+A row of **peer actions on an object** — a sheet, a drawer, a request card.
+64pt/dp circle with the label beneath it.
+
+**When to use it, and when not.** This is the part that matters more than the
+styling. Peer actions *on an object* take circles. A question with an escape —
+`Disconnect / Cancel`, `Cancel / Save` — takes words: there the labels **are** the
+meaning, and one of the two is the way out of the question rather than a peer.
+Count does not decide it. Two peers are still peers, which is why an *Awaiting*
+row is two circles while `Disconnect / Cancel` stays two buttons.
+
+Also **not** for: action sheets (unrelated choices, each needing a sentence),
+outcome pairs (`Missed / Mark complete` — one is the expected outcome and the
+other the exception), or a single action with no peers.
+
+| prop | values | note |
+|---|---|---|
+| `systemName` / `icon` | SF Symbol / `ImageVector` | the glyph; the label sits under the circle |
+| `label` | String | also the accessibility label — the row is glyphs, so this is what a screen reader reads |
+| `role` | `neutral` · `primary` · `danger` · `ask` | see below |
+| `isEnabled` / `enabled` | Bool | disabled drops to 0.4 opacity |
+
+**Roles, and the rationing rule.** Exactly one `primary` per row (the expected
+answer, under the thumb), at most one `danger` (destructive, farthest from it).
+A third fill turns a row of actions into a row of warnings.
+
+| role | plate | glyph | label |
+|---|---|---|---|
+| `neutral` | `surface.higher` — one step above whatever it sits on, so it stays a plate on a card as well as on the page | `text.primary` | `text.primary` |
+| `primary` | brand gradient | white | `brand.primary` |
+| `danger` | **filled** `destructive.primary` | white | `red.400` |
+| `ask` | transparent, 1.5px `teal.500` outline | `teal.500` | `text.primary` |
+
+**Why danger is filled** rather than a pale plate with red ink: it has to read as
+destructive *before* the icon is identified, which is that colour's whole job.
+White on `#F05C5B` measures **3.29:1** — under the 4.5 a label would need, over
+the 3.0 a glyph needs, and a glyph is what sits inside. The word lives beneath the
+circle on the page background, where it has full contrast.
+
+**Why `ask` is outline-only:** asking is not a decision. A third fill colour
+flattens the row's hierarchy.
+
+**Positions are fixed** so the row becomes muscle memory rather than a read:
+refusal left, neutral middle, expected answer right. Coach reads
+`Cancel · Reschedule · Confirm`, athlete `Decline · Reschedule · Accept` — same
+places, role wording.
+
+**The row:** `FitActionCircles` — the container carries the 6pt gap and equal
+widths so they are not re-typed per call site, and so a row that grows a fourth
+action needs no layout rethink.
+
+**Web:** `.fit-action-circles` > `.fit-action-circle` with
+`--primary` / `--danger` / `--ask` modifiers, in `fit-ui.css`.
+
+**Prototype:** `project-spec/prototypes/flows/shared/action-rows.html` — the
+twelve places that adopt it, and the four families that do not.
+
 ### FitIconPlate
 **Purpose:** Decorative leading icon container — rounded square with tinted background + centered icon. Used wherever a row / card needs a visual category accent (Dashboard action cards, Settings rows, empty-state CTAs, list category accents). Non-interactive — for tappable plates use `FitIconBtn` with `tintedBg: true`.
 
