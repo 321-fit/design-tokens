@@ -58,6 +58,8 @@ fun FitHeader(
     backTestTag: String? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    leading: (@Composable () -> Unit)? = null,
+    transparent: Boolean = false,
     trailing: (@Composable () -> Unit)? = null
 ) {
     val theme = LocalFitTheme.current
@@ -65,10 +67,22 @@ fun FitHeader(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
-            .background(theme.screenBg)
+            // Transparent for a header that floats over media — a cover photo, a video. The
+            // opaque plate is right everywhere else and stays the default.
+            .background(if (transparent) Color.Transparent else theme.screenBg)
             .padding(horizontal = FitSpacing.sp4, vertical = FitSpacing.sp2)
     ) {
-        if (showBack && onBack != null) {
+        // A caller-built leading wins over the back button, the way trailing wins over the
+        // icon list: a header starts with a close, a cancel or a step counter often enough
+        // that screens were rebuilding the whole bar to change one corner.
+        if (leading != null) {
+            Box(
+                modifier = Modifier.align(Alignment.CenterStart),
+                contentAlignment = Alignment.Center
+            ) {
+                leading()
+            }
+        } else if (showBack && onBack != null) {
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)

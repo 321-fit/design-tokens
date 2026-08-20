@@ -302,6 +302,12 @@ instead of a `Binding`.
 - `trailing` (iOS `@ViewBuilder`, Android `(@Composable () -> Unit)?`) — an arbitrary end
   control. Takes precedence over `rightActions`: a header ends in a menu, a badge or a text
   action at least as often as in a row of glyphs
+- `leading` (Android `(@Composable () -> Unit)?`, iOS `AnyView?`) — the mirror of `trailing`
+  for the start corner, and it wins over the back button. A screen that opens as a sheet
+  starts with a close, an edit form with a "Cancel"; before this each one rebuilt the whole
+  bar to change that one corner
+- `transparent: Bool = false` — drops the opaque plate for a header that floats over media,
+  a cover photo or a video. Opaque stays the default
 - `maxLines` / `overflow` / `backTestTag` (Android)
 
 **Sub-elements:**
