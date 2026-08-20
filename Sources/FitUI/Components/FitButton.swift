@@ -33,6 +33,9 @@ public struct FitButton: View {
     let title: String
     let style: FitButtonStyle
     let size: FitButtonSize
+    /// A button the screen is not ready for yet — a form CTA before the form is valid. It
+    /// renders the disabled grammar and swallows the tap.
+    let enabled: Bool
     let action: () -> Void
 
     @Environment(\.fitTheme) private var theme
@@ -41,13 +44,17 @@ public struct FitButton: View {
         _ title: String,
         style: FitButtonStyle = .primary,
         size: FitButtonSize = .lg,
+        enabled: Bool = true,
         action: @escaping () -> Void
     ) {
         self.title = title
+        self.enabled = enabled
         self.style = style
         self.size = size
         self.action = action
     }
+
+    private var effectiveStyle: FitButtonStyle { enabled ? style : .disabled }
 
     public var body: some View {
         Button(action: action) {
@@ -60,8 +67,7 @@ public struct FitButton: View {
                 .clipShape(Capsule())
                 .overlay(overlayBorder)
         }
-        .disabled(style == .disabled)
-        .opacity(style == .disabled ? 0.7 : 1.0)
+        .disabled(effectiveStyle == .disabled)
     }
 
     // MARK: - Size mapping
@@ -85,7 +91,7 @@ public struct FitButton: View {
     // MARK: - Style mapping
 
     private var foregroundColor: Color {
-        switch style {
+        switch effectiveStyle {
         case .primary:             return .white
         case .secondary:           return theme.textPrimary
         case .destructive,
@@ -98,20 +104,21 @@ public struct FitButton: View {
 
     @ViewBuilder
     private var background: some View {
-        switch style {
+        switch effectiveStyle {
         case .primary:            FitColors.brandGradient
         case .secondary:          theme.surfaceHigh
         case .destructive:        FitColors.error.opacity(0.15)
         case .destructiveHigh:    FitColors.error
         case .destructiveLow,
              .destructiveMinimal: Color.clear
-        case .disabled:           theme.surfaceLow
+        // Inactive is the outline grammar, not a filled plate — see `.fit-btn-disabled`.
+        case .disabled:           Color.clear
         }
     }
 
     @ViewBuilder
     private var overlayBorder: some View {
-        switch style {
+        switch effectiveStyle {
         case .secondary:
             Capsule().stroke(theme.divider, lineWidth: 1)
         case .destructiveLow:

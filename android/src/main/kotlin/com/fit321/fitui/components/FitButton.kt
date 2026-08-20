@@ -42,9 +42,16 @@ fun FitButton(
      * which was unreachable while the fill was applied unconditionally after [modifier].
      */
     fillWidth: Boolean = true,
+    /**
+     * A button the screen is not ready for yet — a form CTA before the form is valid.
+     * It renders the disabled grammar and swallows the tap, so callers stop pairing an
+     * `if (valid) Primary else Disabled` with their own `clickable(enabled = …)`.
+     */
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     val theme = LocalFitTheme.current
+    val effectiveStyle = if (enabled) style else FitButtonStyle.Disabled
     val height: Dp = when (size) {
         FitButtonSize.Lg -> FitSize.buttonLgHeight
         FitButtonSize.Md -> FitSize.buttonMdHeight
@@ -56,7 +63,7 @@ fun FitButton(
         FitButtonSize.Sm -> FitFont.body2
     }
 
-    val fg: Color = when (style) {
+    val fg: Color = when (effectiveStyle) {
         FitButtonStyle.Primary -> Color.White
         FitButtonStyle.Secondary -> theme.textPrimary
         FitButtonStyle.Destructive,
@@ -66,7 +73,7 @@ fun FitButton(
         FitButtonStyle.Disabled -> theme.textTertiary
     }
 
-    val bgModifier = when (style) {
+    val bgModifier = when (effectiveStyle) {
         FitButtonStyle.Primary ->
             Modifier.background(brush = FitColors.brandGradient, shape = CircleShape)
         FitButtonStyle.Secondary ->
@@ -77,17 +84,20 @@ fun FitButton(
             Modifier.background(brush = SolidColor(FitColors.error), shape = CircleShape)
         FitButtonStyle.DestructiveLow,
         FitButtonStyle.DestructiveMinimal -> Modifier
-        FitButtonStyle.Disabled ->
-            Modifier.background(brush = SolidColor(theme.surfaceLow), shape = CircleShape)
+        // Inactive is the outline grammar, not a filled plate. It used to take `surfaceLow`,
+        // the very token an input uses, so a dead button and a live field were the same
+        // colour — see `.fit-btn-disabled` in fit-ui.css and specs/theme-contrast.md §1.
+        FitButtonStyle.Disabled -> Modifier
     }
 
-    val borderModifier: Modifier = when (style) {
+    val borderModifier: Modifier = when (effectiveStyle) {
         FitButtonStyle.Secondary -> Modifier.border(1.dp, theme.divider, CircleShape)
         FitButtonStyle.DestructiveLow -> Modifier.border(1.dp, FitColors.error, CircleShape)
+        FitButtonStyle.Disabled -> Modifier.border(1.dp, theme.divider, CircleShape)
         else -> Modifier
     }
 
-    key(style) {
+    key(effectiveStyle) {
         Box(
             modifier = modifier
                 .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
@@ -98,8 +108,7 @@ fun FitButton(
                 // Only meaningful when hugging the label: a full-width button centres its text and
                 // needs none. `.fit-btn` in fit-ui.css pads an auto-width button by 24px.
                 .then(if (fillWidth) Modifier else Modifier.padding(horizontal = FitSpacing.sp6))
-                .clickable(enabled = style != FitButtonStyle.Disabled) { onClick() }
-                .alpha(if (style == FitButtonStyle.Disabled) 0.7f else 1f),
+                .clickable(enabled = effectiveStyle != FitButtonStyle.Disabled) { onClick() },
             contentAlignment = Alignment.Center
         ) {
             Text(title, color = fg, style = textStyle)

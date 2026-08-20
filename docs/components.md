@@ -19,6 +19,9 @@ Every component lists **purpose · required props · optional props · variants 
 - `style: enum { primary, secondary, destructive, destructiveHigh, destructiveLow, destructiveMinimal }`
 
 **Optional props:**
+- `enabled: Bool = true` — a CTA the screen is not ready for yet renders the disabled
+  grammar and swallows the tap, instead of every caller pairing `style = disabled` with its
+  own `clickable(enabled = …)`
 - `size: enum { md (h=50, default), sm (h=40) }`
 - `leadingIcon: Icon?`
 
