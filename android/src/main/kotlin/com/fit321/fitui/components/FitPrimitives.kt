@@ -56,12 +56,26 @@ enum class FitIconBtnColor { Primary, Brand, Error, Success }
  */
 enum class FitIconBtnStyle { Filled, Ghost }
 
+/**
+ * How large the circle is, and how large the glyph inside it.
+ *
+ * [Sm] is the header affordance — back, menu, refresh. [Lg] is a choice the screen is
+ * asking for rather than an action tucked into a corner: the provider circles on the auth
+ * screens are the case it was added for. The glyph is not a fixed fraction of the plate —
+ * the small one carries a heavier ratio so it stays legible at 32.
+ */
+enum class FitIconBtnSize(val box: Dp, val glyph: Dp) {
+    Sm(FitSize.iconBtnSize, FitSize.iconMd),
+    Lg(60.dp, 26.dp)
+}
+
 @Composable
 fun FitIconBtn(
     icon: ImageVector,
     color: FitIconBtnColor = FitIconBtnColor.Primary,
     tintedBg: Boolean = false,
     style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    size: FitIconBtnSize = FitIconBtnSize.Sm,
     contentDescription: String? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -69,6 +83,7 @@ fun FitIconBtn(
     color = color,
     tintedBg = tintedBg,
     style = style,
+    size = size,
     modifier = modifier,
     onClick = onClick,
 ) { tint, size ->
@@ -88,6 +103,7 @@ fun FitIconBtn(
     color: FitIconBtnColor = FitIconBtnColor.Primary,
     tintedBg: Boolean = false,
     style: FitIconBtnStyle = FitIconBtnStyle.Filled,
+    size: FitIconBtnSize = FitIconBtnSize.Sm,
     background: Color? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
@@ -124,13 +140,13 @@ fun FitIconBtn(
 
     Box(
         modifier = modifier
-            .size(FitSize.iconBtnSize)
+            .size(size.box)
             .clip(CircleShape)
             .background(bgColor)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        icon(iconColor, FitSize.iconMd)
+        icon(iconColor, size.glyph)
     }
 }
 

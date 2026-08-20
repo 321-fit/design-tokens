@@ -44,7 +44,7 @@ Every component lists **purpose · required props · optional props · variants 
 ---
 
 ### FitIconBtn
-**Purpose:** Circular icon-only button (32px) for header right-slot actions, toolbar, inline actions. Visual weight matches `.fit-header-back` so left + right of header read as a single group.
+**Purpose:** Circular icon-only button — 32px for header right-slot actions, toolbar and inline actions, 60px for a provider choice. Visual weight matches `.fit-header-back` so left + right of header read as a single group.
 
 **Required props:**
 - `icon: Icon`
@@ -54,6 +54,10 @@ Every component lists **purpose · required props · optional props · variants 
 - `color: enum { primary (default), brand, error, success }`
 - `tintedBg: Bool = false` — adds background tint matching color
 - `style: enum { filled (default), ghost }` — `ghost` drops the plate entirely (transparent bg)
+- `size: enum { sm (default, 32 plate / 16 glyph), lg (60 / 26) }` — `sm` is the header
+  affordance; `lg` is a choice the screen is asking for rather than an action in a corner,
+  which is what the auth provider circles are. The glyph is not a fixed fraction of the
+  plate: the small one carries a heavier ratio so it stays legible at 32
 - `contentDescription: String?` — accessibility label (Compose)
 
 **Variants:**

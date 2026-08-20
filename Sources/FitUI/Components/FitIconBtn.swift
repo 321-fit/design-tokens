@@ -2,8 +2,8 @@ import SwiftUI
 
 // MARK: - FitIconBtn
 //
-// Circular icon-only button (32pt). Used in headers, toolbars,
-// inline actions. See `docs/components.md` FitIconBtn.
+// Circular icon-only button, 32pt by default and 60pt for a provider choice. Used in
+// headers, toolbars, inline actions. See `docs/components.md` FitIconBtn.
 
 public enum FitIconBtnColor {
     case primary   // text-secondary icon on surface-high bg (default)
@@ -21,12 +21,37 @@ public enum FitIconBtnStyle {
     case ghost
 }
 
+/// How large the circle is, and how large the glyph inside it. `.sm` is the header
+/// affordance — back, menu, refresh. `.lg` is a choice the screen is asking for rather than
+/// an action tucked into a corner: the provider circles on the auth screens are the case it
+/// was added for. The glyph is not a fixed fraction of the plate — the small one carries a
+/// heavier ratio so it stays legible at 32.
+public enum FitIconBtnSize {
+    case sm
+    case lg
+
+    var box: CGFloat {
+        switch self {
+        case .sm: return FitSize.iconBtnSize
+        case .lg: return 60
+        }
+    }
+
+    var glyph: CGFloat {
+        switch self {
+        case .sm: return FitSize.iconMd
+        case .lg: return 26
+        }
+    }
+}
+
 public struct FitIconBtn: View {
     let systemName: String?
     let imageName: String?
     let color: FitIconBtnColor
     let tintedBg: Bool
     let style: FitIconBtnStyle
+    let size: FitIconBtnSize
     let action: () -> Void
 
     @Environment(\.fitTheme) private var theme
@@ -36,6 +61,7 @@ public struct FitIconBtn: View {
         color: FitIconBtnColor = .primary,
         tintedBg: Bool = false,
         style: FitIconBtnStyle = .filled,
+        size: FitIconBtnSize = .sm,
         action: @escaping () -> Void
     ) {
         self.systemName = systemName
@@ -43,6 +69,7 @@ public struct FitIconBtn: View {
         self.color = color
         self.tintedBg = tintedBg
         self.style = style
+        self.size = size
         self.action = action
     }
 
@@ -51,6 +78,7 @@ public struct FitIconBtn: View {
         color: FitIconBtnColor = .primary,
         tintedBg: Bool = false,
         style: FitIconBtnStyle = .filled,
+        size: FitIconBtnSize = .sm,
         action: @escaping () -> Void
     ) {
         self.systemName = nil
@@ -58,13 +86,14 @@ public struct FitIconBtn: View {
         self.color = color
         self.tintedBg = tintedBg
         self.style = style
+        self.size = size
         self.action = action
     }
 
     public var body: some View {
         Button(action: action) {
             iconView
-                .frame(width: FitSize.iconBtnSize, height: FitSize.iconBtnSize)
+                .frame(width: size.box, height: size.box)
                 .background(backgroundColor)
                 .clipShape(Circle())
         }
@@ -75,14 +104,14 @@ public struct FitIconBtn: View {
     private var iconView: some View {
         if let systemName = systemName {
             Image(systemName: systemName)
-                .font(.system(size: FitSize.iconMd, weight: .regular))
+                .font(.system(size: size.glyph, weight: .regular))
                 .foregroundColor(iconColor)
         } else if let imageName = imageName {
             Image(imageName)
                 .resizable()
                 .renderingMode(.template)
                 .scaledToFit()
-                .frame(width: FitSize.iconMd, height: FitSize.iconMd)
+                .frame(width: size.glyph, height: size.glyph)
                 .foregroundColor(iconColor)
         }
     }
