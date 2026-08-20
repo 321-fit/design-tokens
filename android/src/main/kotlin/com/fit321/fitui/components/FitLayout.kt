@@ -58,6 +58,8 @@ fun FitHeader(
     backTestTag: String? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    subtitle: String? = null,
+    onTitleClick: (() -> Unit)? = null,
     leading: (@Composable () -> Unit)? = null,
     transparent: Boolean = false,
     trailing: (@Composable () -> Unit)? = null
@@ -102,16 +104,43 @@ fun FitHeader(
             }
         }
 
-        Text(
-            title,
-            style = FitFont.navTitle,
-            color = theme.textPrimary,
-            maxLines = maxLines,
-            overflow = overflow,
+        // The title is a block rather than a line: a chat header carries who you are talking
+        // to and whether they are online, and a screen that opens a profile from its own title
+        // needs the tap to cover both lines, not just the first.
+        Column(
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = TitleSideReserve)
-        )
+                .then(
+                    if (onTitleClick != null) {
+                        Modifier.clickable(
+                            interactionSource = null,
+                            indication = null,
+                            onClick = onTitleClick
+                        )
+                    } else {
+                        Modifier
+                    }
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                title,
+                style = FitFont.navTitle,
+                color = theme.textPrimary,
+                maxLines = maxLines,
+                overflow = overflow
+            )
+            if (!subtitle.isNullOrBlank()) {
+                Text(
+                    subtitle,
+                    style = FitFont.caption,
+                    color = theme.textTertiary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
 
         // A caller-built trailing wins over the icon list: a header ends in a menu, a badge
         // or a text action at least as often as it ends in a row of glyphs.

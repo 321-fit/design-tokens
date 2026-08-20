@@ -306,6 +306,9 @@ instead of a `Binding`.
   for the start corner, and it wins over the back button. A screen that opens as a sheet
   starts with a close, an edit form with a "Cancel"; before this each one rebuilt the whole
   bar to change that one corner
+- `subtitle: String?` + `onTitleClick` — the title is a block, not a line: a chat header
+  carries who you are talking to and whether they are online, and the tap that opens their
+  profile covers both lines
 - `transparent: Bool = false` — drops the opaque plate for a header that floats over media,
   a cover photo or a video. Opaque stays the default
 - `maxLines` / `overflow` / `backTestTag` (Android)

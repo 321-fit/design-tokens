@@ -7,6 +7,8 @@ import SwiftUI
 public struct FitHeader<Trailing: View>: View {
     let title: String
     var onBack: (() -> Void)? = nil
+    let subtitle: String?
+    let onTitleClick: (() -> Void)?
     let leading: AnyView?
     let transparent: Bool
     let trailing: Trailing
@@ -17,12 +19,16 @@ public struct FitHeader<Trailing: View>: View {
     public init(
         _ title: String,
         onBack: (() -> Void)? = nil,
+        subtitle: String? = nil,
+        onTitleClick: (() -> Void)? = nil,
         leading: AnyView? = nil,
         transparent: Bool = false,
         @ViewBuilder trailing: () -> Trailing = { EmptyView() }
     ) {
         self.title = title
         self.onBack = onBack
+        self.subtitle = subtitle
+        self.onTitleClick = onTitleClick
         self.leading = leading
         self.transparent = transparent
         self.trailing = trailing()
@@ -38,10 +44,10 @@ public struct FitHeader<Trailing: View>: View {
             } else {
                 backButton
             }
-            // Title
-            Text(title)
-                .font(FitFont.h2)
-                .foregroundColor(theme.textPrimary)
+            // The title is a block rather than a line: a chat header carries who you are
+            // talking to and whether they are online, and a tap that opens a profile has to
+            // cover both lines.
+            titleBlock
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             // Trailing action (e.g., trash icon)
@@ -52,6 +58,25 @@ public struct FitHeader<Trailing: View>: View {
         // Transparent for a header that floats over media — a cover photo, a video. The
         // opaque plate is right everywhere else and stays the default.
         .background(transparent ? Color.clear : theme.screenBg)
+    }
+
+    @ViewBuilder
+    private var titleBlock: some View {
+        let block = VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(FitFont.h2)
+                .foregroundColor(theme.textPrimary)
+            if let subtitle = subtitle, !subtitle.isEmpty {
+                Text(subtitle)
+                    .font(FitFont.caption)
+                    .foregroundColor(theme.textTertiary)
+            }
+        }
+        if let onTitleClick = onTitleClick {
+            Button(action: onTitleClick) { block }.buttonStyle(.plain)
+        } else {
+            block
+        }
     }
 
     private var backButton: some View {
