@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.DirectionsRun
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,7 +52,7 @@ fun FitRoleTag(
     ) {
         Icon(
             imageVector = when (role) {
-                FitRole.Athlete -> Icons.Filled.DirectionsRun
+                FitRole.Athlete -> Icons.AutoMirrored.Filled.DirectionsRun
                 FitRole.Coach   -> Icons.Filled.Person
             },
             contentDescription = null,

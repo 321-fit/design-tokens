@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +42,7 @@ fun FitTransactionRow(
 
     val (icon: ImageVector, tone: FitIconPlateTone) = when (type) {
         FitTransactionType.Earning -> Icons.Default.ArrowOutward to FitIconPlateTone.Success
-        FitTransactionType.Payout  -> Icons.Default.ArrowForward to FitIconPlateTone.Success
+        FitTransactionType.Payout  -> Icons.AutoMirrored.Filled.ArrowForward to FitIconPlateTone.Success
         FitTransactionType.Refund  -> Icons.AutoMirrored.Filled.ArrowBack to FitIconPlateTone.Error
     }
     val amountColor: Color = when {
