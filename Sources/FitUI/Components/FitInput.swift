@@ -15,6 +15,9 @@ public struct FitInput: View {
     var isError: Bool = false
     var errorText: String? = nil
     var keyboardType: UIKeyboardType = .default
+    /// What the field holds, for the system's password manager. Mirrors Compose's
+    /// `FitInputContent`; on iOS it becomes `textContentType`.
+    var content: UITextContentType? = nil
     var submitLabel: SubmitLabel = .done
 
     @Environment(\.fitTheme) private var theme
@@ -28,6 +31,7 @@ public struct FitInput: View {
         isError: Bool = false,
         errorText: String? = nil,
         keyboardType: UIKeyboardType = .default,
+        content: UITextContentType? = nil,
         submitLabel: SubmitLabel = .done
     ) {
         self.label = label
@@ -37,6 +41,7 @@ public struct FitInput: View {
         self.isError = isError
         self.errorText = errorText
         self.keyboardType = keyboardType
+        self.content = content
         self.submitLabel = submitLabel
     }
 
@@ -55,6 +60,7 @@ public struct FitInput: View {
                     SecureField(placeholder, text: $text)
                         .font(FitFont.body1)
                         .foregroundColor(theme.textPrimary)
+                        .textContentType(content)
                         .keyboardType(keyboardType)
                         .submitLabel(submitLabel)
                         .focused($isFocused)
@@ -62,6 +68,7 @@ public struct FitInput: View {
                     TextField(placeholder, text: $text)
                         .font(FitFont.body1)
                         .foregroundColor(theme.textPrimary)
+                        .textContentType(content)
                         .keyboardType(keyboardType)
                         .submitLabel(submitLabel)
                         .focused($isFocused)
