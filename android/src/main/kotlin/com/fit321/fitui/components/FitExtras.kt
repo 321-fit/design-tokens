@@ -19,9 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,6 +42,16 @@ import com.fit321.fitui.tokens.FitSpacing
 // ============================================================================
 // FitInput — text input with label + error + secure mode
 // ============================================================================
+
+/**
+ * What the field holds, for the system's password manager.
+ *
+ * A closed set rather than the platform's own type: the manager only helps if a field says
+ * what it is, and leaving that to each screen is how one of them ends up marked as a
+ * username while the one next to it says nothing. [NewPassword] is the sign-up case — it is
+ * what makes a manager offer to generate and store one, rather than autofill the old one.
+ */
+enum class FitInputContent { None, Email, Username, Password, NewPassword }
 
 enum class FitInputKeyboard { Default, Number, Email, Url, Phone }
 
@@ -58,6 +71,7 @@ fun FitInput(
     keyboardType: FitInputKeyboard = FitInputKeyboard.Default,
     enabled: Boolean = true,
     height: Dp = FitSize.inputHeight,
+    content: FitInputContent = FitInputContent.None,
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
@@ -92,6 +106,13 @@ fun FitInput(
                 .padding(horizontal = 12.dp),
             contentAlignment = Alignment.CenterStart
         ) {
+            val autofill = when (content) {
+                FitInputContent.Email -> ContentType.EmailAddress
+                FitInputContent.Username -> ContentType.Username
+                FitInputContent.Password -> ContentType.Password
+                FitInputContent.NewPassword -> ContentType.NewPassword
+                FitInputContent.None -> null
+            }
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -101,7 +122,15 @@ fun FitInput(
                 // own content leaves ~16dp of dead pixels above and below inside a box that
                 // looks entirely tappable: aiming at the top of the field did nothing, which
                 // reads as the screen ignoring you rather than as a small target.
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (autofill != null) {
+                            Modifier.semantics { contentType = autofill }
+                        } else {
+                            Modifier
+                        }
+                    ),
                 textStyle = FitFont.body1.copy(color = theme.textPrimary),
                 cursorBrush = androidx.compose.ui.graphics.SolidColor(FitColors.brandPrimary),
                 visualTransformation = if (showSecure) PasswordVisualTransformation() else VisualTransformation.None,

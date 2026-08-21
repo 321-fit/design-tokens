@@ -288,6 +288,10 @@ owes for.
 - `label: String?` — omitted when the placeholder already names the field: the label or the
   placeholder names it, never both. Labels stay where the placeholder is a format hint
 - `height` (Android) — the auth screens run 60 against the default 56
+- `content: enum { none (default), email, username, password, newPassword }` — what the field
+  holds, so the system's password manager can offer saved credentials on a tap and store new
+  ones. Compose sets it as autofill semantics, Swift as `textContentType`. `newPassword` is
+  the sign-up case: it is what makes a manager offer to generate one rather than fill the old
 - `placeholder: String?`
 - `isSecure: Bool = false`
 - `isError: Bool = false`
