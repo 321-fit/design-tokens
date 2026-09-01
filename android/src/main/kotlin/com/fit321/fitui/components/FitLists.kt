@@ -512,6 +512,12 @@ fun FitChip(
     onClick: () -> Unit,
     size: FitChipSize = FitChipSize.Md,
     modifier: Modifier = Modifier,
+    /**
+     * Trailing slot, for a chip that carries its own affordance — a scope the caller can drop,
+     * a count. Symmetrical with [leading] and for the same reason: without it a host has to
+     * rebuild the chip to put one glyph on the other side.
+     */
+    trailing: (@Composable () -> Unit)? = null,
     leading: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
@@ -537,6 +543,7 @@ fun FitChip(
         leading()
         val style = if (size == FitChipSize.Sm) FitFont.body2 else FitFont.body1
         Text(label, style = style, color = theme.textPrimary)
+        trailing?.invoke()
     }
 }
 

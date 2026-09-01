@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -238,25 +239,34 @@ fun FitSnackbarContent(
             .border(1.dp, theme.divider, CircleShape)
             .padding(horizontal = FitSpacing.sp4, vertical = FitSpacing.sp2_5)
     ) {
+        val hasAction = actionLabel != null && onAction != null
         Row(
-            modifier = Modifier.align(Alignment.Center),
+            // With an action the message must yield width to it, so the two are laid
+            // out side by side; on its own the message stays centred in the pill.
+            modifier = if (hasAction) Modifier.fillMaxWidth() else Modifier.align(Alignment.Center),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1_5)
         ) {
             if (dotColor != null) {
                 Box(Modifier.size(6.dp).clip(CircleShape).background(dotColor))
             }
-            Text(message, style = FitFont.body2, color = theme.textPrimary)
-        }
-        if (actionLabel != null && onAction != null) {
             Text(
-                actionLabel,
-                style = FitFont.body2.copy(fontWeight = FontWeight.Medium),
-                color = FitColors.Teal.t500,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .clickable { onAction() }
+                message,
+                style = FitFont.body2,
+                color = theme.textPrimary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = if (hasAction) Modifier.weight(1f) else Modifier
             )
+            if (hasAction) {
+                Text(
+                    actionLabel!!,
+                    style = FitFont.body2.copy(fontWeight = FontWeight.Medium),
+                    color = FitColors.Teal.t500,
+                    maxLines = 1,
+                    modifier = Modifier.clickable { onAction!!() }
+                )
+            }
         }
     }
 }
