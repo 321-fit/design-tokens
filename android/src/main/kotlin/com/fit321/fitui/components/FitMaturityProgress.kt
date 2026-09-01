@@ -22,10 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -67,7 +70,7 @@ fun FitMaturityProgress(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             FitIconPlate(
-                icon = Icons.Default.Star,
+                icon = ImageVector.vectorResource(R.drawable.ic_fit_star_filled),
                 tone = FitIconPlateTone.Success,
                 size = FitIconPlateSize.Md
             )
@@ -105,7 +108,7 @@ fun FitMaturityProgress(
                     color = FitColors.brandPrimary
                 )
                 Icon(
-                    Icons.Default.ChevronRight,
+                    ImageVector.vectorResource(R.drawable.ic_fit_chevron_right),
                     contentDescription = null,
                     tint = FitColors.brandPrimary,
                     modifier = Modifier.size(13.dp)
@@ -137,7 +140,7 @@ private fun CriterionRow(c: FitMaturityCriterion) {
         ) {
             if (c.done) {
                 Icon(
-                    Icons.Default.Check,
+                    ImageVector.vectorResource(R.drawable.ic_fit_check),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(11.dp)

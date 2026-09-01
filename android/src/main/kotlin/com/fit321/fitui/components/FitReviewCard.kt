@@ -26,11 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -139,7 +142,7 @@ private fun StarRow(filled: Int, total: Int, theme: com.fit321.fitui.tokens.FitC
     Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
         repeat(total) { i ->
             Icon(
-                Icons.Default.Star,
+                ImageVector.vectorResource(R.drawable.ic_fit_star_filled),
                 contentDescription = null,
                 tint = if (i < filled) FitColors.Teal.t500 else theme.textTertiary,
                 modifier = Modifier.size(12.dp)

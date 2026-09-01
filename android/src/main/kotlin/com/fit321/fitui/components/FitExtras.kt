@@ -192,30 +192,15 @@ fun FitRating(
     starSize = size.px,
     readOnly = readOnly,
     modifier = modifier
-) { _, filled, tint, px ->
-    Icon(
-        imageVector = if (filled) Icons.Default.Star else Icons.Outlined.StarOutline,
-        contentDescription = null,
-        tint = tint,
-        modifier = Modifier.size(px)
-    )
-}
+)
 
 /**
- * [FitRating] with a caller-supplied glyph — see the note on [FitChip].
+ * [starSize] is a [Dp] rather than a [FitRatingSize] because the sizes in the wild are not
+ * the three the enum names: a review screen sets its stars at the size of the question it
+ * asks, and a summary row at the size of the line it sits in.
  *
- * The star is the one glyph a product is most likely to own: the Material pair is a
- * filled star against a thin outline, and a set drawn as one family reads as one
- * control. The slot is handed the index, whether that position is filled, the tint and
- * the size the row would have used, so a caller swapping the glyph does not re-derive
- * any of them — and can hang its own test tag on the position it draws.
- *
- * [starSize] is a [Dp] rather than a [FitRatingSize] because the sizes in the wild are
- * not the three the enum names: a review screen sets its stars at the size of the
- * question it asks, and a summary row at the size of the line it sits in.
- *
- * There is no ripple: at these sizes a bounded indication paints a square behind the
- * star, which reads as a selection box rather than a tap.
+ * There is no ripple: at these sizes a bounded indication paints a square behind the star,
+ * which reads as a selection box rather than a tap.
  */
 @Composable
 fun FitRating(
@@ -225,23 +210,27 @@ fun FitRating(
     spacing: Dp = 10.dp,
     readOnly: Boolean = false,
     tint: Color = FitColors.Yellow.y400,
-    modifier: Modifier = Modifier,
-    star: @Composable (index: Int, filled: Boolean, tint: Color, size: Dp) -> Unit
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(spacing)
     ) {
         (1..5).forEach { index ->
-            Box(
-                modifier = Modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    enabled = !readOnly
-                ) { onRate(index) }
-            ) {
-                star(index, index <= rating, tint, starSize)
-            }
+            Icon(
+                painter = painterResource(
+                    if (index <= rating) R.drawable.ic_fit_star_filled else R.drawable.ic_fit_star
+                ),
+                contentDescription = null,
+                tint = tint,
+                modifier = Modifier
+                    .size(starSize)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        enabled = !readOnly
+                    ) { onRate(index) }
+            )
         }
     }
 }

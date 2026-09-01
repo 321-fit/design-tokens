@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
@@ -284,7 +285,7 @@ fun FitTicket(
     ) {
         Row(verticalAlignment = Alignment.Top) {
             Text(title, style = FitFont.button1, color = theme.textPrimary, modifier = Modifier.weight(1f))
-            Icon(Icons.Default.ChevronRight, null, tint = theme.textTertiary, modifier = Modifier.size(FitSize.iconMd))
+            Icon(ImageVector.vectorResource(R.drawable.ic_fit_chevron_right), null, tint = theme.textTertiary, modifier = Modifier.size(FitSize.iconMd))
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,

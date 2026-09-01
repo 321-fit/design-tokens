@@ -9,7 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -38,7 +41,7 @@ fun FitPasswordRule(
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp2)
             ) {
                 Icon(
-                    imageVector = if (rule.isMet) Icons.Default.Check else Icons.Default.Circle,
+                    imageVector = if (rule.isMet) ImageVector.vectorResource(R.drawable.ic_fit_check) else Icons.Default.Circle,
                     contentDescription = null,
                     tint = if (rule.isMet) FitColors.Teal.t500 else theme.textTertiary,
                     modifier = Modifier.size(12.dp)

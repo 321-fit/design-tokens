@@ -28,10 +28,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -117,7 +120,7 @@ fun FitSelectRow(
         when (trailing) {
             FitSelectRowTrailing.Chevron ->
                 Icon(
-                    Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                    ImageVector.vectorResource(R.drawable.ic_fit_chevron_right), null, tint = theme.textTertiary,
                     modifier = Modifier.size(FitSize.iconMd)
                 )
 
@@ -130,7 +133,7 @@ fun FitSelectRow(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        Icons.Default.Check,
+                        ImageVector.vectorResource(R.drawable.ic_fit_check),
                         null,
                         tint = Color.White,
                         modifier = Modifier.size(14.dp)
@@ -269,7 +272,7 @@ fun FitSettingsCard(
 
         if (trailing == FitSettingsTrailing.Chevron) {
             Icon(
-                Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                ImageVector.vectorResource(R.drawable.ic_fit_chevron_right), null, tint = theme.textTertiary,
                 modifier = Modifier.size(FitSize.settingsCardChevron)
             )
         }
@@ -328,10 +331,6 @@ enum class FitParticipantState {
  * [paymentLabel] overrides the built-in label for [payment]. The enum carries the meaning —
  * cash in hand, a card charge, a credit spent — and the library spells it in English; a
  * consumer that keeps its copy in resources passes its own string and keeps the meaning.
- *
- * [removeGlyph] and [chevronGlyph] are handed the tint and size the row would have drawn, so
- * a consumer with its own icon family swaps the glyph without re-deriving the 28dp plate or
- * the geometry around it — see the note on [FitChip].
  */
 @Composable
 fun FitParticipant(
@@ -348,13 +347,7 @@ fun FitParticipant(
     pendingLabel: String? = null,
     isYou: Boolean = false,
     onTap: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
-    removeGlyph: @Composable (tint: Color, size: Dp) -> Unit = { tint, size ->
-        Icon(Icons.Default.Close, null, tint = tint, modifier = Modifier.size(size))
-    },
-    chevronGlyph: @Composable (tint: Color, size: Dp) -> Unit = { tint, size ->
-        Icon(Icons.Default.ChevronRight, null, tint = tint, modifier = Modifier.size(size))
-    }
+    modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
 
@@ -455,15 +448,26 @@ fun FitParticipant(
                         .clickable(onClick = onRemove),
                     contentAlignment = Alignment.Center
                 ) {
-                    removeGlyph(FitColors.error, 12.dp)
+                    Icon(
+                        painter = painterResource(R.drawable.ic_fit_close),
+                        contentDescription = null,
+                        tint = FitColors.error,
+                        modifier = Modifier.size(12.dp)
+                    )
                 }
             }
 
-            trailing is FitParticipantTrailing.Chevron -> chevronGlyph(theme.textTertiary, 16.dp)
+            trailing is FitParticipantTrailing.Chevron ->
+                Icon(
+                    painter = painterResource(R.drawable.ic_fit_chevron_right),
+                    contentDescription = null,
+                    tint = theme.textTertiary,
+                    modifier = Modifier.size(16.dp)
+                )
 
             trailing is FitParticipantTrailing.Edit ->
                 Icon(
-                    Icons.Default.Edit,
+                    ImageVector.vectorResource(R.drawable.ic_fit_pencil),
                     null,
                     tint = theme.textTertiary,
                     modifier = Modifier.size(16.dp)
