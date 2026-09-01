@@ -3,6 +3,7 @@ package com.fit321.fitui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -185,20 +186,62 @@ fun FitRating(
     size: FitRatingSize = FitRatingSize.Medium,
     readOnly: Boolean = false,
     modifier: Modifier = Modifier
+) = FitRating(
+    rating = rating,
+    onRate = onRate,
+    starSize = size.px,
+    readOnly = readOnly,
+    modifier = modifier
+) { _, filled, tint, px ->
+    Icon(
+        imageVector = if (filled) Icons.Default.Star else Icons.Outlined.StarOutline,
+        contentDescription = null,
+        tint = tint,
+        modifier = Modifier.size(px)
+    )
+}
+
+/**
+ * [FitRating] with a caller-supplied glyph — see the note on [FitChip].
+ *
+ * The star is the one glyph a product is most likely to own: the Material pair is a
+ * filled star against a thin outline, and a set drawn as one family reads as one
+ * control. The slot is handed the index, whether that position is filled, the tint and
+ * the size the row would have used, so a caller swapping the glyph does not re-derive
+ * any of them — and can hang its own test tag on the position it draws.
+ *
+ * [starSize] is a [Dp] rather than a [FitRatingSize] because the sizes in the wild are
+ * not the three the enum names: a review screen sets its stars at the size of the
+ * question it asks, and a summary row at the size of the line it sits in.
+ *
+ * There is no ripple: at these sizes a bounded indication paints a square behind the
+ * star, which reads as a selection box rather than a tap.
+ */
+@Composable
+fun FitRating(
+    rating: Int,
+    onRate: (Int) -> Unit,
+    starSize: Dp,
+    spacing: Dp = 10.dp,
+    readOnly: Boolean = false,
+    tint: Color = FitColors.Yellow.y400,
+    modifier: Modifier = Modifier,
+    star: @Composable (index: Int, filled: Boolean, tint: Color, size: Dp) -> Unit
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(spacing)
     ) {
         (1..5).forEach { index ->
-            Icon(
-                imageVector = if (index <= rating) Icons.Default.Star else Icons.Outlined.StarOutline,
-                contentDescription = null,
-                tint = FitColors.Yellow.y400,
-                modifier = Modifier
-                    .size(size.px)
-                    .clickable(enabled = !readOnly) { onRate(index) }
-            )
+            Box(
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    enabled = !readOnly
+                ) { onRate(index) }
+            ) {
+                star(index, index <= rating, tint, starSize)
+            }
         }
     }
 }

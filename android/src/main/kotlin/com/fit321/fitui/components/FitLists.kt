@@ -320,6 +320,19 @@ enum class FitParticipantState {
     Destructive
 }
 
+/**
+ * [pendingLabel] marks a participant who was invited and has not answered. It reads as a
+ * badge next to the subtitle rather than as another grey line under the name, because on a
+ * roster the one thing worth seeing without reading is who is still being waited on.
+ *
+ * [paymentLabel] overrides the built-in label for [payment]. The enum carries the meaning —
+ * cash in hand, a card charge, a credit spent — and the library spells it in English; a
+ * consumer that keeps its copy in resources passes its own string and keeps the meaning.
+ *
+ * [removeGlyph] and [chevronGlyph] are handed the tint and size the row would have drawn, so
+ * a consumer with its own icon family swaps the glyph without re-deriving the 28dp plate or
+ * the geometry around it — see the note on [FitChip].
+ */
 @Composable
 fun FitParticipant(
     name: String,
@@ -331,9 +344,17 @@ fun FitParticipant(
     onRemove: (() -> Unit)? = null,
     isPaid: Boolean = false,
     payment: FitParticipantPayment = FitParticipantPayment.None,
+    paymentLabel: String? = null,
+    pendingLabel: String? = null,
     isYou: Boolean = false,
     onTap: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    removeGlyph: @Composable (tint: Color, size: Dp) -> Unit = { tint, size ->
+        Icon(Icons.Default.Close, null, tint = tint, modifier = Modifier.size(size))
+    },
+    chevronGlyph: @Composable (tint: Color, size: Dp) -> Unit = { tint, size ->
+        Icon(Icons.Default.ChevronRight, null, tint = tint, modifier = Modifier.size(size))
+    }
 ) {
     val theme = LocalFitTheme.current
 
@@ -408,11 +429,17 @@ fun FitParticipant(
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1)
             ) {
                 Text(subtitle, style = FitFont.caption, color = subtitleColor)
-                when (payment) {
-                    FitParticipantPayment.Cash -> FitBadge("Cash", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.Card -> FitBadge("Card", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.Pack -> FitBadge("Pack", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.None -> {}
+                if (pendingLabel != null) {
+                    FitBadge(pendingLabel, FitBadgeStyle.Pending, compact = true)
+                }
+                val paymentText = paymentLabel ?: when (payment) {
+                    FitParticipantPayment.Cash -> "Cash"
+                    FitParticipantPayment.Card -> "Card"
+                    FitParticipantPayment.Pack -> "Pack"
+                    FitParticipantPayment.None -> null
+                }
+                if (payment != FitParticipantPayment.None && paymentText != null) {
+                    FitBadge(paymentText, FitBadgeStyle.Neutral, compact = true)
                 }
             }
         }
@@ -428,22 +455,11 @@ fun FitParticipant(
                         .clickable(onClick = onRemove),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.Default.Close,
-                        null,
-                        tint = FitColors.error,
-                        modifier = Modifier.size(12.dp)
-                    )
+                    removeGlyph(FitColors.error, 12.dp)
                 }
             }
 
-            trailing is FitParticipantTrailing.Chevron ->
-                Icon(
-                    Icons.Default.ChevronRight,
-                    null,
-                    tint = theme.textTertiary,
-                    modifier = Modifier.size(16.dp)
-                )
+            trailing is FitParticipantTrailing.Chevron -> chevronGlyph(theme.textTertiary, 16.dp)
 
             trailing is FitParticipantTrailing.Edit ->
                 Icon(
