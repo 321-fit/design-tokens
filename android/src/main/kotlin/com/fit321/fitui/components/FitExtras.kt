@@ -201,6 +201,10 @@ fun FitRating(
  *
  * There is no ripple: at these sizes a bounded indication paints a square behind the star,
  * which reads as a selection box rather than a tap.
+ *
+ * A rated star keeps the outline it had when it was empty and fills inside it, per
+ * `.fit-rating svg.filled`. Dropping the stroke on the way in would make the rated star
+ * narrower than the ones next to it, so a row of five would change width as it is filled.
  */
 @Composable
 fun FitRating(
@@ -219,7 +223,7 @@ fun FitRating(
         (1..5).forEach { index ->
             Icon(
                 painter = painterResource(
-                    if (index <= rating) R.drawable.ic_fit_star_filled else R.drawable.ic_fit_star
+                    if (index <= rating) R.drawable.ic_fit_star_rated else R.drawable.ic_fit_star
                 ),
                 contentDescription = null,
                 tint = tint,
