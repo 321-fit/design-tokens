@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -57,6 +59,17 @@ data class FitNavbarItem<T>(
  * The tab type is the consumer's own, not this library's: a product with a role-specific
  * tab set, or one tab the design gives the middle slot, cannot express itself in a closed
  * enum. [FitNavTab] is still there for a consumer that wants the named five.
+ *
+ * The bar draws the pill and nothing around it: the margin under it and the room a scrolling
+ * tab has to leave for it are the caller's, because only the caller knows the window insets.
+ *
+ * Two deliberate departures from `.fit-navbar`, both because the web rule does not survive
+ * the platform. The pill is an opaque surface rather than translucent white — Compose has no
+ * backdrop blur below API 31, and translucency without the blur behind it reads as a smear of
+ * whatever scrolled under it. And the shadow is drawn on light only, where the pill has to
+ * separate from a pale page; on dark it lands on a dark ground and does nothing but cost a
+ * layer. Items take equal shares of the width instead of a centred row of fixed squares, so
+ * the touch targets grow with the screen rather than clustering in the middle of a tablet.
  */
 @Composable
 fun <T> FitNavbar(
@@ -71,53 +84,59 @@ fun <T> FitNavbar(
 
     Row(
         modifier = modifier
-            .padding(horizontal = FitSpacing.sp4, vertical = FitSpacing.sp4)
-            .shadow(
-                elevation = 12.dp,
-                shape = pill,
-                ambientColor = Color.Black.copy(alpha = if (isDark) 0.4f else 0.15f),
-                spotColor = Color.Black.copy(alpha = if (isDark) 0.4f else 0.15f)
-            )
+            .fillMaxWidth()
+            .height(FitSize.navbarHeight)
+            .then(if (isDark) Modifier else Modifier.shadow(12.dp, pill))
             .clip(pill)
-            .background(FitColors.Gray.white.copy(alpha = if (isDark) 0.1f else 0.75f))
-            .padding(FitSpacing.sp1),
-        horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp3),
+            .background(if (isDark) theme.surfaceHigher else theme.surfaceHigh)
+            .padding(horizontal = FitSpacing.sp1),
+        horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1),
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEach { item ->
             val isActive = item.tab == activeTab
             Box(
                 modifier = Modifier
-                    .size(FitSize.navbarItemSize)
-                    .clip(pill)
-                    .then(
-                        if (isActive) Modifier.background(FitColors.selectionGradient, pill)
-                        else Modifier
-                    )
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) { onTabChange(item.tab) }
+                    .weight(1f)
+                    .height(FitSize.navbarItemSize),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = null,
-                    tint = when {
-                        isActive -> theme.textPrimary
-                        isDark -> FitColors.Gray.g300
-                        else -> FitColors.Gray.g400
-                    },
+                Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(FitSize.iconLg)
-                )
-                if (item.badgeCount > 0) {
-                    FitNavbarBadge(
-                        count = item.badgeCount,
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .offset(x = FitSize.navbarItemSize / 2 + 4.dp, y = 6.dp)
+                        .size(FitSize.navbarItemSize)
+                        .clip(pill)
+                        .then(
+                            if (isActive) Modifier.background(FitColors.selectionGradient, pill)
+                            else Modifier
+                        )
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onTabChange(item.tab) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = null,
+                        tint = when {
+                            isActive && isDark -> FitColors.Gray.white
+                            isActive -> theme.textPrimary
+                            isDark -> FitColors.Gray.g300
+                            else -> FitColors.Gray.g400
+                        },
+                        modifier = Modifier.size(FitSize.iconLg)
                     )
+                }
+                if (item.badgeCount > 0) {
+                    Box(modifier = Modifier.size(FitSize.iconLg)) {
+                        FitNavbarBadge(
+                            count = item.badgeCount,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .wrapContentSize(align = Alignment.TopStart, unbounded = true)
+                                .offset(x = FitSize.iconLg - 6.dp, y = (-9).dp)
+                        )
+                    }
                 }
             }
         }
