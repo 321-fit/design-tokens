@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import com.fit321.fitui.tokens.FitSpacing
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -48,6 +49,13 @@ fun FitButton(
      * `if (valid) Primary else Disabled` with their own `clickable(enabled = …)`.
      */
     enabled: Boolean = true,
+    /**
+     * A tap the screen has accepted and is still working on — a form CTA between submit and
+     * the answer. The label gives way to a spinner and the button stops taking taps, so a
+     * caller no longer has to gate `onClick` itself and leave the button looking idle while
+     * the request is in flight.
+     */
+    loading: Boolean = false,
     onClick: () -> Unit
 ) {
     val theme = LocalFitTheme.current
@@ -108,10 +116,18 @@ fun FitButton(
                 // Only meaningful when hugging the label: a full-width button centres its text and
                 // needs none. `.fit-btn` in fit-ui.css pads an auto-width button by 24px.
                 .then(if (fillWidth) Modifier else Modifier.padding(horizontal = FitSpacing.sp6))
-                .clickable(enabled = effectiveStyle != FitButtonStyle.Disabled) { onClick() },
+                .clickable(enabled = effectiveStyle != FitButtonStyle.Disabled && !loading) { onClick() },
             contentAlignment = Alignment.Center
         ) {
-            Text(title, color = fg, style = textStyle)
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(FitSize.iconLg),
+                    color = fg,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text(title, color = fg, style = textStyle)
+            }
         }
     }
 }
