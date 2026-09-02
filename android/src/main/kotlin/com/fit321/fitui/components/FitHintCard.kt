@@ -27,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitSpacing
@@ -103,7 +105,7 @@ fun FitHintCard(
             )
         }
         Icon(
-            imageVector = Icons.Default.ChevronRight,
+            imageVector = ImageVector.vectorResource(R.drawable.ic_fit_chevron_right),
             contentDescription = null,
             tint = theme.textTertiary,
             modifier = Modifier.size(18.dp),

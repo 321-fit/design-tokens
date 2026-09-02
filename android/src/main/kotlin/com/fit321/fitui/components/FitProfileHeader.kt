@@ -7,8 +7,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitSpacing
@@ -63,7 +66,7 @@ fun FitProfileHeader(
                     )
                     if (onEdit != null) {
                         FitIconBtn(
-                            icon = Icons.Default.Edit,
+                            icon = ImageVector.vectorResource(R.drawable.ic_fit_pencil),
                             color = FitIconBtnColor.Primary,
                             onClick = onEdit
                         )

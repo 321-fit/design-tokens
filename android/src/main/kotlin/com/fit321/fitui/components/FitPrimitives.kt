@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -450,7 +451,7 @@ fun FitCheckbox(
             contentAlignment = Alignment.Center
         ) {
             if (checked) {
-                Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(14.dp))
+                Icon(ImageVector.vectorResource(R.drawable.ic_fit_check), null, tint = Color.White, modifier = Modifier.size(14.dp))
             }
         }
         if (label != null) {

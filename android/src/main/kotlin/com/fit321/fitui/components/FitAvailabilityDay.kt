@@ -14,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -145,7 +148,7 @@ private fun IntervalRow(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Default.Close, null,
+                    ImageVector.vectorResource(R.drawable.ic_fit_close), null,
                     tint = FitColors.error,
                     modifier = Modifier.size(12.dp)
                 )

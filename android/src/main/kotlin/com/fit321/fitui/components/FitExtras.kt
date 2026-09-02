@@ -3,6 +3,7 @@ package com.fit321.fitui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -185,19 +186,54 @@ fun FitRating(
     size: FitRatingSize = FitRatingSize.Medium,
     readOnly: Boolean = false,
     modifier: Modifier = Modifier
+) = FitRating(
+    rating = rating,
+    onRate = onRate,
+    starSize = size.px,
+    readOnly = readOnly,
+    modifier = modifier
+)
+
+/**
+ * [starSize] is a [Dp] rather than a [FitRatingSize] because the sizes in the wild are not
+ * the three the enum names: a review screen sets its stars at the size of the question it
+ * asks, and a summary row at the size of the line it sits in.
+ *
+ * There is no ripple: at these sizes a bounded indication paints a square behind the star,
+ * which reads as a selection box rather than a tap.
+ *
+ * A rated star keeps the outline it had when it was empty and fills inside it, per
+ * `.fit-rating svg.filled`. Dropping the stroke on the way in would make the rated star
+ * narrower than the ones next to it, so a row of five would change width as it is filled.
+ */
+@Composable
+fun FitRating(
+    rating: Int,
+    onRate: (Int) -> Unit,
+    starSize: Dp,
+    spacing: Dp = 10.dp,
+    readOnly: Boolean = false,
+    tint: Color = FitColors.Yellow.y400,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(spacing)
     ) {
         (1..5).forEach { index ->
             Icon(
-                imageVector = if (index <= rating) Icons.Default.Star else Icons.Outlined.StarOutline,
+                painter = painterResource(
+                    if (index <= rating) R.drawable.ic_fit_star_rated else R.drawable.ic_fit_star
+                ),
                 contentDescription = null,
-                tint = FitColors.Yellow.y400,
+                tint = tint,
                 modifier = Modifier
-                    .size(size.px)
-                    .clickable(enabled = !readOnly) { onRate(index) }
+                    .size(starSize)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        enabled = !readOnly
+                    ) { onRate(index) }
             )
         }
     }

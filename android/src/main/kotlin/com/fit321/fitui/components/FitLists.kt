@@ -28,10 +28,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -117,7 +120,7 @@ fun FitSelectRow(
         when (trailing) {
             FitSelectRowTrailing.Chevron ->
                 Icon(
-                    Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                    ImageVector.vectorResource(R.drawable.ic_fit_chevron_right), null, tint = theme.textTertiary,
                     modifier = Modifier.size(FitSize.iconMd)
                 )
 
@@ -130,7 +133,7 @@ fun FitSelectRow(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        Icons.Default.Check,
+                        ImageVector.vectorResource(R.drawable.ic_fit_check),
                         null,
                         tint = Color.White,
                         modifier = Modifier.size(14.dp)
@@ -269,7 +272,7 @@ fun FitSettingsCard(
 
         if (trailing == FitSettingsTrailing.Chevron) {
             Icon(
-                Icons.Default.ChevronRight, null, tint = theme.textTertiary,
+                ImageVector.vectorResource(R.drawable.ic_fit_chevron_right), null, tint = theme.textTertiary,
                 modifier = Modifier.size(FitSize.settingsCardChevron)
             )
         }
@@ -320,6 +323,15 @@ enum class FitParticipantState {
     Destructive
 }
 
+/**
+ * [pendingLabel] marks a participant who was invited and has not answered. It reads as a
+ * badge next to the subtitle rather than as another grey line under the name, because on a
+ * roster the one thing worth seeing without reading is who is still being waited on.
+ *
+ * [paymentLabel] overrides the built-in label for [payment]. The enum carries the meaning —
+ * cash in hand, a card charge, a credit spent — and the library spells it in English; a
+ * consumer that keeps its copy in resources passes its own string and keeps the meaning.
+ */
 @Composable
 fun FitParticipant(
     name: String,
@@ -331,6 +343,8 @@ fun FitParticipant(
     onRemove: (() -> Unit)? = null,
     isPaid: Boolean = false,
     payment: FitParticipantPayment = FitParticipantPayment.None,
+    paymentLabel: String? = null,
+    pendingLabel: String? = null,
     isYou: Boolean = false,
     onTap: (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -408,11 +422,17 @@ fun FitParticipant(
                 horizontalArrangement = Arrangement.spacedBy(FitSpacing.sp1)
             ) {
                 Text(subtitle, style = FitFont.caption, color = subtitleColor)
-                when (payment) {
-                    FitParticipantPayment.Cash -> FitBadge("Cash", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.Card -> FitBadge("Card", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.Pack -> FitBadge("Pack", FitBadgeStyle.Neutral)
-                    FitParticipantPayment.None -> {}
+                if (pendingLabel != null) {
+                    FitBadge(pendingLabel, FitBadgeStyle.Pending, compact = true)
+                }
+                val paymentText = paymentLabel ?: when (payment) {
+                    FitParticipantPayment.Cash -> "Cash"
+                    FitParticipantPayment.Card -> "Card"
+                    FitParticipantPayment.Pack -> "Pack"
+                    FitParticipantPayment.None -> null
+                }
+                if (payment != FitParticipantPayment.None && paymentText != null) {
+                    FitBadge(paymentText, FitBadgeStyle.Neutral, compact = true)
                 }
             }
         }
@@ -429,8 +449,8 @@ fun FitParticipant(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        Icons.Default.Close,
-                        null,
+                        painter = painterResource(R.drawable.ic_fit_close),
+                        contentDescription = null,
                         tint = FitColors.error,
                         modifier = Modifier.size(12.dp)
                     )
@@ -439,15 +459,15 @@ fun FitParticipant(
 
             trailing is FitParticipantTrailing.Chevron ->
                 Icon(
-                    Icons.Default.ChevronRight,
-                    null,
+                    painter = painterResource(R.drawable.ic_fit_chevron_right),
+                    contentDescription = null,
                     tint = theme.textTertiary,
                     modifier = Modifier.size(16.dp)
                 )
 
             trailing is FitParticipantTrailing.Edit ->
                 Icon(
-                    Icons.Default.Edit,
+                    ImageVector.vectorResource(R.drawable.ic_fit_pencil),
                     null,
                     tint = theme.textTertiary,
                     modifier = Modifier.size(16.dp)

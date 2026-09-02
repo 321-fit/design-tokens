@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
+import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitRadius
@@ -84,7 +86,7 @@ fun FitStatTile(
         }
         if (showChevron) {
             Icon(
-                Icons.Default.ChevronRight,
+                ImageVector.vectorResource(R.drawable.ic_fit_chevron_right),
                 contentDescription = null,
                 tint = theme.textTertiary,
                 modifier = Modifier.size(18.dp)
