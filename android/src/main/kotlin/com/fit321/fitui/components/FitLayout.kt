@@ -172,13 +172,27 @@ fun FitHeader(
 @Composable
 fun FitFooter(
     topPadding: androidx.compose.ui.unit.Dp = 12.dp,
+    /**
+     * The plate behind the footer. Defaults to the screen ground, which is what a footer
+     * over a scrolling list needs. A screen whose footer sits on artwork — the entrance
+     * photo, a cover image — passes [Color.Transparent] so the picture keeps running to
+     * the bottom edge.
+     */
+    background: Color? = null,
     content: @Composable () -> Unit
 ) {
     val theme = LocalFitTheme.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(theme.screenBg)
+            .background(background ?: theme.screenBg)
+            // The safe area this component has always promised. SwiftUI hands it over for
+            // free, so the Swift original could stop at a fixed bottom padding; Android
+            // draws edge to edge with nothing consuming the insets, and the same 32dp then
+            // measured from the screen edge rather than from the bar — which put the CTA
+            // under three-button navigation on every screen that trusted this wrapper.
+            // The plate is painted before the inset so it still runs behind the bar.
+            .navigationBarsPadding()
             .padding(horizontal = FitSpacing.sp4)
             .padding(top = topPadding, bottom = FitSpacing.sp8)
     ) {
