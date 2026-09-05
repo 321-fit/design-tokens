@@ -109,6 +109,11 @@ fun FitSheet(
                     bottom = if (variant == FitSheetVariant.Standard) FitSpacing.sp9 else 28.dp
                 )
                 .navigationBarsPadding()
+                // A sheet with a field in it is half the sheets we have, and the keyboard
+                // covers whatever it likes — 302dp on a third-party one against ~270dp for
+                // the stock. Reading the inset is the only version of this that is right on
+                // every device.
+                .imePadding()
         ) {
             content()
         }
