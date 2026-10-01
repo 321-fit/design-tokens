@@ -14,6 +14,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
@@ -355,19 +359,32 @@ private fun FitAvatarPlate(
             )
             return@Box
         }
-        // Initials stay underneath rather than behind a conditional: they are the
-        // placeholder while the photo loads and the fallback if it never does, which
-        // is what AsyncImage does on the SwiftUI side.
-        Text(
-            initials.take(2).uppercase(),
-            color = ink,
-            style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
-        )
+        // Initials are the placeholder while the photo loads and the fallback if it never
+        // does, so they give way the moment it succeeds — SwiftUI's `AsyncImage` switches
+        // on `.success` for the same reason. Keeping them underneath instead would show
+        // them through any photo with an alpha channel (a logo, a cut-out portrait).
+        //
+        // "Succeeds" also means the bytes are a picture. Avatar stores hold translucent
+        // 1x1 stubs for accounts that never uploaded one, and Coil reports those as a
+        // success: stretched over the plate they are a faint wash, so anything that small
+        // counts as no photo and the initials stay.
+        var photoLoaded by remember(imageUrl) { mutableStateOf(false) }
+        if (!photoLoaded) {
+            Text(
+                initials.take(2).uppercase(),
+                color = ink,
+                style = FitFont.body1.copy(fontSize = fontSize, fontWeight = fontWeight)
+            )
+        }
         if (!imageUrl.isNullOrBlank()) {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                onState = { state ->
+                    photoLoaded = state is AsyncImagePainter.State.Success &&
+                        state.painter.intrinsicSize.minDimension >= MIN_PHOTO_SIZE_PX
+                },
                 modifier = Modifier.matchParentSize().clip(shapeValue)
             )
         }
@@ -381,6 +398,8 @@ private fun FitAvatarPlate(
  * wanted one of these two, and each one that supplied its own glyph is how the ring, the
  * plate and the icon size drifted apart in the first place.
  */
+private const val MIN_PHOTO_SIZE_PX = 8f
+
 enum class FitAvatarBadge { None, Edit, Add }
 
 /**
