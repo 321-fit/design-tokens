@@ -244,8 +244,10 @@ Text is single-line (`maxLines = 1, softWrap = false`) — a squeezed badge trun
 **Optional props:**
 - `size: enum { xs (24), sm (32), md (40, default), lg (48), xl (80) }`
 - `bg: enum { brand (gradient), gray, surfaceHigher }`
-- `image: URL?` (iOS) / `imageUrl: String?` (Android) — the photo; initials stay underneath
-  as the placeholder while it loads and the fallback if it never does
+- `image: URL?` (iOS) / `imageUrl: String?` (Android) — the photo. Initials are the
+  placeholder while it loads and the fallback if it never does, and they give way the moment
+  it succeeds: drawing them under the photo shows them through any image with an alpha
+  channel (a logo, a cut-out portrait)
 - `textColor` / `fontWeight` (Android) — initials colour and weight; a `bg` that is not the
   brand gradient usually needs the first, a large avatar sometimes the second
 - `shape: enum { circle (default), rect10 }` — rect10 for session/template icons
