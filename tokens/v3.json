@@ -1,0 +1,163 @@
+{
+  "v3": {
+    "comment": "UI rework grammar (issue #54), Compose only. Deliberately its own top-level category: the Style Dictionary platforms filter on `color` / `font` / `spacing` / `component`, so nothing in here reaches Sources/FitUI/Tokens/Generated or android/src/main/res. The Compose mirror is android/src/main/kotlin/com/fit321/fitui/v3/tokens/FitV3Colors.kt; values come from the prototype (prototypes/flows/coach/dashboard-drafts.html, the .k-alpha block) and from the athlete .fit-light recipe, which is canonical over the spec table.",
+
+    "canvas": {
+      "tinted": {
+        "value": "linear-gradient(180deg, #0a5f68 0%, #084653 22%, #062e3b 48%, #05202a 72%, #04161d 100%)",
+        "comment": "The tinted canvas IS the screen, top to bottom — not a wash behind a header. Nothing below it carries its own colour."
+      },
+      "tinted-glow": {
+        "value": "radial-gradient(120% 48% at 50% -8%, rgba(0,190,215,0.60), rgba(5,224,166,0.10) 55%, transparent 78%)",
+        "comment": "Painted over the base gradient. Centre sits above the top edge, so the brightest point is off-screen and the screen opens on the fall-off."
+      },
+      "light": {
+        "value": "{color.screen.light}",
+        "comment": "The athlete keeps the existing light canvas — the rework changes the shapes, not the background."
+      },
+      "light-glow": {
+        "value": "radial-gradient(120% 80% at 50% 0%, rgba(0,167,208,0.22), rgba(5,224,166,0.07) 45%, transparent 72%)",
+        "comment": "The same brand breath at roughly half the strength: on #F2F2F7 the dark alphas read as a stain."
+      }
+    },
+
+    "surface": {
+      "tinted": {
+        "value": "rgba(0,0,0,0.28)",
+        "comment": "Panel, card, chip, input, segmented, stepper, select row. A flat darkening of the canvas — no blur, no opaque fill."
+      },
+      "tinted-hairline": {
+        "value": "rgba(255,255,255,0.06)",
+        "comment": "Inset 1px edge. On tinted the edge comes from the hairline; on light it comes from the shadow."
+      },
+      "light": {
+        "value": "{color.gray.white}",
+        "comment": "Same shapes, white body."
+      },
+      "light-shadow": {
+        "value": "{elevation.2.light}",
+        "comment": "Reuses the existing card lift (FitElevation.fitCardElevation) rather than inventing a second shadow."
+      }
+    },
+
+    "raised": {
+      "tinted": {
+        "value": "rgba(255,255,255,0.14)",
+        "comment": "Anything that sits ON a surface: avatar, icon plate, face."
+      },
+      "light": {
+        "value": "{color.gray.100}"
+      },
+      "face-tinted": {
+        "value": "#2b5f6a",
+        "comment": "A face in a STACK is opaque — translucent faces show each other through. One fill per canvas hue; teal is the shipped one."
+      },
+      "face-light": {
+        "value": "{color.gray.200}"
+      }
+    },
+
+    "text": {
+      "primary-tinted":   { "value": "#ffffff" },
+      "secondary-tinted": { "value": "rgba(255,255,255,0.74)" },
+      "tertiary-tinted":  { "value": "rgba(255,255,255,0.52)" },
+      "primary-light":    { "value": "{color.text.primary.light}" },
+      "secondary-light":  { "value": "{color.text.secondary.light}" },
+      "tertiary-light":   { "value": "{color.text.tertiary.light}" }
+    },
+
+    "divider": {
+      "tinted": { "value": "rgba(255,255,255,0.10)" },
+      "light":  { "value": "{color.divider.light}" }
+    },
+
+    "cta": {
+      "tinted": {
+        "value": "linear-gradient(180deg, #ffffff 0%, #f3f7f8 45%, #e2ebee 100%)",
+        "comment": "The one solid object on a coloured screen. Flat teal was tried and rejected 2026-09-14: the brand gradient is already the canvas, so a gradient button has nothing to stand out against."
+      },
+      "tinted-label":     { "value": "#12161a" },
+      "tinted-highlight": { "value": "rgba(255,255,255,0.95)", "comment": "Inset hairline on the top edge — paper, not plastic." },
+      "tinted-shadow":    { "value": "rgba(0,0,0,0.45)" },
+      "light": {
+        "value": "{gradient.brand-horizontal}",
+        "comment": "On the light canvas the brand gradient still reads, so primary stays as it is today."
+      },
+      "light-label": { "value": "{color.gray.white}" }
+    },
+
+    "secondary-button": {
+      "tinted-fill":   { "value": "rgba(255,255,255,0.10)" },
+      "tinted-border": { "value": "rgba(255,255,255,0.18)" },
+      "light-fill":    { "value": "{color.surface.high.light}" },
+      "light-border":  { "value": "{color.divider.light}" }
+    },
+
+    "material": {
+      "tinted": {
+        "value": "rgba(5,24,31,0.80)",
+        "comment": "Sheets, menus, snackbars. Blur belongs here and nowhere else — a sheet is a layer above the screen, and the screen showing through is what says so."
+      },
+      "tinted-blur":     { "value": 28 },
+      "tinted-edge":     { "value": "rgba(255,255,255,0.14)" },
+      "tinted-scrim":    { "value": "rgba(2,12,16,0.45)" },
+      "light":           { "value": "{color.screen.light}" },
+      "light-scrim":     { "value": "rgba(0,0,0,0.35)" }
+    },
+
+    "bar": {
+      "tinted": {
+        "value": "rgba(4,22,29,0.88)",
+        "comment": "Bars over scrolling content (header, footer) — translucent, so the canvas keeps running underneath."
+      },
+      "light": { "value": "{color.screen.light}" }
+    },
+
+    "state": {
+      "pressed-tinted":  { "value": "rgba(255,255,255,0.06)" },
+      "pressed-light":   { "value": "rgba(60,60,67,0.05)" },
+      "disabled-tinted": { "value": "rgba(255,255,255,0.10)" },
+      "disabled-light":  { "value": "{color.bg.disabled.light}" },
+      "selected-tinted-fill":   { "value": "rgba(5,224,166,0.14)" },
+      "selected-tinted-border": { "value": "rgba(5,224,166,0.45)" },
+      "selected-light-fill":    { "value": "{color.bg.brand-subtle.light}" },
+      "selected-light-border":  { "value": "{color.border.selection}" },
+      "segmented-selected-tinted": { "value": "rgba(255,255,255,0.16)" }
+    },
+
+    "geometry": {
+      "comment": "Measurements the rework adds. Values that already exist (radius 14/16, screen inset 16) are referenced, not redeclared.",
+      "screenInset":        { "value": 16 },
+      "panelRadius":        { "value": 22 },
+      "panelPadding":       { "value": 6 },
+      "rowRadius":          { "value": 16 },
+      "rowPadding":         { "value": 12 },
+      "rowGap":             { "value": 12 },
+      "rowSubGap":          { "value": 2 },
+      "sectionTitleTop":    { "value": 20 },
+      "sectionTitleSide":   { "value": 20 },
+      "sectionTitleBottom": { "value": 8 },
+      "sectionTitleFirstTop": { "value": 8 },
+      "fieldHeight":        { "value": 56 },
+      "fieldRadius":        { "value": 14 },
+      "footerCtaHeight":    { "value": 50 },
+      "footerCtaSide":      { "value": 20 },
+      "footerCtaBottom":    { "value": 26 },
+      "actionCircle":       { "value": 52 },
+      "actionCircleIcon":   { "value": 23 },
+      "actionCircleBadge":  { "value": 20 },
+      "chipRadius":         { "value": 14 },
+      "chipPaddingY":       { "value": 10 },
+      "chipPaddingX":       { "value": 14 },
+      "chipDot":            { "value": 8 },
+      "checkCircle":        { "value": 22 },
+      "stepperButton":      { "value": 40 },
+      "leadingPlate":       { "value": 40 },
+      "leadingPlateRadius": { "value": 12 },
+      "identityAvatar":     { "value": 84 },
+      "identityStack":      { "value": 56 },
+      "profileAvatar":      { "value": 72 },
+      "profileCompactAvatar": { "value": 68 }
+    }
+  }
+}
