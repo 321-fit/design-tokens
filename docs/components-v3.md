@@ -96,6 +96,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSelectListRow` + `FitSelectCheck` (brand wash + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
 
+### The snackbar does not follow the canvas
+
+It floats over content instead of replacing a surface, so it stays dark in **both** looks: near-black on light (the canon snackbar, unchanged), the bar colour at 88% on tinted. Its text is white and its action teal-400 in both — reading them from the palette is what made the light one vanish into `#F2F2F7`. `material` is the sheet's colour and is not interchangeable with it.
+
 ### Two marks, not one
 
 A picker and a select list do not share a tick, and swapping them is easy to do by accident:

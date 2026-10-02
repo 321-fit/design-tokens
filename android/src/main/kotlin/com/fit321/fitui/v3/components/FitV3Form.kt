@@ -1,6 +1,7 @@
 package com.fit321.fitui.v3.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -168,27 +169,28 @@ fun FitV3Snackbar(
     onAction: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(percent = 50)
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .background(palette.material, RoundedCornerShape(percent = 50))
-            .padding(horizontal = 16.dp),
+            .background(palette.snackbar, shape)
+            .border(1.dp, palette.snackbarEdge, shape)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
             text = text,
-            style = FitV3Type.rowValue,
-            color = palette.textPrimary,
-            maxLines = 1,
+            style = FitV3Type.identityContext,
+            color = FitColors.Gray.white,
+            maxLines = 2,
             modifier = Modifier.weight(1f),
         )
         if (actionLabel != null && onAction != null) {
             Text(
                 text = actionLabel,
-                style = FitV3Type.rowValue,
-                color = FitColors.Teal.t500,
+                style = FitV3Type.chip,
+                color = FitColors.Teal.t400,
                 modifier = Modifier
                     .clip(RoundedCornerShape(percent = 50))
                     .clickable { onAction() }

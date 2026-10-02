@@ -113,6 +113,16 @@
       "light-scrim":     { "value": "rgba(0,0,0,0.35)" }
     },
 
+    "snackbar": {
+      "comment": "The snackbar is dark in BOTH looks \u2014 it floats over content rather than replacing a surface, so it does not follow the canvas. On light it is the same near-black the canon snackbar has always been; on tinted it is the bar colour with a blur behind it.",
+      "tinted":      { "value": "rgba(4,22,29,0.88)" },
+      "tinted-edge": { "value": "rgba(255,255,255,0.14)" },
+      "light":       { "value": "{color.gray.black}" },
+      "light-edge":  { "value": "rgba(255,255,255,0.06)" },
+      "ink":         { "value": "{color.gray.white}" },
+      "action":      { "value": "{color.teal.400}" }
+    },
+
     "bar": {
       "tinted": {
         "value": "rgba(4,22,29,0.88)",
