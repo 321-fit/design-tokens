@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.fit321.designtokens.R
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
@@ -149,7 +152,7 @@ fun FitSelectListRow(
             title = title,
             subtitle = subtitle,
             trailing = if (selected) {
-                { FitCheckCircle(checked = true) }
+                { FitSelectCheck() }
             } else {
                 null
             },
@@ -192,6 +195,23 @@ fun FitV3Snackbar(
                     .padding(horizontal = 4.dp, vertical = 2.dp),
             )
         }
+    }
+}
+
+@Composable
+fun FitSelectCheck(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(FitV3Geometry.checkCircle)
+            .background(FitColors.Teal.t600, RoundedCornerShape(6.dp)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_fit_check),
+            contentDescription = null,
+            tint = FitColors.Gray.white,
+            modifier = Modifier.size(12.dp),
+        )
     }
 }
 

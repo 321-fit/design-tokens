@@ -93,8 +93,15 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitPickRow` + `FitCheckCircle` (22, muted with the reason) | `FitCheckbox`, `FitSelectionGroup` | 4 | ✅ built |
 | `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | ✅ built |
 | `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | ✅ built |
-| `FitSelectListRow` (teal tint + teal hairline when selected) | — | 5 | ✅ built |
+| `FitSelectListRow` + `FitSelectCheck` (brand wash + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
+
+### Two marks, not one
+
+A picker and a select list do not share a tick, and swapping them is easy to do by accident:
+
+- **`FitCheckCircle`** (`FitPickRow`) — a 22 circle, teal-**500** fill, and a **dark** tick `#06251f`. The dark tick is the same in both looks on purpose: teal-500 is a bright mint and white on it is the weaker pair.
+- **`FitSelectCheck`** (`FitSelectListRow`) — a 22 rounded square (radius 6), teal-**600** fill, **white** tick, and it exists only while the row is selected.
 
 ### A selection tint is not a surface
 
