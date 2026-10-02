@@ -84,16 +84,20 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitIdentity` (centred, avatar 84, name 28/700) · `FitIdentityCompact` (22/700 + stats 15/600) | `FitProfileHero` | 2 | ✅ built |
 | `FitProfileHeader` (cover → row → stats) · `FitProfileCover` · `FitProfileStats` · `FitProfileCard` | `FitProfileHeader` | 2 | ✅ built |
 | `FitV3Avatar` (plate on canvas / on surface / brand) | `FitAvatar` | 2 | ✅ built |
-| `FitActionCircle` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | to build |
-| `FitChip.needs(dot:)` (red money · blue question · yellow review · grey waiting) | `FitChip` | 3 | to build |
-| `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | to build |
-| `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | to build |
+| `FitActionCircle` + `FitActionCircleRow` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | ✅ built |
+| `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting) | `FitChip` | 3 | ✅ built |
+| `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
+| `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
 | `FitSessionCard` | — (app code today) | 4 | to build |
 | `FitChip` sport variant | `FitChip` | 4 | to build |
 | `FitPickRow` (check circle 22, muted with the reason) | `FitCheckbox`, `FitSelectionGroup` | 4 | to build |
 | `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | to build |
 | `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | to build |
 | `FitSnackbar` (action slot, 5s) | `FitSnackbar` | 5 | to build |
+
+### Icon slots carry no colour
+
+`FitActionCircle` and `FitRowPlate` take the glyph as a slot and provide `LocalContentColor` around it, so a Material `Icon` with its default tint comes out right in both looks — white-on-teal inside a filled circle, `#12161a` inside the white one. A call site that hardcodes a tint defeats it; pass the painter and let the component colour it.
 
 ### What v3 reuses from v2
 

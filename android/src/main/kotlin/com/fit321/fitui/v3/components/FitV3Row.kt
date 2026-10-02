@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -128,8 +130,9 @@ fun FitRowPlate(
             .size(FitV3Geometry.leadingPlate)
             .background(palette.raised, RoundedCornerShape(FitV3Geometry.leadingPlateRadius)),
         contentAlignment = Alignment.Center,
-        content = { content() },
-    )
+    ) {
+        CompositionLocalProvider(LocalContentColor provides palette.textSecondary) { content() }
+    }
 }
 
 @Composable

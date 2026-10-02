@@ -135,7 +135,17 @@
         "value": "rgba(255,255,255,0.22)",
         "comment": "The add row's border. Stronger than the divider on purpose \u2014 it is the only affordance on an otherwise empty panel."
       },
-      "dashed-light": { "value": "{color.gray.300}" }
+      "dashed-light": { "value": "{color.gray.300}" },
+      "circle-outline-tinted": {
+        "value": "rgba(255,255,255,0.30)",
+        "comment": "An action circle that is not the expected answer: outline only."
+      },
+      "circle-outline-light": { "value": "{color.gray.500}" },
+      "action-primary-label-tinted": {
+        "value": "#ffffff",
+        "comment": "The label under the filled circle. On the tinted canvas the fill is white, so the word cannot be \u2014 it goes plain white; on light the fill is the brand gradient and the word carries the brand colour."
+      },
+      "action-primary-label-light": { "value": "{color.brand.primary}" }
     },
 
     "geometry": {
