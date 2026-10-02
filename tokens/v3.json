@@ -143,7 +143,13 @@
         "comment": "The brand wash at 10%, not a flat tint: `bg.brand-subtle` is teal-600 at 16%, which on a white row reads as a solid mint block rather than a selection."
       },
       "selected-light-border":  { "value": "{color.border.selection}" },
-      "segmented-selected-tinted": { "value": "rgba(255,255,255,0.16)" },
+      "segmented-selected-tinted": {
+        "value": "rgba(255,255,255,0.16)",
+        "comment": "Only the tinted look drops the selection gradient: teal on a teal canvas does not separate. On light the gradient stays, because a white tab on a white track is invisible."
+      },
+      "segmented-selected-light":     { "value": "{gradient.selection-overlay}" },
+      "segmented-selected-ink-tinted": { "value": "#ffffff" },
+      "segmented-selected-ink-light":  { "value": "{color.text.on-brand.light}" },
       "dashed-tinted": {
         "value": "rgba(255,255,255,0.22)",
         "comment": "The add row's border. Stronger than the divider on purpose \u2014 it is the only affordance on an otherwise empty panel."

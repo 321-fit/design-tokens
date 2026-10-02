@@ -55,8 +55,12 @@ fun <T> FitSegmented(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(FitV3Geometry.fieldRadius - 4.dp))
-                    .background(
-                        if (isSelected) palette.segmentedSelected else Color.Transparent,
+                    .then(
+                        if (isSelected) {
+                            Modifier.background(palette.segmentedSelected)
+                        } else {
+                            Modifier
+                        },
                     )
                     .clickable { onSelectedChange(option) }
                     .padding(vertical = 10.dp),
@@ -65,7 +69,7 @@ fun <T> FitSegmented(
                 Text(
                     text = label(option),
                     style = FitV3Type.rowValue,
-                    color = if (isSelected) palette.textPrimary else palette.textSecondary,
+                    color = if (isSelected) palette.segmentedSelectedInk else palette.textSecondary,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                 )

@@ -96,6 +96,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSelectListRow` + `FitSelectCheck` (brand wash + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
 
+### Only tinted drops the selection gradient
+
+`FitSegmented` marks the selected tab with the brand selection wash in both looks — **except** on tinted, where that wash is teal over a teal canvas and does not separate, so it becomes white at 16% instead. Carrying the tinted recipe into light is what produced a white tab on a white track. The label follows the fill: white on tinted, `text.on-brand` (blue-700) on light.
+
 ### The snackbar does not follow the canvas
 
 It floats over content instead of replacing a surface, so it stays dark in **both** looks: near-black on light (the canon snackbar, unchanged), the bar colour at 88% on tinted. Its text is white and its action teal-400 in both — reading them from the palette is what made the light one vanish into `#F2F2F7`. `material` is the sheet's colour and is not interchangeable with it.
