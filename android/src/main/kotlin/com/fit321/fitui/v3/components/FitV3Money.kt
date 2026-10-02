@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Type
 
@@ -49,7 +48,7 @@ fun FitMoneyWidget(
                 Text(
                     text = amount,
                     style = FitV3Type.moneyHeadline,
-                    color = if (due) FitColors.Red.r400 else palette.textPrimary,
+                    color = if (due) palette.textError else palette.textPrimary,
                 )
                 if (context != null) {
                     Text(

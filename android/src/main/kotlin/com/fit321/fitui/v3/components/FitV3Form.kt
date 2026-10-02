@@ -69,7 +69,7 @@ fun <T> FitSegmented(
                 Text(
                     text = label(option),
                     style = FitV3Type.rowValue,
-                    color = if (isSelected) palette.segmentedSelectedInk else palette.textSecondary,
+                    color = if (isSelected) palette.onBrandInk else palette.textSecondary,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                 )
@@ -122,7 +122,7 @@ private fun FitStepperButton(
         modifier = Modifier
             .size(FitV3Geometry.stepperButton)
             .alpha(if (enabled) 1f else 0.35f)
-            .background(palette.raised, CircleShape)
+            .background(palette.control, CircleShape)
             .clickable(enabled = enabled) { onClick() },
         contentAlignment = Alignment.Center,
     ) {

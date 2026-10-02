@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.tokens.FitColors
@@ -48,7 +49,7 @@ fun FitActionCircleRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.Top,
         content = content,
@@ -69,9 +70,7 @@ fun FitActionCircle(
     val palette = LocalFitV3Palette.current
     val fill: Brush? = when (style) {
         FitActionCircleStyle.Primary -> Brush.verticalGradient(colorStops = palette.ctaStops.toTypedArray())
-        FitActionCircleStyle.Danger -> Brush.verticalGradient(
-            listOf(FitColors.Red.r400, FitColors.Red.r400),
-        )
+        FitActionCircleStyle.Danger -> SolidColor(palette.textError)
         else -> null
     }
     val border = when (style) {
@@ -87,7 +86,7 @@ fun FitActionCircle(
     }
     val labelColor = when (style) {
         FitActionCircleStyle.Primary -> palette.actionPrimaryLabel
-        FitActionCircleStyle.Danger -> FitColors.Red.r400
+        FitActionCircleStyle.Danger -> palette.textError
         FitActionCircleStyle.Ask -> FitColors.Teal.t500
         FitActionCircleStyle.Outline -> palette.textPrimary
     }
@@ -138,13 +137,14 @@ private fun FitActionBadge(
 ) {
     val palette = LocalFitV3Palette.current
     val background = when (tone) {
-        FitActionBadgeTone.Money -> FitColors.Red.r400
-        FitActionBadgeTone.Review -> FitColors.Yellow.y400
+        FitActionBadgeTone.Money -> palette.textError
+        FitActionBadgeTone.Review -> palette.perimeterAttention
         FitActionBadgeTone.Calm -> palette.raised
     }
     val ink = when (tone) {
         FitActionBadgeTone.Calm -> palette.textSecondary
-        else -> FitColors.Gray.white
+        FitActionBadgeTone.Review -> palette.badgeReviewInk
+        FitActionBadgeTone.Money -> FitColors.Gray.white
     }
     Box(
         modifier = modifier
@@ -184,7 +184,7 @@ fun FitNeedsChip(
     val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.chipRadius)
     val dot = when (tone) {
-        FitNeedsTone.Money -> FitColors.Red.r400
+        FitNeedsTone.Money -> palette.textError
         FitNeedsTone.Question -> FitColors.brandPrimary
         FitNeedsTone.Review -> FitColors.Yellow.y400
         FitNeedsTone.Waiting -> FitColors.Gray.g500

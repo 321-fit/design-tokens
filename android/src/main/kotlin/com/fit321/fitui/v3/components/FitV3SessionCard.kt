@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
+import com.fit321.fitui.v3.tokens.FitV3Colors
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
 
@@ -152,14 +154,14 @@ fun FitSportChip(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         if (icon != null) {
-            CompositionLocalProvider(LocalContentColor provides palette.textPrimary) {
+            CompositionLocalProvider(LocalContentColor provides palette.onBrandInk) {
                 Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) { icon() }
             }
         }
         Text(
             text = name,
             style = FitV3Type.fieldText,
-            color = palette.textPrimary,
+            color = palette.onBrandInk,
             maxLines = 1,
         )
     }
@@ -201,6 +203,7 @@ fun FitCheckCircle(
     val on = checked && enabled
     Box(
         modifier = modifier
+            .alpha(if (enabled) 1f else 0.35f)
             .size(FitV3Geometry.checkCircle)
             .background(
                 color = if (on) FitColors.Teal.t500 else Color.Transparent,
@@ -213,7 +216,7 @@ fun FitCheckCircle(
             Icon(
                 painter = painterResource(R.drawable.ic_fit_check),
                 contentDescription = null,
-                tint = Color(0xFF06251F),
+                tint = FitV3Colors.pickTick,
                 modifier = Modifier.size(13.dp),
             )
         }

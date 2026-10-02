@@ -96,6 +96,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSelectListRow` + `FitSelectCheck` (brand wash + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
 
+### Status colour splits by look too
+
+`textError`, the next-session perimeters and the attention tint are palette entries, not `FitColors` constants, for the same reason the canon theme splits `text.error`: red-400 reads on a dark canvas and shouts on white (light takes red-700), and a yellow-400 perimeter vanishes on `#F2F2F7` (light takes yellow-600). The one deliberate constant is the review badge's ink — a yellow badge carries a dark number in both looks, because white on yellow is the unreadable pair.
+
 ### Only tinted drops the selection gradient
 
 `FitSegmented` marks the selected tab with the brand selection wash in both looks — **except** on tinted, where that wash is teal over a teal canvas and does not separate, so it becomes white at 16% instead. Carrying the tinted recipe into light is what produced a white tab on a white track. The label follows the fill: white on tinted, `text.on-brand` (blue-700) on light.

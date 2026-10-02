@@ -51,7 +51,7 @@ fun FitInput(
     val focused by interaction.collectIsFocusedAsState()
     val shape = RoundedCornerShape(FitV3Geometry.fieldRadius)
     val edge = when {
-        errorText != null -> FitColors.Red.r400
+        errorText != null -> palette.textError
         focused -> FitColors.Teal.t600
         else -> null
     }
@@ -122,7 +122,7 @@ fun FitInput(
                 Text(
                     text = below.orEmpty(),
                     style = FitV3Type.fieldHint,
-                    color = if (errorText != null) FitColors.Red.r400 else palette.textTertiary,
+                    color = if (errorText != null) palette.textError else palette.textTertiary,
                     modifier = Modifier.weight(1f),
                 )
                 if (counterMax != null) {

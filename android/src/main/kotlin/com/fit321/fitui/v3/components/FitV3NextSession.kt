@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
@@ -41,11 +40,11 @@ fun FitNextSessionCard(
     val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.panelRadius)
     val perimeter = when (state) {
-        FitNextSessionState.Planned -> FitColors.Teal.t500.copy(alpha = 0.75f)
-        FitNextSessionState.Request, FitNextSessionState.Awaiting -> FitColors.Yellow.y400
+        FitNextSessionState.Planned -> palette.perimeterPlanned
+        FitNextSessionState.Request, FitNextSessionState.Awaiting -> palette.perimeterAttention
     }
     val tint = when (state) {
-        FitNextSessionState.Request -> FitColors.Yellow.y600.copy(alpha = 0.10f)
+        FitNextSessionState.Request -> palette.attentionTint
         else -> Color.Transparent
     }
     val density = LocalDensity.current

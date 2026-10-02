@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -67,7 +68,7 @@ fun FitProfileCover(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .fillMaxSize(0.55f)
+                .fillMaxHeight(0.55f)
                 .background(
                     Brush.verticalGradient(
                         listOf(Color.Transparent, Color(0x8C000000)),
@@ -135,7 +136,7 @@ fun FitProfileHeader(
                 size = FitV3Geometry.profileAvatar,
                 imageUrl = avatarUrl,
                 plate = FitV3AvatarPlate.Brand,
-                modifier = Modifier.border(3.dp, Color.White.copy(alpha = 0.12f), CircleShape),
+                modifier = Modifier.border(3.dp, palette.avatarRing, CircleShape),
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
