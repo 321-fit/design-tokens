@@ -40,6 +40,7 @@ data class FitV3Palette(
     val selectedFill: Color,
     val selectedBorder: Color,
     val segmentedSelected: Color,
+    val dashed: Color,
 )
 
 object FitV3Colors {
@@ -91,6 +92,7 @@ object FitV3Colors {
         selectedFill = Color(0x2405E0A6),
         selectedBorder = Color(0x7305E0A6),
         segmentedSelected = Color(0x29FFFFFF),
+        dashed = Color(0x38FFFFFF),
     )
 
     val light = FitV3Palette(
@@ -136,6 +138,7 @@ object FitV3Colors {
         selectedFill = FitColors.Teal.t600.copy(alpha = 0.16f),
         selectedBorder = FitColors.Teal.t600,
         segmentedSelected = FitColors.Gray.white,
+        dashed = FitColors.Gray.g300,
     )
 
     fun of(look: FitV3Look): FitV3Palette = when (look) {

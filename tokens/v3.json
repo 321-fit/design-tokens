@@ -122,7 +122,12 @@
       "selected-tinted-border": { "value": "rgba(5,224,166,0.45)" },
       "selected-light-fill":    { "value": "{color.bg.brand-subtle.light}" },
       "selected-light-border":  { "value": "{color.border.selection}" },
-      "segmented-selected-tinted": { "value": "rgba(255,255,255,0.16)" }
+      "segmented-selected-tinted": { "value": "rgba(255,255,255,0.16)" },
+      "dashed-tinted": {
+        "value": "rgba(255,255,255,0.22)",
+        "comment": "The add row's border. Stronger than the divider on purpose \u2014 it is the only affordance on an otherwise empty panel."
+      },
+      "dashed-light": { "value": "{color.gray.300}" }
     },
 
     "geometry": {
