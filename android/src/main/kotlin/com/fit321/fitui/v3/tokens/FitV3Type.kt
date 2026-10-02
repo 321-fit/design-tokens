@@ -3,15 +3,22 @@ package com.fit321.fitui.v3.tokens
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.TextUnit
 import com.fit321.fitui.tokens.FitFont
 
 object FitV3Type {
 
-    private fun style(size: Int, weight: FontWeight, lineHeight: Int) = TextStyle(
+    private fun style(
+        size: Int,
+        weight: FontWeight,
+        lineHeight: Int,
+        letterSpacing: TextUnit = TextUnit.Unspecified,
+    ) = TextStyle(
         fontFamily = FitFont.family,
         fontWeight = weight,
         fontSize = size.sp,
         lineHeight = lineHeight.sp,
+        letterSpacing = letterSpacing,
     )
 
     val sectionTitle = style(15, FontWeight.SemiBold, 20)
@@ -43,6 +50,10 @@ object FitV3Type {
     val ringValue = style(34, FontWeight.Bold, 36)
     val ringTotal = style(18, FontWeight.SemiBold, 24)
     val rowValueBold = style(14, FontWeight.SemiBold, 19)
+
+    val detailHero = style(32, FontWeight.SemiBold, 38, (-0.5).sp)
+    val detailHeroSub = style(14, FontWeight.Normal, 20)
+    val sheetTitle = style(18, FontWeight.Medium, 23)
 
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     val moneyHero = style(48, FontWeight.Bold, 54)

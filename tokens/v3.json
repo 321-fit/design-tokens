@@ -1,11 +1,10 @@
 {
   "v3": {
     "comment": "UI rework grammar (issue #54), Compose only. Deliberately its own top-level category: the Style Dictionary platforms filter on `color` / `font` / `spacing` / `component`, so nothing in here reaches Sources/FitUI/Tokens/Generated or android/src/main/res. The Compose mirror is android/src/main/kotlin/com/fit321/fitui/v3/tokens/FitV3Colors.kt; values come from the prototype (prototypes/flows/coach/dashboard-drafts.html, the .k-alpha block) and from the athlete .fit-light recipe, which is canonical over the spec table.",
-
     "canvas": {
       "tinted": {
         "value": "linear-gradient(180deg, #0a5f68 0%, #084653 22%, #062e3b 48%, #05202a 72%, #04161d 100%)",
-        "comment": "The tinted canvas IS the screen, top to bottom — not a wash behind a header. Nothing below it carries its own colour."
+        "comment": "The tinted canvas IS the screen, top to bottom \u2014 not a wash behind a header. Nothing below it carries its own colour."
       },
       "tinted-glow": {
         "value": "radial-gradient(120% 48% at 50% -8%, rgba(0,190,215,0.60), rgba(5,224,166,0.10) 55%, transparent 78%)",
@@ -13,18 +12,17 @@
       },
       "light": {
         "value": "{color.screen.light}",
-        "comment": "The athlete keeps the existing light canvas — the rework changes the shapes, not the background."
+        "comment": "The athlete keeps the existing light canvas \u2014 the rework changes the shapes, not the background."
       },
       "light-glow": {
         "value": "radial-gradient(120% 80% at 50% 0%, rgba(0,167,208,0.22), rgba(5,224,166,0.07) 45%, transparent 72%)",
         "comment": "The same brand breath at roughly half the strength: on #F2F2F7 the dark alphas read as a stain."
       }
     },
-
     "surface": {
       "tinted": {
         "value": "rgba(0,0,0,0.28)",
-        "comment": "Panel, card, chip, input, segmented, stepper, select row. A flat darkening of the canvas — no blur, no opaque fill."
+        "comment": "Panel, card, chip, input, segmented, stepper, select row. A flat darkening of the canvas \u2014 no blur, no opaque fill."
       },
       "tinted-hairline": {
         "value": "rgba(255,255,255,0.06)",
@@ -39,7 +37,6 @@
         "comment": "Reuses the existing card lift (FitElevation.fitCardElevation) rather than inventing a second shadow."
       }
     },
-
     "raised": {
       "tinted": {
         "value": "rgba(255,255,255,0.14)",
@@ -50,7 +47,7 @@
       },
       "face-tinted": {
         "value": "#2b5f6a",
-        "comment": "A face in a STACK is opaque — translucent faces show each other through. One fill per canvas hue; teal is the shipped one."
+        "comment": "A face in a STACK is opaque \u2014 translucent faces show each other through. One fill per canvas hue; teal is the shipped one."
       },
       "face-light": {
         "value": "{color.gray.200}"
@@ -64,210 +61,466 @@
         "comment": "On #F2F2F7 a raised plate goes lighter than the canvas, not darker \u2014 gray.100 would read as a hole."
       }
     },
-
     "text": {
-      "primary-tinted":   { "value": "#ffffff" },
-      "secondary-tinted": { "value": "rgba(255,255,255,0.74)" },
-      "tertiary-tinted":  { "value": "rgba(255,255,255,0.52)" },
-      "primary-light":    { "value": "{color.text.primary.light}" },
-      "secondary-light":  { "value": "{color.text.secondary.light}" },
-      "tertiary-light":   { "value": "{color.text.tertiary.light}" }
+      "primary-tinted": {
+        "value": "#ffffff"
+      },
+      "secondary-tinted": {
+        "value": "rgba(255,255,255,0.74)"
+      },
+      "tertiary-tinted": {
+        "value": "rgba(255,255,255,0.52)"
+      },
+      "primary-light": {
+        "value": "{color.text.primary.light}"
+      },
+      "secondary-light": {
+        "value": "{color.text.secondary.light}"
+      },
+      "tertiary-light": {
+        "value": "{color.text.tertiary.light}"
+      }
     },
-
     "divider": {
-      "tinted": { "value": "rgba(255,255,255,0.10)" },
-      "light":  { "value": "{color.divider.light}" }
+      "tinted": {
+        "value": "rgba(255,255,255,0.10)"
+      },
+      "light": {
+        "value": "{color.divider.light}"
+      }
     },
-
     "status": {
       "comment": "Status colours split by look for the same reason the canon ones do: a red that reads on a dark canvas is too bright on white, and a yellow perimeter at the 400 step disappears on it.",
-      "error-tinted":  { "value": "{color.red.400}" },
-      "error-light":   { "value": "{color.red.700}" },
-      "perimeter-planned-tinted":   { "value": "rgba(5,224,166,0.75)" },
-      "perimeter-planned-light":    { "value": "{color.teal.500}" },
-      "perimeter-attention-tinted": { "value": "{color.yellow.400}" },
-      "perimeter-attention-light":  { "value": "{color.yellow.600}" },
-      "attention-tint-tinted":      { "value": "rgba(222,145,29,0.10)" },
-      "attention-tint-light":       { "value": "rgba(222,145,29,0.14)" },
+      "error-tinted": {
+        "value": "{color.red.400}"
+      },
+      "error-light": {
+        "value": "{color.red.700}"
+      },
+      "perimeter-planned-tinted": {
+        "value": "rgba(5,224,166,0.75)"
+      },
+      "perimeter-planned-light": {
+        "value": "{color.teal.500}"
+      },
+      "perimeter-attention-tinted": {
+        "value": "{color.yellow.400}"
+      },
+      "perimeter-attention-light": {
+        "value": "{color.yellow.600}"
+      },
+      "attention-tint-tinted": {
+        "value": "rgba(222,145,29,0.10)"
+      },
+      "attention-tint-light": {
+        "value": "rgba(222,145,29,0.14)"
+      },
       "badge-review-ink": {
         "value": "{color.gray.900}",
         "comment": "A review badge is yellow; white on yellow is the unreadable pair, so its number goes dark in both looks."
       }
     },
-
     "control": {
       "comment": "A control ON a field surface \u2014 the stepper's round buttons. One step away from the field rather than the plate step, which on white is too faint to find.",
-      "tinted": { "value": "rgba(255,255,255,0.10)" },
-      "light":  { "value": "{color.gray.200}" }
+      "tinted": {
+        "value": "rgba(255,255,255,0.10)"
+      },
+      "light": {
+        "value": "{color.gray.200}"
+      }
     },
-
     "avatar-ring": {
       "comment": "The halo around the profile avatar. It exists to lift the avatar off the tinted canvas; on light there is nothing to lift it from, and the prototype has no light recipe for it, so it is deliberately absent rather than accidentally invisible.",
-      "tinted": { "value": "rgba(255,255,255,0.12)" },
-      "light":  { "value": "transparent" }
+      "tinted": {
+        "value": "rgba(255,255,255,0.12)"
+      },
+      "light": {
+        "value": "transparent"
+      }
     },
-
     "cta": {
       "tinted": {
         "value": "linear-gradient(180deg, #ffffff 0%, #f3f7f8 45%, #e2ebee 100%)",
         "comment": "The one solid object on a coloured screen. Flat teal was tried and rejected 2026-09-14: the brand gradient is already the canvas, so a gradient button has nothing to stand out against."
       },
-      "tinted-label":     { "value": "#12161a" },
-      "tinted-highlight": { "value": "rgba(255,255,255,0.95)", "comment": "Inset hairline on the top edge — paper, not plastic." },
-      "tinted-shadow":    { "value": "rgba(0,0,0,0.45)" },
+      "tinted-label": {
+        "value": "#12161a"
+      },
+      "tinted-highlight": {
+        "value": "rgba(255,255,255,0.95)",
+        "comment": "Inset hairline on the top edge \u2014 paper, not plastic."
+      },
+      "tinted-shadow": {
+        "value": "rgba(0,0,0,0.45)"
+      },
       "light": {
         "value": "{gradient.brand-horizontal}",
         "comment": "On the light canvas the brand gradient still reads, so primary stays as it is today."
       },
-      "light-label": { "value": "{color.gray.white}" }
+      "light-label": {
+        "value": "{color.gray.white}"
+      }
     },
-
     "secondary-button": {
-      "tinted-fill":   { "value": "rgba(255,255,255,0.10)" },
-      "tinted-border": { "value": "rgba(255,255,255,0.18)" },
-      "light-fill":    { "value": "{color.surface.high.light}" },
-      "light-border":  { "value": "{color.divider.light}" }
+      "tinted-fill": {
+        "value": "rgba(255,255,255,0.10)"
+      },
+      "tinted-border": {
+        "value": "rgba(255,255,255,0.18)"
+      },
+      "light-fill": {
+        "value": "{color.surface.high.light}"
+      },
+      "light-border": {
+        "value": "{color.divider.light}"
+      }
     },
-
     "material": {
       "tinted": {
         "value": "rgba(5,24,31,0.80)",
-        "comment": "Sheets, menus, snackbars. Blur belongs here and nowhere else — a sheet is a layer above the screen, and the screen showing through is what says so."
+        "comment": "Sheets, menus, snackbars. Blur belongs here and nowhere else \u2014 a sheet is a layer above the screen, and the screen showing through is what says so."
       },
-      "tinted-blur":     { "value": 28 },
-      "tinted-edge":     { "value": "rgba(255,255,255,0.14)" },
-      "tinted-scrim":    { "value": "rgba(2,12,16,0.45)" },
-      "light":           { "value": "{color.screen.light}" },
-      "light-scrim":     { "value": "rgba(0,0,0,0.35)" }
+      "tinted-blur": {
+        "value": 28
+      },
+      "tinted-edge": {
+        "value": "rgba(255,255,255,0.14)"
+      },
+      "tinted-scrim": {
+        "value": "rgba(2,12,16,0.45)"
+      },
+      "light": {
+        "value": "{color.screen.light}"
+      },
+      "light-scrim": {
+        "value": "rgba(0,0,0,0.35)"
+      }
     },
-
     "snackbar": {
       "comment": "The snackbar is dark in BOTH looks \u2014 it floats over content rather than replacing a surface, so it does not follow the canvas. On light it is the same near-black the canon snackbar has always been; on tinted it is the bar colour with a blur behind it.",
-      "tinted":      { "value": "rgba(4,22,29,0.88)" },
-      "tinted-edge": { "value": "rgba(255,255,255,0.14)" },
-      "light":       { "value": "{color.gray.black}" },
-      "light-edge":  { "value": "rgba(255,255,255,0.06)" },
-      "ink":         { "value": "{color.gray.white}" },
-      "action":      { "value": "{color.teal.400}" }
+      "tinted": {
+        "value": "rgba(4,22,29,0.88)"
+      },
+      "tinted-edge": {
+        "value": "rgba(255,255,255,0.14)"
+      },
+      "light": {
+        "value": "{color.gray.black}"
+      },
+      "light-edge": {
+        "value": "rgba(255,255,255,0.06)"
+      },
+      "ink": {
+        "value": "{color.gray.white}"
+      },
+      "action": {
+        "value": "{color.teal.400}"
+      }
     },
-
     "chrome": {
       "comment": "The screen's OWN header and footer. On the tinted canvas they are transparent and the gradient runs under them (`.fit-phone.fit-dark.k-alpha > .fit-phone-header/.fit-phone-footer`); `bar` below is for a bar that floats over scrolling content, which is a different job.",
-      "tinted": { "value": "transparent" },
-      "light":  { "value": "{color.screen.light}" }
+      "tinted": {
+        "value": "transparent"
+      },
+      "light": {
+        "value": "{color.screen.light}"
+      }
     },
-
     "header-circle": {
-      "fill-tinted":   { "value": "rgba(255,255,255,0.10)" },
-      "fill-light":    { "value": "rgba(255,255,255,0.70)" },
-      "border-tinted": { "value": "rgba(255,255,255,0.18)" },
-      "border-light":  { "value": "{color.gray.200}" }
+      "fill-tinted": {
+        "value": "rgba(255,255,255,0.10)"
+      },
+      "fill-light": {
+        "value": "rgba(255,255,255,0.70)"
+      },
+      "border-tinted": {
+        "value": "rgba(255,255,255,0.18)"
+      },
+      "border-light": {
+        "value": "{color.gray.200}"
+      }
     },
-
     "accent-badge": {
       "comment": "The canon `.fit-badge-accent` \u2014 a value that is good news next to a number (the week's trend).",
-      "fill": { "value": "rgba(5,224,166,0.15)" },
-      "ink-tinted": { "value": "{color.teal.500}" },
-      "ink-light":  { "value": "{color.teal.600}" }
+      "fill": {
+        "value": "rgba(5,224,166,0.15)"
+      },
+      "ink-tinted": {
+        "value": "{color.teal.500}"
+      },
+      "ink-light": {
+        "value": "{color.teal.600}"
+      }
     },
-
     "ring": {
-      "from": { "value": "#00a7d0", "comment": "The day ring's own gradient (`#cdgrad`) \u2014 it starts a step off the brand blue." },
-      "to":   { "value": "{color.teal.500}" }
+      "from": {
+        "value": "#00a7d0",
+        "comment": "The day ring's own gradient (`#cdgrad`) \u2014 it starts a step off the brand blue."
+      },
+      "to": {
+        "value": "{color.teal.500}"
+      }
     },
-
     "bar": {
       "tinted": {
         "value": "rgba(4,22,29,0.88)",
-        "comment": "Bars over scrolling content (header, footer) — translucent, so the canvas keeps running underneath."
+        "comment": "Bars over scrolling content (header, footer) \u2014 translucent, so the canvas keeps running underneath."
       },
-      "light": { "value": "{color.screen.light}" }
+      "light": {
+        "value": "{color.screen.light}"
+      }
     },
-
     "state": {
-      "pressed-tinted":  { "value": "rgba(255,255,255,0.06)" },
-      "pressed-light":   { "value": "rgba(60,60,67,0.05)" },
-      "disabled-tinted": { "value": "rgba(255,255,255,0.10)" },
-      "disabled-light":  { "value": "{color.bg.disabled.light}" },
-      "selected-tinted-fill":   { "value": "rgba(5,224,166,0.14)" },
-      "selected-tinted-border": { "value": "rgba(5,224,166,0.45)" },
+      "pressed-tinted": {
+        "value": "rgba(255,255,255,0.06)"
+      },
+      "pressed-light": {
+        "value": "rgba(60,60,67,0.05)"
+      },
+      "disabled-tinted": {
+        "value": "rgba(255,255,255,0.10)"
+      },
+      "disabled-light": {
+        "value": "{color.bg.disabled.light}"
+      },
+      "selected-tinted-fill": {
+        "value": "rgba(5,224,166,0.14)"
+      },
+      "selected-tinted-border": {
+        "value": "rgba(5,224,166,0.45)"
+      },
       "selected-light-fill": {
         "value": "linear-gradient(to right, rgba(10,147,189,0.10), rgba(5,224,166,0.10))",
         "comment": "The brand wash at 10%, not a flat tint: `bg.brand-subtle` is teal-600 at 16%, which on a white row reads as a solid mint block rather than a selection."
       },
-      "selected-light-border":  { "value": "{color.border.selection}" },
-      "on-brand-ink-tinted": { "value": "#ffffff" },
-      "on-brand-ink-light":  { "value": "{color.text.on-brand.light}" },
+      "selected-light-border": {
+        "value": "{color.border.selection}"
+      },
+      "on-brand-ink-tinted": {
+        "value": "#ffffff"
+      },
+      "on-brand-ink-light": {
+        "value": "{color.text.on-brand.light}"
+      },
       "segmented-selected-tinted": {
         "value": "rgba(255,255,255,0.16)",
         "comment": "Only the tinted look drops the selection gradient: teal on a teal canvas does not separate. On light the gradient stays, because a white tab on a white track is invisible."
       },
-      "segmented-selected-light":     { "value": "{gradient.selection-overlay}" },
-      "segmented-selected-ink-tinted": { "value": "#ffffff" },
-      "segmented-selected-ink-light":  { "value": "{color.text.on-brand.light}" },
+      "segmented-selected-light": {
+        "value": "{gradient.selection-overlay}"
+      },
+      "segmented-selected-ink-tinted": {
+        "value": "#ffffff"
+      },
+      "segmented-selected-ink-light": {
+        "value": "{color.text.on-brand.light}"
+      },
       "dashed-tinted": {
         "value": "rgba(255,255,255,0.22)",
         "comment": "The add row's border. Stronger than the divider on purpose \u2014 it is the only affordance on an otherwise empty panel."
       },
-      "dashed-light": { "value": "{color.gray.300}" },
+      "dashed-light": {
+        "value": "{color.gray.300}"
+      },
       "circle-outline-tinted": {
         "value": "rgba(255,255,255,0.30)",
         "comment": "An action circle that is not the expected answer: outline only."
       },
-      "circle-outline-light": { "value": "{color.gray.500}" },
+      "circle-outline-light": {
+        "value": "{color.gray.500}"
+      },
       "action-primary-label-tinted": {
         "value": "#ffffff",
         "comment": "The label under the filled circle. On the tinted canvas the fill is white, so the word cannot be \u2014 it goes plain white; on light the fill is the brand gradient and the word carries the brand colour."
       },
-      "action-primary-label-light": { "value": "{color.brand.primary}" },
+      "action-primary-label-light": {
+        "value": "{color.brand.primary}"
+      },
       "strip-tinted": {
         "value": "rgba(0,0,0,0.18)",
         "comment": "The session card's location strip \u2014 a deeper inset of the same surface, not a second card."
       },
-      "strip-light": { "value": "rgba(60,60,67,0.05)" },
-      "pick-ring-tinted": { "value": "{color.gray.500}" },
-      "pick-ring-light":  { "value": "{color.gray.400}" },
+      "strip-light": {
+        "value": "rgba(60,60,67,0.05)"
+      },
+      "pick-ring-tinted": {
+        "value": "{color.gray.500}"
+      },
+      "pick-ring-light": {
+        "value": "{color.gray.400}"
+      },
       "pick-tick": {
         "value": "#06251f",
         "comment": "The tick inside a filled check circle \u2014 dark on teal in both looks."
       }
     },
-
     "geometry": {
       "comment": "Measurements the rework adds. Values that already exist (radius 14/16, screen inset 16) are referenced, not redeclared.",
-      "screenInset":        { "value": 16 },
-      "panelRadius":        { "value": 22 },
-      "panelPadding":       { "value": 6 },
-      "rowRadius":          { "value": 16 },
-      "rowPadding":         { "value": 12 },
-      "rowGap":             { "value": 12 },
-      "rowSubGap":          { "value": 2 },
-      "sectionTitleTop":    { "value": 20 },
-      "sectionTitleSide":   { "value": 20 },
-      "sectionTitleBottom": { "value": 8 },
-      "sectionTitleFirstTop": { "value": 8 },
-      "fieldHeight":        { "value": 56 },
-      "fieldRadius":        { "value": 14 },
-      "footerCtaHeight":    { "value": 50 },
-      "footerCtaSide":      { "value": 20 },
-      "footerCtaBottom":    { "value": 26 },
-      "actionCircle":       { "value": 52 },
-      "actionCircleIcon":   { "value": 23 },
-      "actionCircleBadge":  { "value": 20 },
-      "chipRadius":         { "value": 14 },
-      "sessionCardRadius":  { "value": 18 },
-      "sessionPlate":       { "value": 44 },
-      "chipPaddingY":       { "value": 10 },
-      "chipPaddingX":       { "value": 14 },
-      "chipDot":            { "value": 8 },
-      "checkCircle":        { "value": 22 },
-      "stepperButton":      { "value": 40 },
-      "leadingPlate":       { "value": 40 },
-      "leadingPlateRadius": { "value": 12 },
-      "identityAvatar":     { "value": 84 },
-      "identityStack":      { "value": 56 },
-      "profileAvatar":      { "value": 72 },
-      "profileCompactAvatar": { "value": 68 }
+      "screenInset": {
+        "value": 16
+      },
+      "panelRadius": {
+        "value": 22
+      },
+      "panelPadding": {
+        "value": 6
+      },
+      "rowRadius": {
+        "value": 16
+      },
+      "rowPadding": {
+        "value": 12
+      },
+      "rowGap": {
+        "value": 12
+      },
+      "rowSubGap": {
+        "value": 2
+      },
+      "sectionTitleTop": {
+        "value": 20
+      },
+      "sectionTitleSide": {
+        "value": 20
+      },
+      "sectionTitleBottom": {
+        "value": 8
+      },
+      "sectionTitleFirstTop": {
+        "value": 8
+      },
+      "fieldHeight": {
+        "value": 56
+      },
+      "fieldRadius": {
+        "value": 14
+      },
+      "footerCtaHeight": {
+        "value": 50
+      },
+      "footerCtaSide": {
+        "value": 20
+      },
+      "footerCtaBottom": {
+        "value": 26
+      },
+      "actionCircle": {
+        "value": 52
+      },
+      "actionCircleIcon": {
+        "value": 23
+      },
+      "actionCircleBadge": {
+        "value": 20
+      },
+      "chipRadius": {
+        "value": 14
+      },
+      "sessionCardRadius": {
+        "value": 18
+      },
+      "sessionPlate": {
+        "value": 44
+      },
+      "chipPaddingY": {
+        "value": 10
+      },
+      "chipPaddingX": {
+        "value": 14
+      },
+      "chipDot": {
+        "value": 8
+      },
+      "checkCircle": {
+        "value": 22
+      },
+      "stepperButton": {
+        "value": 40
+      },
+      "leadingPlate": {
+        "value": 40
+      },
+      "leadingPlateRadius": {
+        "value": 12
+      },
+      "identityAvatar": {
+        "value": 84
+      },
+      "identityStack": {
+        "value": 56
+      },
+      "profileAvatar": {
+        "value": 72
+      },
+      "profileCompactAvatar": {
+        "value": 68
+      },
+      "txnPlate": {
+        "value": 36
+      },
+      "txnGroupRadius": {
+        "value": 14
+      },
+      "txnPadding": {
+        "value": 12
+      },
+      "heroRadius": {
+        "value": 16
+      },
+      "heroPadding": {
+        "value": 24
+      },
+      "sheetRadius": {
+        "value": 16
+      },
+      "sheetHandleWidth": {
+        "value": 36
+      },
+      "sheetHandleHeight": {
+        "value": 4
+      },
+      "sheetSide": {
+        "value": 16
+      },
+      "sheetBottom": {
+        "value": 28
+      }
+    },
+    "txn": {
+      "comment": "Ledger-row tones (.fit-txn-icon--in/out/info/danger and the matching amount). The fill is the tint the prototype paints behind the 36px circle; the ink colours both the glyph and the amount. The sheet's action icons reuse the same two accent tones, so the destructive icon lands at 12% here where the prototype's sheet alone says 14%.",
+      "income-fill": {
+        "value": "rgba(5,224,166,0.12)"
+      },
+      "income-ink-tinted": {
+        "value": "{color.teal.500}"
+      },
+      "income-ink-light": {
+        "value": "{color.teal.600}"
+      },
+      "neutral-fill": {
+        "value": "rgba(117,126,135,0.14)"
+      },
+      "info-fill": {
+        "value": "rgba(3,178,226,0.12)"
+      },
+      "info-ink-tinted": {
+        "value": "{color.blue.500}"
+      },
+      "info-ink-light": {
+        "value": "{color.blue.700}"
+      },
+      "danger-fill": {
+        "value": "rgba(240,92,91,0.12)"
+      }
+    },
+    "sheet": {
+      "comment": "The settle drawer. Its body is the material already used for overlays \u2014 the tinted look never gets the prototype's opaque gray-900 panel.",
+      "handle-tinted": {
+        "value": "rgba(255,255,255,0.22)"
+      },
+      "handle-light": {
+        "value": "{color.gray.200}"
+      }
     }
   }
 }

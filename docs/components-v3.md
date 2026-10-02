@@ -103,6 +103,16 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitTile` · `FitTileGrid` · `FitFaceStack` (the Activity grammar) | — | 6 | ✅ built |
 | `FitTipCard` (outlined, dismissable) | `FitTipCard` | 6 | ✅ built |
 | `FitAccentBadge` | `FitBadge` | 6 | ✅ built |
+| `FitDetailHero` · `FitTxnGroup` · `FitTxnRow` · `FitTxnPlate` · `FitTxnDivider` + `FitV3Tone` | `LedgerRow` kit | 7 | ✅ built |
+| `FitV3Sheet` · `FitSheetTitle` · `FitSheetActionRow` · `FitSheetCloseButton` | `FitSheet`, `FitSheetActionItem` | 7 | ✅ built |
+
+### One tone set for rows and sheet actions
+
+`FitV3Tone` is the single vocabulary for a tinted circle and the ink beside it — `Income` (teal), `Danger` (red), `Info` (blue), `Muted` (grey), `Neutral` (the raised plate). The ledger row, its amount, the detail hero's figure and the sheet's action icons all read from it, so a settle sheet cannot drift from the row that opened it. The prototype paints the sheet's destructive icon at red 14 % and the ledger's danger icon at 12 %; v3 keeps the single 12 % and treats the 2 % as a prototype slip, not a variant.
+
+### A ledger row is not a `FitRow`
+
+`FitRow` is the panel row — 16 px title, a 40 × 12 plate, rounded on its own. `FitTxnRow` is the money row from `.fit-txn`: a 36 px **circle** carrying a tone, a 15 px title, up to two sub-lines (the second is the age, in its own tone) and an amount that takes its colour from the same tone. They stack inside `FitTxnGroup` — one radius-14 surface, hairlines between the rows, the light look's card lift on the group rather than on each row.
 
 ### The day widget has two shapes
 

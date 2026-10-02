@@ -64,6 +64,13 @@ data class FitV3Palette(
     val actionPrimaryLabel: Color,
     val strip: Color,
     val pickRing: Color,
+    val txnIncomeFill: Color,
+    val txnIncomeInk: Color,
+    val txnNeutralFill: Color,
+    val txnInfoFill: Color,
+    val txnInfoInk: Color,
+    val txnDangerFill: Color,
+    val sheetHandle: Color,
 )
 
 object FitV3Colors {
@@ -137,6 +144,13 @@ object FitV3Colors {
         actionPrimaryLabel = Color(0xFFFFFFFF),
         strip = Color(0x2E000000),
         pickRing = FitColors.Gray.g500,
+        txnIncomeFill = FitColors.Teal.t500.copy(alpha = 0.12f),
+        txnIncomeInk = FitColors.Teal.t500,
+        txnNeutralFill = Color(0x24757E87),
+        txnInfoFill = FitColors.Blue.b500.copy(alpha = 0.12f),
+        txnInfoInk = FitColors.Blue.b500,
+        txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
+        sheetHandle = Color(0x38FFFFFF),
     )
 
     val light = FitV3Palette(
@@ -209,6 +223,13 @@ object FitV3Colors {
         actionPrimaryLabel = FitColors.brandPrimary,
         strip = Color(0x0D3C3C43),
         pickRing = FitColors.Gray.g400,
+        txnIncomeFill = FitColors.Teal.t500.copy(alpha = 0.12f),
+        txnIncomeInk = FitColors.Teal.t600,
+        txnNeutralFill = Color(0x24757E87),
+        txnInfoFill = FitColors.Blue.b500.copy(alpha = 0.12f),
+        txnInfoInk = FitColors.Blue.b700,
+        txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
+        sheetHandle = FitColors.Gray.g200,
     )
 
     val pickTick = Color(0xFF06251F)

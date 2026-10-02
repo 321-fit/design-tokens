@@ -49,6 +49,19 @@ object FitV3Geometry {
     val leadingPlate = 40.dp
     val leadingPlateRadius = 12.dp
 
+    val txnPlate = 36.dp
+    val txnGroupRadius = 14.dp
+    val txnPadding = 12.dp
+
+    val heroRadius = 16.dp
+    val heroPadding = 24.dp
+
+    val sheetRadius = 16.dp
+    val sheetHandleWidth = 36.dp
+    val sheetHandleHeight = 4.dp
+    val sheetSide = 16.dp
+    val sheetBottom = 28.dp
+
     val identityAvatar = 84.dp
     val identityStack = 56.dp
     val profileAvatar = 72.dp
