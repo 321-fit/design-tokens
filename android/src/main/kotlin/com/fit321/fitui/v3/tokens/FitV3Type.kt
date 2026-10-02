@@ -40,6 +40,10 @@ object FitV3Type {
     val nextWhen = style(17, FontWeight.SemiBold, 22)
     val nextWhat = style(13, FontWeight.Normal, 18)
 
+    val ringValue = style(34, FontWeight.Bold, 36)
+    val ringTotal = style(18, FontWeight.SemiBold, 24)
+    val rowValueBold = style(14, FontWeight.SemiBold, 19)
+
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     val moneyHero = style(48, FontWeight.Bold, 54)
     val moneyHeroCurrency = style(28, FontWeight.SemiBold, 34)

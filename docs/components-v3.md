@@ -95,6 +95,13 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | ✅ built |
 | `FitSelectListRow` + `FitSelectCheck` (brand wash + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
+| `FitButton` (white-with-depth on tinted, brand gradient on light) + `FitV3ButtonStyle` | `FitButton` | 6 | ✅ built |
+| `FitV3Screen` · `FitV3Header` · `FitV3HeaderCircle` · `FitV3Footer` · `FitV3Bar` | `FitScreen`, `FitHeader`, `FitFooter` | 6 | ✅ built |
+| `FitDayRing` · `FitDayWidget` · `FitDayWidgetAnchor` · `FitDayBar` | — | 6 | ✅ built |
+
+### The day widget has two shapes
+
+`FitDayWidget` is the full form — ring, three bars, a sentence, a link — and it is deliberately generic: the coach's ring is *sessions today* with money either side, the athlete's is *sessions this week* with balance / self-paced / streak in the bars. `FitDayWidgetAnchor` is the same widget in Home's anchor slot, where the prototype hides the bars, the sentence and the link: the anchor is ring + earned / planned only, and the money widget stays below it as its own block (decided in the prototype's annotation, 2026-09-24). A day with nothing in it drops the anchor entirely rather than drawing a ring of 0/0 — that call belongs to the screen, not the component.
 
 ### Status colour splits by look too
 
