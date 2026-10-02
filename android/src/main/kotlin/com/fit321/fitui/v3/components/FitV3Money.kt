@@ -24,6 +24,7 @@ data class FitMoneyFact(val value: String, val label: String)
 fun FitMoneyWidget(
     amount: String,
     modifier: Modifier = Modifier,
+    badge: (@Composable () -> Unit)? = null,
     context: String? = null,
     due: Boolean = false,
     leading: (@Composable () -> Unit)? = null,
@@ -45,11 +46,17 @@ fun FitMoneyWidget(
                 Box(modifier = Modifier.padding(top = 8.dp)) { leading() }
             }
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = amount,
-                    style = FitV3Type.moneyHeadline,
-                    color = if (due) palette.textError else palette.textPrimary,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = amount,
+                        style = FitV3Type.moneyHeadline,
+                        color = if (due) palette.textError else palette.textPrimary,
+                    )
+                    badge?.invoke()
+                }
                 if (context != null) {
                     Text(
                         text = context,

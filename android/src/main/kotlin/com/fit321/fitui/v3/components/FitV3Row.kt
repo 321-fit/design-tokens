@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
@@ -122,13 +123,15 @@ fun FitRowChevron(modifier: Modifier = Modifier) {
 @Composable
 fun FitRowPlate(
     modifier: Modifier = Modifier,
+    size: Dp = FitV3Geometry.leadingPlate,
+    radius: Dp = FitV3Geometry.leadingPlateRadius,
     content: @Composable () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
     Box(
         modifier = modifier
-            .size(FitV3Geometry.leadingPlate)
-            .background(palette.raised, RoundedCornerShape(FitV3Geometry.leadingPlateRadius)),
+            .size(size)
+            .background(palette.raised, RoundedCornerShape(radius)),
         contentAlignment = Alignment.Center,
     ) {
         CompositionLocalProvider(LocalContentColor provides palette.textSecondary) { content() }

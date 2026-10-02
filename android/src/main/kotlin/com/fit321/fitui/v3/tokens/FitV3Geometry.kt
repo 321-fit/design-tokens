@@ -30,6 +30,13 @@ object FitV3Geometry {
     val actionCircleBadge = 20.dp
 
     val chipRadius = 14.dp
+    val segmentedRadius = 12.dp
+    val selectRowRadius = 8.dp
+    val tileRadius = 18.dp
+    val tilePadding = 14.dp
+    val tileGap = 10.dp
+    val smallPlate = 34.dp
+    val smallPlateRadius = 10.dp
     val sessionCardRadius = 18.dp
     val sessionPlate = 44.dp
     val chipPaddingY = 10.dp

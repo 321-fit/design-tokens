@@ -40,7 +40,7 @@ fun <T> FitSegmented(
     label: (T) -> String,
 ) {
     val palette = LocalFitV3Palette.current
-    val shape = RoundedCornerShape(FitV3Geometry.fieldRadius)
+    val shape = RoundedCornerShape(FitV3Geometry.segmentedRadius)
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +54,7 @@ fun <T> FitSegmented(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(FitV3Geometry.fieldRadius - 4.dp))
+                    .clip(RoundedCornerShape(FitV3Geometry.segmentedRadius - 4.dp))
                     .then(
                         if (isSelected) {
                             Modifier.background(palette.segmentedSelected)
@@ -141,7 +141,7 @@ fun FitSelectListRow(
     onClick: () -> Unit = {},
 ) {
     val palette = LocalFitV3Palette.current
-    val shape = RoundedCornerShape(FitV3Geometry.fieldRadius)
+    val shape = RoundedCornerShape(FitV3Geometry.selectRowRadius)
     Box(
         modifier = modifier
             .fillMaxWidth()

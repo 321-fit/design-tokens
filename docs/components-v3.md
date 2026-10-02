@@ -100,6 +100,9 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitDayRing` · `FitDayWidget` · `FitDayWidgetAnchor` · `FitDayBar` | — | 6 | ✅ built |
 | `FitStatusBanner` (attention / error / neutral, optional action) | `StatusBanner`, `InfoBanner` | 6 | ✅ built |
 | `FitEmptyPanel` (one card, one door — §4.14) | `FitEmptyState` | 6 | ✅ built |
+| `FitTile` · `FitTileGrid` · `FitFaceStack` (the Activity grammar) | — | 6 | ✅ built |
+| `FitTipCard` (outlined, dismissable) | `FitTipCard` | 6 | ✅ built |
+| `FitAccentBadge` | `FitBadge` | 6 | ✅ built |
 
 ### The day widget has two shapes
 
@@ -112,6 +115,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 ### Only tinted drops the selection gradient
 
 `FitSegmented` marks the selected tab with the brand selection wash in both looks — **except** on tinted, where that wash is teal over a teal canvas and does not separate, so it becomes white at 16% instead. Carrying the tinted recipe into light is what produced a white tab on a white track. The label follows the fill: white on tinted, `text.on-brand` (blue-700) on light.
+
+### Chrome is not a bar
+
+A screen's own header and footer are **transparent** on the tinted canvas — the gradient runs under them (`.fit-phone.fit-dark.k-alpha > .fit-phone-header/.fit-phone-footer`), and that is the `chrome` token (light keeps the canvas colour, which is opaque there). `bar` at 88% is for something else: a bar that floats **over scrolling content**. Painting the footer with `bar` on tinted puts a dark slab across the gradient.
 
 ### The snackbar does not follow the canvas
 

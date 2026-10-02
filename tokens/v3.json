@@ -151,6 +151,31 @@
       "action":      { "value": "{color.teal.400}" }
     },
 
+    "chrome": {
+      "comment": "The screen's OWN header and footer. On the tinted canvas they are transparent and the gradient runs under them (`.fit-phone.fit-dark.k-alpha > .fit-phone-header/.fit-phone-footer`); `bar` below is for a bar that floats over scrolling content, which is a different job.",
+      "tinted": { "value": "transparent" },
+      "light":  { "value": "{color.screen.light}" }
+    },
+
+    "header-circle": {
+      "fill-tinted":   { "value": "rgba(255,255,255,0.10)" },
+      "fill-light":    { "value": "rgba(255,255,255,0.70)" },
+      "border-tinted": { "value": "rgba(255,255,255,0.18)" },
+      "border-light":  { "value": "{color.gray.200}" }
+    },
+
+    "accent-badge": {
+      "comment": "The canon `.fit-badge-accent` \u2014 a value that is good news next to a number (the week's trend).",
+      "fill": { "value": "rgba(5,224,166,0.15)" },
+      "ink-tinted": { "value": "{color.teal.500}" },
+      "ink-light":  { "value": "{color.teal.600}" }
+    },
+
+    "ring": {
+      "from": { "value": "#00a7d0", "comment": "The day ring's own gradient (`#cdgrad`) \u2014 it starts a step off the brand blue." },
+      "to":   { "value": "{color.teal.500}" }
+    },
+
     "bar": {
       "tinted": {
         "value": "rgba(4,22,29,0.88)",

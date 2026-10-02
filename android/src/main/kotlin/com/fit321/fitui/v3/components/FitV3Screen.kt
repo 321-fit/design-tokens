@@ -1,6 +1,7 @@
 package com.fit321.fitui.v3.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -112,7 +113,8 @@ fun FitV3HeaderCircle(
         modifier = modifier
             .size(FitV3Geometry.leadingPlate)
             .clip(CircleShape)
-            .background(palette.raisedOnCanvas, CircleShape)
+            .background(palette.headerCircleFill, CircleShape)
+            .border(1.dp, palette.headerCircleBorder, CircleShape)
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
@@ -129,7 +131,7 @@ fun FitV3Footer(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(palette.bar)
+            .background(palette.chrome)
             .navigationBarsPadding()
             .padding(
                 start = FitV3Geometry.footerCtaSide,

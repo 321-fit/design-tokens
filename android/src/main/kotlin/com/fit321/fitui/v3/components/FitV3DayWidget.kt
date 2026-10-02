@@ -77,9 +77,7 @@ fun FitDayRing(
             )
             if (progress > 0f) {
                 drawArc(
-                    brush = Brush.linearGradient(
-                        listOf(FitColors.Blue.b500, FitColors.Teal.t500),
-                    ),
+                    brush = Brush.linearGradient(colorStops = palette.ringStops.toTypedArray()),
                     startAngle = -90f,
                     sweepAngle = 360f * progress,
                     useCenter = false,
