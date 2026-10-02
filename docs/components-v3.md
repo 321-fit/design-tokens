@@ -45,6 +45,10 @@ The group sits at the top level (category `v3`) on purpose: every Style Dictiona
 
 `FitV3Geometry` carries the measurements the rework adds (panel radius 22, row radius 16, action circle 52, identity avatar 84 …). Values that already exist in `spacing.json` are referenced there rather than redeclared.
 
+## Type scale
+
+`FitV3Type` is the rework's own scale, built on `FitFont.family`. It exists because the rework names weights the v2 scale does not carry (row title 16/500, section title 15/600, field label 13/600, identity 28/700, money hero 48/700); reusing `FitFont` would have meant changing shared styles.
+
 ## API
 
 ```kotlin
@@ -64,15 +68,19 @@ fun Something() {
 
 The glow is a radial gradient in Compose where the prototype uses a CSS ellipse (`120% 48% at 50% -8%`). The centre offset and the radius are expressed as fractions of the drawn size in `FitV3CanvasSpec`, so the fall-off matches at phone proportions; it is an approximation by construction.
 
+## Where the previews live
+
+The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`) — one `@Preview` per look over the whole set, rather than a tooling dependency in this module. Nothing in this repo carries previews today and the app is where they are reviewed.
+
 ## Component inventory
 
 | Component | Replaces (v2) | Stage | Status |
 |---|---|---|---|
 | `FitV3Theme` · `FitV3Colors` · `FitV3Geometry` · `FitV3Canvas` | — | 0 | ✅ built |
-| `FitPanel` · `FitRow` | `FitCard`, `FitSettingsCard`, `FitSelectRow` | 1 | to build |
-| `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | to build |
-| `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | to build |
-| `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | to build |
+| `FitPanel` · `FitRow` (+ `FitRowValue`, `FitRowChevron`, `FitRowPlate`) | `FitCard`, `FitSettingsCard`, `FitSelectRow` | 1 | ✅ built |
+| `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | ✅ built |
+| `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
+| `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
 | `FitIdentity` (full 84 + compact 22/700) | `FitProfileHero` | 2 | to build |
 | `FitProfileHeader` (cover → row → stats) + `.compact` | `FitProfileHeader` | 2 | to build |
 | `FitActionCircle` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | to build |
