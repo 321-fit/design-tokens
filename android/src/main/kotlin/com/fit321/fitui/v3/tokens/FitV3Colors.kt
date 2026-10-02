@@ -118,7 +118,7 @@ object FitV3Colors {
         ctaShadow = Color(0x73000000),
         secondaryFill = Color(0x1AFFFFFF),
         secondaryBorder = Color(0x2EFFFFFF),
-        material = Color(0xCC05181F),
+        material = Color(0xFF05181F),
         materialEdge = Color(0x24FFFFFF),
         snackbar = Color(0xE004161D),
         snackbarEdge = Color(0x24FFFFFF),

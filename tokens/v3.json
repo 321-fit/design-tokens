@@ -177,8 +177,8 @@
     },
     "material": {
       "tinted": {
-        "value": "rgba(5,24,31,0.80)",
-        "comment": "Sheets, menus, snackbars. Blur belongs here and nowhere else \u2014 a sheet is a layer above the screen, and the screen showing through is what says so."
+        "value": "#05181F",
+        "comment": "Sheets, menus, snackbars. The blur below is the intent \u2014 but Compose blurs a composable's own content, never what sits behind it, so Android paints the material opaque: at 80% with nothing blurred the sheet reads as see-through rather than as a layer, and even 96% ghosts the text underneath. Platforms that can blur the backdrop take the translucent value with tinted-blur."
       },
       "tinted-blur": {
         "value": 28

@@ -114,6 +114,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 
 `FitRow` is the panel row — 16 px title, a 40 × 12 plate, rounded on its own. `FitTxnRow` is the money row from `.fit-txn`: a 36 px **circle** carrying a tone, a 15 px title, up to two sub-lines (the second is the age, in its own tone) and an amount that takes its colour from the same tone. They stack inside `FitTxnGroup` — one radius-14 surface, hairlines between the rows, the light look's card lift on the group rather than on each row.
 
+### The sheet carries the blur Android cannot draw
+
+`material` is the sheet's colour and the one place the spec asks for blur. Compose blurs a composable's own content, never what sits behind it, so the Android sheet paints the material **opaque** where the token says 80 % + a 28 px blur: with nothing blurred behind it, a translucent sheet reads as see-through rather than as a layer above the screen, and even at 96 % the rows underneath ghost through. The token keeps the blur for the platforms that can draw it.
+
 ### The day widget has two shapes
 
 `FitDayWidget` is the full form — ring, three bars, a sentence, a link — and it is deliberately generic: the coach's ring is *sessions today* with money either side, the athlete's is *sessions this week* with balance / self-paced / streak in the bars. `FitDayWidgetAnchor` is the same widget in Home's anchor slot, where the prototype hides the bars, the sentence and the link: the anchor is ring + earned / planned only, and the money widget stays below it as its own block (decided in the prototype's annotation, 2026-09-24). A day with nothing in it drops the anchor entirely rather than drawing a ring of 0/0 — that call belongs to the screen, not the component.

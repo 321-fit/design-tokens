@@ -173,7 +173,7 @@ fun FitTxnRow(
                     text = sub,
                     style = FitV3Type.rowSub,
                     color = palette.textTertiary,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = FitV3Geometry.rowSubGap),
                 )
