@@ -81,8 +81,9 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | ✅ built |
 | `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
 | `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
-| `FitIdentity` (full 84 + compact 22/700) | `FitProfileHero` | 2 | to build |
-| `FitProfileHeader` (cover → row → stats) + `.compact` | `FitProfileHeader` | 2 | to build |
+| `FitIdentity` (centred, avatar 84, name 28/700) · `FitIdentityCompact` (22/700 + stats 15/600) | `FitProfileHero` | 2 | ✅ built |
+| `FitProfileHeader` (cover → row → stats) · `FitProfileCover` · `FitProfileStats` · `FitProfileCard` | `FitProfileHeader` | 2 | ✅ built |
+| `FitV3Avatar` (plate on canvas / on surface / brand) | `FitAvatar` | 2 | ✅ built |
 | `FitActionCircle` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | to build |
 | `FitChip.needs(dot:)` (red money · blue question · yellow review · grey waiting) | `FitChip` | 3 | to build |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | to build |
@@ -93,6 +94,14 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | to build |
 | `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | to build |
 | `FitSnackbar` (action slot, 5s) | `FitSnackbar` | 5 | to build |
+
+### What v3 reuses from v2
+
+Three things, each deliberate:
+
+- `FitColors.Gray.*` / `Teal` / `Blue` — the palette the light look is built from.
+- `FitElevation.fitCardElevation` — the card lift, so the light surface has one shadow in the app, not two.
+- `FitAvatar(size: Dp, bg, textColor)` — the photo-or-initials logic, including the guard that keeps initials from showing through a 1×1 alpha stub. `FitV3Avatar` passes v3 colours into it, so none of v2's theming leaks in; rebuilding it would have meant re-deriving that fix.
 
 ### Open points carried from the spec
 

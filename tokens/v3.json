@@ -54,6 +54,14 @@
       },
       "face-light": {
         "value": "{color.gray.200}"
+      },
+      "on-canvas-tinted": {
+        "value": "rgba(255,255,255,0.13)",
+        "comment": "Raised directly on the canvas (the identity avatar, a header circle) rather than on a surface \u2014 the canvas is darker than a panel, so the plate is a touch lighter."
+      },
+      "on-canvas-light": {
+        "value": "rgba(255,255,255,0.75)",
+        "comment": "On #F2F2F7 a raised plate goes lighter than the canvas, not darker \u2014 gray.100 would read as a hole."
       }
     },
 
