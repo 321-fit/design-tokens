@@ -139,7 +139,7 @@ fun FitSelectListRow(
             .fillMaxWidth()
             .fitV3Surface(
                 shape = shape,
-                fill = if (selected) palette.selectedFill else null,
+                brush = if (selected) palette.selectedFill else null,
                 hairline = if (selected) palette.selectedBorder else null,
             )
             .clip(shape)

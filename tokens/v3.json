@@ -128,7 +128,10 @@
       "disabled-light":  { "value": "{color.bg.disabled.light}" },
       "selected-tinted-fill":   { "value": "rgba(5,224,166,0.14)" },
       "selected-tinted-border": { "value": "rgba(5,224,166,0.45)" },
-      "selected-light-fill":    { "value": "{color.bg.brand-subtle.light}" },
+      "selected-light-fill": {
+        "value": "linear-gradient(to right, rgba(10,147,189,0.10), rgba(5,224,166,0.10))",
+        "comment": "The brand wash at 10%, not a flat tint: `bg.brand-subtle` is teal-600 at 16%, which on a white row reads as a solid mint block rather than a selection."
+      },
       "selected-light-border":  { "value": "{color.border.selection}" },
       "segmented-selected-tinted": { "value": "rgba(255,255,255,0.16)" },
       "dashed-tinted": {

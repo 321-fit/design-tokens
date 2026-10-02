@@ -96,6 +96,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSelectListRow` (teal tint + teal hairline when selected) | — | 5 | ✅ built |
 | `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
 
+### A selection tint is not a surface
+
+`fitV3Surface(brush = …)` paints a translucent tint instead of the surface fill, and when it does it skips the light look's card lift: a shadow under a 10% wash turns the row into floating glass. The selected select-list row is the case — tinted fills it with teal at 14% and a teal hairline, light with the brand wash at 10% (blue → teal, left to right). `bg.brand-subtle` was the wrong token for it: teal-600 at 16% on a white row reads as a solid mint block, not as a selection.
+
 ### Icon slots carry no colour
 
 `FitActionCircle` and `FitRowPlate` take the glyph as a slot and provide `LocalContentColor` around it, so a Material `Icon` with its default tint comes out right in both looks — white-on-teal inside a filled circle, `#12161a` inside the white one. A call site that hardcodes a tint defeats it; pass the painter and let the component colour it.

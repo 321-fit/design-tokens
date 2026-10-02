@@ -1,6 +1,8 @@
 package com.fit321.fitui.v3.tokens
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import com.fit321.fitui.tokens.FitColors
 
 enum class FitV3Look { Tinted, Light }
@@ -38,7 +40,7 @@ data class FitV3Palette(
     val bar: Color,
     val pressed: Color,
     val disabled: Color,
-    val selectedFill: Color,
+    val selectedFill: Brush,
     val selectedBorder: Color,
     val segmentedSelected: Color,
     val dashed: Color,
@@ -95,7 +97,7 @@ object FitV3Colors {
         bar = Color(0xE004161D),
         pressed = Color(0x0FFFFFFF),
         disabled = Color(0x1AFFFFFF),
-        selectedFill = Color(0x2405E0A6),
+        selectedFill = SolidColor(Color(0x2405E0A6)),
         selectedBorder = Color(0x7305E0A6),
         segmentedSelected = Color(0x29FFFFFF),
         dashed = Color(0x38FFFFFF),
@@ -146,7 +148,12 @@ object FitV3Colors {
         bar = Color(0xFFF2F2F7),
         pressed = Color(0x0D3C3C43),
         disabled = FitColors.Gray.g200,
-        selectedFill = FitColors.Teal.t600.copy(alpha = 0.16f),
+        selectedFill = Brush.horizontalGradient(
+            listOf(
+                FitColors.Blue.b600.copy(alpha = 0.10f),
+                FitColors.Teal.t500.copy(alpha = 0.10f),
+            ),
+        ),
         selectedBorder = FitColors.Teal.t600,
         segmentedSelected = FitColors.Gray.white,
         dashed = FitColors.Gray.g300,
