@@ -98,6 +98,8 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitButton` (white-with-depth on tinted, brand gradient on light) + `FitV3ButtonStyle` | `FitButton` | 6 | ✅ built |
 | `FitV3Screen` · `FitV3Header` · `FitV3HeaderCircle` · `FitV3Footer` · `FitV3Bar` | `FitScreen`, `FitHeader`, `FitFooter` | 6 | ✅ built |
 | `FitDayRing` · `FitDayWidget` · `FitDayWidgetAnchor` · `FitDayBar` | — | 6 | ✅ built |
+| `FitStatusBanner` (attention / error / neutral, optional action) | `StatusBanner`, `InfoBanner` | 6 | ✅ built |
+| `FitEmptyPanel` (one card, one door — §4.14) | `FitEmptyState` | 6 | ✅ built |
 
 ### The day widget has two shapes
 
