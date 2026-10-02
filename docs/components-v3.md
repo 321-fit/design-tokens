@@ -1,6 +1,6 @@
 # FitUI v3 — the rework grammar (Compose only)
 
-> **Status:** foundation landed, components in progress (issue #54)
+> **Status:** all 17 pieces of issue #54 built in Compose; screens next
 > **Scope:** Android / Compose only. SwiftUI is deliberately not built here — the iOS side is the iOS team's call.
 > **Canonical source:** `project-spec/prototypes/flows/coach/dashboard-drafts.html` (the `.k-alpha` block) for the tinted look, `flows/athlete/athlete-drafts.html` (the `.fit-light` rules) for the light one, and `specs/rework-grammar.md` §1–§4 for measurements. Where the spec table and the prototype disagree, the prototype wins.
 
@@ -88,12 +88,13 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting) | `FitChip` | 3 | ✅ built |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
 | `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
-| `FitSessionCard` | — (app code today) | 4 | to build |
-| `FitChip` sport variant | `FitChip` | 4 | to build |
-| `FitPickRow` (check circle 22, muted with the reason) | `FitCheckbox`, `FitSelectionGroup` | 4 | to build |
-| `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | to build |
-| `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | to build |
-| `FitSnackbar` (action slot, 5s) | `FitSnackbar` | 5 | to build |
+| `FitSessionCard` (radius 18, type in the plate, location strip) | — (app code today) | 4 | ✅ built |
+| `FitSportChip` (selection pill, icon slot) | `FitChip` | 4 | ✅ built |
+| `FitPickRow` + `FitCheckCircle` (22, muted with the reason) | `FitCheckbox`, `FitSelectionGroup` | 4 | ✅ built |
+| `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | ✅ built |
+| `FitStepper` (40px circles on the field surface) | `FitStepper` | 5 | ✅ built |
+| `FitSelectListRow` (teal tint + teal hairline when selected) | — | 5 | ✅ built |
+| `FitV3Snackbar` (action slot, `FIT_V3_SNACKBAR_UNDO_MS` = 5s) | `FitSnackbar` | 5 | ✅ built |
 
 ### Icon slots carry no colour
 

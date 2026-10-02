@@ -145,7 +145,18 @@
         "value": "#ffffff",
         "comment": "The label under the filled circle. On the tinted canvas the fill is white, so the word cannot be \u2014 it goes plain white; on light the fill is the brand gradient and the word carries the brand colour."
       },
-      "action-primary-label-light": { "value": "{color.brand.primary}" }
+      "action-primary-label-light": { "value": "{color.brand.primary}" },
+      "strip-tinted": {
+        "value": "rgba(0,0,0,0.18)",
+        "comment": "The session card's location strip \u2014 a deeper inset of the same surface, not a second card."
+      },
+      "strip-light": { "value": "rgba(60,60,67,0.05)" },
+      "pick-ring-tinted": { "value": "{color.gray.500}" },
+      "pick-ring-light":  { "value": "{color.gray.400}" },
+      "pick-tick": {
+        "value": "#06251f",
+        "comment": "The tick inside a filled check circle \u2014 dark on teal in both looks."
+      }
     },
 
     "geometry": {
@@ -170,6 +181,8 @@
       "actionCircleIcon":   { "value": 23 },
       "actionCircleBadge":  { "value": 20 },
       "chipRadius":         { "value": 14 },
+      "sessionCardRadius":  { "value": 18 },
+      "sessionPlate":       { "value": 44 },
       "chipPaddingY":       { "value": 10 },
       "chipPaddingX":       { "value": 14 },
       "chipDot":            { "value": 8 },

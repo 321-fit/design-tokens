@@ -44,6 +44,8 @@ data class FitV3Palette(
     val dashed: Color,
     val circleOutline: Color,
     val actionPrimaryLabel: Color,
+    val strip: Color,
+    val pickRing: Color,
 )
 
 object FitV3Colors {
@@ -99,6 +101,8 @@ object FitV3Colors {
         dashed = Color(0x38FFFFFF),
         circleOutline = Color(0x4DFFFFFF),
         actionPrimaryLabel = Color(0xFFFFFFFF),
+        strip = Color(0x2E000000),
+        pickRing = FitColors.Gray.g500,
     )
 
     val light = FitV3Palette(
@@ -148,6 +152,8 @@ object FitV3Colors {
         dashed = FitColors.Gray.g300,
         circleOutline = FitColors.Gray.g500,
         actionPrimaryLabel = FitColors.brandPrimary,
+        strip = Color(0x0D3C3C43),
+        pickRing = FitColors.Gray.g400,
     )
 
     fun of(look: FitV3Look): FitV3Palette = when (look) {
