@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,6 +47,7 @@ fun FitInput(
     minLines: Int = 1,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    leading: (@Composable () -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
     val interaction = remember { MutableInteractionSource() }
@@ -99,14 +102,26 @@ fun FitInput(
                 visualTransformation = visualTransformation,
                 modifier = Modifier.fillMaxWidth(),
                 decorationBox = { inner ->
-                    if (value.isEmpty() && placeholder != null) {
-                        Text(
-                            text = placeholder,
-                            style = FitV3Type.fieldText,
-                            color = palette.textTertiary,
-                        )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        if (leading != null) {
+                            CompositionLocalProvider(LocalContentColor provides palette.textTertiary) {
+                                leading()
+                            }
+                        }
+                        Box(modifier = Modifier.weight(1f)) {
+                            if (value.isEmpty() && placeholder != null) {
+                                Text(
+                                    text = placeholder,
+                                    style = FitV3Type.fieldText,
+                                    color = palette.textTertiary,
+                                )
+                            }
+                            inner()
+                        }
                     }
-                    inner()
                 },
             )
         }

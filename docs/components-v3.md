@@ -107,6 +107,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitV3Sheet` · `FitSheetTitle` · `FitSheetActionRow` · `FitSheetCloseButton` | `FitSheet`, `FitSheetActionItem` | 7 | ✅ built |
 | `FitClipStrip` · `FitClipCard` (poster slot, duration, no-clip face) | — | 8 | ✅ built |
 | `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
+| `FitInput(leading)` — the search field's glyph | `FitSearchField` | 8 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
