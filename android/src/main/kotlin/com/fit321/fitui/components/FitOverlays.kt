@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -92,7 +93,7 @@ fun FitSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = FitRadius.lg, topEnd = FitRadius.lg),
-        containerColor = theme.screenBg,
+        containerColor = LocalFitSkin.current?.sheet ?: theme.screenBg,
         contentColor = theme.textPrimary,
         tonalElevation = 0.dp,
         scrimColor = Color.Black.copy(alpha = 0.5f),

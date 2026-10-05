@@ -108,6 +108,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitClipStrip` · `FitClipCard` (poster slot, duration, no-clip face) | — | 8 | ✅ built |
 | `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
 | `FitInput(leading)` — the search field's glyph | `FitSearchField` | 8 | ✅ built |
+| `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
@@ -120,6 +121,12 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 ### A queue of work has one attention panel, not many badges
 
 The self-paced hub stacks three panels and only the first — *To set up*, the work the coach owes someone who already paid — wears `FitPanel(attention = true)`: the yellow tint plus a yellow-600 hairline. The other two are plain. A tint on every section would say everything is urgent, which is the same as saying nothing is; and a per-row badge inside a tinted panel double-counts the signal. The exception is a row whose own state contradicts its panel — an overdue workout inside the plain *Sent* panel — and that is what `FitStatusBadge` beside the name is for.
+
+### Restyled is a skin, not a rewrite
+
+A **redrawn** screen is rebuilt from the v3 components. A **restyled** one already has the right layout, so rebuilding it would be a rewrite with nothing to show for it: `FitV3Skin` swaps the canvas and the palette underneath it instead, and the screen goes on calling `FitTheme`, `FitScreen`, `FitCard` and the rest. The check sits inside `FitTheme`, because a nested `FitTheme(isDark = …)` — which is how the role picks dark or light on a hundred screens — must not undo the skin.
+
+Only the colours a surface is made of are mapped; brand, status tints and the calendar washes carry meaning rather than depth and stay as they are. Two answers have no token to travel in and ride along with the skin: the **primary CTA**, which is a brush and stops being the brand gradient on a teal canvas, and the **sheet**, which is the sharper split — `screenBg` is both a screen's background and a sheet's container, and the rework needs the screen to let the gradient through while the sheet must not.
 
 ### The sheet carries the blur Android cannot draw
 
