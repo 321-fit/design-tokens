@@ -128,6 +128,10 @@ A **redrawn** screen is rebuilt from the v3 components. A **restyled** one alrea
 
 Only the colours a surface is made of are mapped; brand, status tints and the calendar washes carry meaning rather than depth and stay as they are. Two answers have no token to travel in and ride along with the skin: the **primary CTA**, which is a brush and stops being the brand gradient on a teal canvas, and the **sheet**, which is the sharper split — `screenBg` is both a screen's background and a sheet's container, and the rework needs the screen to let the gradient through while the sheet must not.
 
+### Light or dark is asked, never guessed
+
+Components used to infer the mode by comparing the theme against the two canonical instances — `theme === Theme.dark`, or `screenBg != gray.900`. A skinned screen breaks both: its theme is a `copy`, and its screen background is **transparent** so the gradient can show through. Every one of those checks then answered "light" on the darkest canvas in the app — which is how a card on the rework canvas grew the light theme's drop shadow and read as a pale frame around itself. `fitIsLight()` is the single answer now: the skin states it, and only the unskinned fallback compares colours.
+
 ### The sheet carries the blur Android cannot draw
 
 `material` is the sheet's colour and the one place the spec asks for blur. Compose blurs a composable's own content, never what sits behind it, so the Android sheet paints the material **opaque** where the token says 80 % + a 28 px blur: with nothing blurred behind it, a translucent sheet reads as see-through rather than as a layer above the screen, and even at 96 % the rows underneath ghost through. The token keeps the blur for the platforms that can draw it.

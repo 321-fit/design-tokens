@@ -41,6 +41,7 @@ fun FitV3Skin(
                 ink = palette.ctaLabel,
             ),
             sheet = palette.material,
+            isLight = look == FitV3Look.Light,
         )
     }
     FitV3Theme(look = look) {

@@ -41,6 +41,7 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitRadius
@@ -139,7 +140,7 @@ fun FitIconBtn(
         // (`rgba(117,126,135,0.3)`); light keeps the opaque surface (`.fit-light .fit-icon-btn`).
         // The blur itself has no cheap Compose equivalent — a backdrop filter would mean
         // rendering the layer underneath — so the plate carries the effect on its own.
-        theme === FitColors.Theme.dark -> IconBtnPlateDark
+        !fitIsLight() -> IconBtnPlateDark
         else -> theme.surfaceHigh
     }
 

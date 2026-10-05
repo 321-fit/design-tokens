@@ -2,6 +2,7 @@ package com.fit321.fitui.theme
 
 import androidx.compose.foundation.text.LocalAutofillHighlightColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Brush
@@ -43,9 +44,24 @@ data class FitSkin(
     val theme: FitColors.Theme,
     val cta: FitSkinCta,
     val sheet: Color,
+    val isLight: Boolean,
 )
 
 data class FitSkinCta(val fill: Brush, val ink: Color)
+
+/**
+ * Light or dark, asked rather than guessed.
+ *
+ * Components used to infer it by comparing the theme against the two canonical instances —
+ * `theme === Theme.dark`, or `screenBg != gray.900`. A skinned screen breaks both: its theme is
+ * a copy, and its screen background is transparent so the gradient can show through. Every one
+ * of those checks then answered "light" on the darkest canvas in the app, which is how a card
+ * on the rework canvas grew a drop shadow it should never have.
+ */
+@Composable
+@ReadOnlyComposable
+fun fitIsLight(): Boolean =
+    LocalFitSkin.current?.isLight ?: (LocalFitTheme.current.screenBg != FitColors.Gray.g900)
 
 @Composable
 fun FitTheme(
