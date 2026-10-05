@@ -135,7 +135,7 @@ places that would otherwise be free to disagree about what "group" looks like.
 
 A **redrawn** screen is rebuilt from the v3 components. A **restyled** one already has the right layout, so rebuilding it would be a rewrite with nothing to show for it: `FitV3Skin` swaps the canvas and the palette underneath it instead, and the screen goes on calling `FitTheme`, `FitScreen`, `FitCard` and the rest. The check sits inside `FitTheme`, because a nested `FitTheme(isDark = …)` — which is how the role picks dark or light on a hundred screens — must not undo the skin.
 
-Only the colours a surface is made of are mapped; brand, status tints and the calendar washes carry meaning rather than depth and stay as they are. Two answers have no token to travel in and ride along with the skin: the **primary CTA**, which is a brush and stops being the brand gradient on a teal canvas, and the **sheet**, which is the sharper split — `screenBg` is both a screen's background and a sheet's container, and the rework needs the screen to let the gradient through while the sheet must not.
+Only the colours a surface is made of are mapped; brand, status tints and the calendar washes carry meaning rather than depth and stay as they are. Two answers have no token to travel in and ride along with the skin: the **primary CTA**, which is a brush and stops being the brand gradient on a teal canvas, and the **overlay**, which is the sharper split — a sheet and a menu are layers *over* the screen, and the rework needs them opaque while the screen itself lets the gradient through; one `screenBg` cannot be both.
 
 ### A perimeter says "act", a word says what
 

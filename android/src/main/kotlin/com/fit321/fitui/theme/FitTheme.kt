@@ -32,18 +32,20 @@ val LocalFitTheme = compositionLocalOf { FitColors.Theme.dark }
  * is why the check lives in [FitTheme] and not at each call site: those calls are spread over a
  * hundred screens and are how the role picks dark or light in the first place.
  *
- * [cta] and [sheet] exist because two of the rework's answers have no token to travel in. The
+ * [cta] and [overlay] exist because two of the rework's answers have no token to travel in. The
  * primary CTA is a brush, not a colour, and on the tinted canvas it stops being the brand
- * gradient. The sheet is the sharper split: `screenBg` is both the screen's own background and
- * a sheet's container, and the rework needs those to differ — the screen must let the gradient
- * through, the sheet must not.
+ * gradient. The overlay is the sharper split: a sheet and a menu are layers *over* the screen,
+ * and the rework needs them opaque while the screen itself lets the gradient through — one
+ * `screenBg` cannot be both.
  */
 val LocalFitSkin = compositionLocalOf<FitSkin?> { null }
 
 data class FitSkin(
     val theme: FitColors.Theme,
     val cta: FitSkinCta,
-    val sheet: Color,
+    /** Sheets and menus: a layer over the screen, not a surface on it. */
+    val overlay: Color,
+    val overlayEdge: Color,
     val isLight: Boolean,
 )
 

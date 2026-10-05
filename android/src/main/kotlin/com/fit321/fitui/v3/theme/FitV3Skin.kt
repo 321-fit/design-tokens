@@ -41,7 +41,8 @@ fun FitV3Skin(
                 fill = Brush.verticalGradient(palette.ctaStops.map { it.second }),
                 ink = palette.ctaLabel,
             ),
-            sheet = palette.material,
+            overlay = palette.material,
+            overlayEdge = palette.materialEdge,
             isLight = look == FitV3Look.Light,
         )
     }

@@ -93,7 +93,7 @@ fun FitSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = FitRadius.lg, topEnd = FitRadius.lg),
-        containerColor = LocalFitSkin.current?.sheet ?: theme.screenBg,
+        containerColor = LocalFitSkin.current?.overlay ?: theme.screenBg,
         contentColor = theme.textPrimary,
         tonalElevation = 0.dp,
         scrimColor = Color.Black.copy(alpha = 0.5f),
