@@ -92,7 +92,12 @@ fun FitStatusBanner(
 
 @Composable
 fun FitEmptyPanel(
-    title: String,
+    /**
+     * Null for a section that is merely empty. A whole screen with nothing in it announces
+     * itself; a section inside a full screen says one quiet line and offers the way out — a
+     * headline there competes with the section title right above it.
+     */
+    title: String? = null,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     actions: (@Composable () -> Unit)? = null,
@@ -106,12 +111,14 @@ fun FitEmptyPanel(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Text(
-                text = title,
-                style = FitV3Type.nextWhen,
-                color = palette.textPrimary,
-                textAlign = TextAlign.Center,
-            )
+            if (title != null) {
+                Text(
+                    text = title,
+                    style = FitV3Type.nextWhen,
+                    color = palette.textPrimary,
+                    textAlign = TextAlign.Center,
+                )
+            }
             if (subtitle != null) {
                 Text(
                     text = subtitle,
