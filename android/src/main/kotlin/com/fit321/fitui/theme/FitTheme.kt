@@ -53,6 +53,12 @@ data class FitSkin(
      */
     val circle: Color,
     val circleEdge: Color,
+    /**
+     * What a link or an inline action is coloured with. The shipped palette's brand is blue;
+     * the rework's is teal, and a screen worn under the skin would otherwise keep one blue
+     * word in the middle of a teal page.
+     */
+    val accent: Color,
     val isLight: Boolean,
 )
 
@@ -67,6 +73,11 @@ data class FitSkinCta(val fill: Brush, val ink: Color)
  * of those checks then answered "light" on the darkest canvas in the app, which is how a card
  * on the rework canvas grew a drop shadow it should never have.
  */
+/** The accent a skinned screen wears, falling back to the shipped brand. */
+@Composable
+@ReadOnlyComposable
+fun fitAccent(): Color = LocalFitSkin.current?.accent ?: FitColors.brandPrimary
+
 @Composable
 @ReadOnlyComposable
 fun fitIsLight(): Boolean =

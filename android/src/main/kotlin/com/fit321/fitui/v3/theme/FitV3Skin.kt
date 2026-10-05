@@ -51,6 +51,7 @@ fun FitV3Skin(
             overlayEdge = palette.materialEdge,
             circle = palette.headerCircleFill,
             circleEdge = palette.headerCircleBorder,
+            accent = palette.accentBadgeInk,
             isLight = look == FitV3Look.Light,
         )
     }
