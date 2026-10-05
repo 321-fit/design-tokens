@@ -56,8 +56,13 @@ fun FitActionCircleRow(
     )
 }
 
+/**
+ * One of the things a coach does on this screen. The row splits evenly between them —
+ * `.fit-action-circle { flex: 1 }` — so the share is taken here rather than asked for at every
+ * call site: a row that forgot it bunched its circles against the left edge.
+ */
 @Composable
-fun FitActionCircle(
+fun RowScope.FitActionCircle(
     label: String,
     modifier: Modifier = Modifier,
     style: FitActionCircleStyle = FitActionCircleStyle.Outline,
@@ -92,6 +97,7 @@ fun FitActionCircle(
     }
     Column(
         modifier = modifier
+            .weight(1f)
             .alpha(if (enabled) 1f else 0.32f)
             .clickable(enabled = enabled) { onClick() }
             .padding(vertical = 4.dp),
