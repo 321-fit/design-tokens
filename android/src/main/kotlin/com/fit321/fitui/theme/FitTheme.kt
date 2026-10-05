@@ -46,6 +46,13 @@ data class FitSkin(
     /** Sheets and menus: a layer over the screen, not a surface on it. */
     val overlay: Color,
     val overlayEdge: Color,
+    /**
+     * The round plate a header button sits on. Its own entry because the rework draws it as a
+     * wash with a hairline, and a theme can only carry the wash — a plate with no rim reads as
+     * a hole on the gradient.
+     */
+    val circle: Color,
+    val circleEdge: Color,
     val isLight: Boolean,
 )
 

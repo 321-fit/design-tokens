@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.fit321.designtokens.R
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
@@ -124,6 +125,7 @@ fun FitIconBtn(
         FitIconBtnColor.Error -> FitColors.error
         FitIconBtnColor.Success -> FitColors.success
     }
+    val skin = LocalFitSkin.current
     val bgColor = when {
         // A plate colour the caller states wins: the tinted variants below are computed
         // alphas, and a host with a `bg.<status>-subtle` token has the value this file
@@ -140,15 +142,18 @@ fun FitIconBtn(
         // (`rgba(117,126,135,0.3)`); light keeps the opaque surface (`.fit-light .fit-icon-btn`).
         // The blur itself has no cheap Compose equivalent — a backdrop filter would mean
         // rendering the layer underneath — so the plate carries the effect on its own.
+        skin != null -> skin.circle
         !fitIsLight() -> IconBtnPlateDark
         else -> theme.surfaceHigh
     }
+    val plateEdge = skin?.circleEdge.takeIf { background == null && style != FitIconBtnStyle.Ghost }
 
     Box(
         modifier = modifier
             .size(size.box)
             .clip(CircleShape)
             .background(bgColor)
+            .then(if (plateEdge != null) Modifier.border(1.dp, plateEdge, CircleShape) else Modifier)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {

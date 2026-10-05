@@ -43,6 +43,8 @@ fun FitV3Skin(
             ),
             overlay = palette.material,
             overlayEdge = palette.materialEdge,
+            circle = palette.headerCircleFill,
+            circleEdge = palette.headerCircleBorder,
             isLight = look == FitV3Look.Light,
         )
     }

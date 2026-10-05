@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.fit321.designtokens.R
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -91,7 +92,11 @@ fun FitHeader(
                     .align(Alignment.CenterStart)
                     .size(FitSize.iconBtnSize)
                     .clip(CircleShape)
-                    .background(theme.surfaceHigh)
+                    .background(LocalFitSkin.current?.circle ?: theme.surfaceHigh)
+                    .then(
+                        LocalFitSkin.current?.circleEdge?.let { Modifier.border(1.dp, it, CircleShape) }
+                            ?: Modifier,
+                    )
                     .clickable { onBack() }
                     .then(if (backTestTag != null) Modifier.testTag(backTestTag) else Modifier),
                 contentAlignment = Alignment.Center
