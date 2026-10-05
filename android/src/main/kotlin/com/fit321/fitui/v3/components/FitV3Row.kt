@@ -45,6 +45,12 @@ fun FitRow(
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
     titleBadge: (@Composable () -> Unit)? = null,
+    /**
+     * Under the sub-line, inside the text column: a bar, a meter, anything that measures what
+     * the row is about. It belongs here and not in [trailing] because it reads as a second
+     * line of the row's own text — a progress bar beside the value would be a third column.
+     */
+    below: (@Composable () -> Unit)? = null,
     muted: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
@@ -92,6 +98,9 @@ fun FitRow(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = FitV3Geometry.rowSubGap),
                 )
+            }
+            if (below != null) {
+                Box(modifier = Modifier.padding(top = 7.dp)) { below() }
             }
         }
         trailing?.invoke()

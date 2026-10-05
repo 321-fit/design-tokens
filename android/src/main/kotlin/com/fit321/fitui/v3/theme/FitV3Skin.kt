@@ -31,6 +31,12 @@ import com.fit321.fitui.v3.tokens.FitV3Palette
 @Composable
 fun FitV3Skin(
     look: FitV3Look = FitV3Look.Tinted,
+    /**
+     * False for something that is already *on* a rework screen — a sheet or a dialog opened
+     * over one. The canvas is the screen's own gradient; painting a second one behind an
+     * overlay would cover the screen the overlay is supposed to sit on.
+     */
+    canvas: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val palette = FitV3Colors.of(look)
@@ -49,10 +55,10 @@ fun FitV3Skin(
         )
     }
     FitV3Theme(look = look) {
-        FitV3Canvas {
-            // Both locals, not just the skin: a screen that does not call `FitTheme` itself
-            // would otherwise keep the role's palette under the rework canvas and paint its own
-            // opaque background over the gradient.
+        // Both locals, not just the skin: a screen that does not call `FitTheme` itself
+        // would otherwise keep the role's palette under the rework canvas and paint its own
+        // opaque background over the gradient.
+        val skinned: @Composable () -> Unit = {
             CompositionLocalProvider(
                 LocalFitSkin provides skin,
                 LocalFitTheme provides skin.theme,
@@ -60,6 +66,7 @@ fun FitV3Skin(
                 Box { content() }
             }
         }
+        if (canvas) FitV3Canvas { skinned() } else skinned()
     }
 }
 
