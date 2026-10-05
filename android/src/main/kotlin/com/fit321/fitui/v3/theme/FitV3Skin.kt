@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import com.fit321.fitui.theme.FitSkin
 import com.fit321.fitui.theme.FitSkinCta
 import com.fit321.fitui.theme.LocalFitSkin
+import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.components.FitV3Canvas
 import com.fit321.fitui.v3.tokens.FitV3Colors
@@ -46,7 +47,13 @@ fun FitV3Skin(
     }
     FitV3Theme(look = look) {
         FitV3Canvas {
-            CompositionLocalProvider(LocalFitSkin provides skin) {
+            // Both locals, not just the skin: a screen that does not call `FitTheme` itself
+            // would otherwise keep the role's palette under the rework canvas and paint its own
+            // opaque background over the gradient.
+            CompositionLocalProvider(
+                LocalFitSkin provides skin,
+                LocalFitTheme provides skin.theme,
+            ) {
                 Box { content() }
             }
         }

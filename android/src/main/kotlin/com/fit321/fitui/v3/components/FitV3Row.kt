@@ -166,6 +166,27 @@ fun FitRowGo(
     }
 }
 
+/**
+ * The day a row belongs to, as a block rather than a sentence: a history read top to bottom is
+ * scanned by date first, and a date inside the sub-line cannot be scanned at all.
+ */
+@Composable
+fun FitDateBlock(
+    day: String,
+    weekday: String,
+    modifier: Modifier = Modifier,
+) {
+    val palette = LocalFitV3Palette.current
+    Column(
+        modifier = modifier.size(FitV3Geometry.leadingPlate),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(text = day, style = FitV3Type.compactStats, color = palette.textPrimary, maxLines = 1)
+        Text(text = weekday, style = FitV3Type.statLabelSmall, color = palette.textTertiary, maxLines = 1)
+    }
+}
+
 @Composable
 fun FitRowPlate(
     modifier: Modifier = Modifier,

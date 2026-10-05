@@ -110,6 +110,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitInput(leading)` — the search field's glyph | `FitSearchField` | 8 | ✅ built |
 | `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
 | `FitCountBadge` · `FitV3HeaderCircle(badge)` · `FitNextSessionCard(badge)` · `FitV3Tone.Attention` | `FitBadge` | 9 | ✅ built |
+| `FitIdentityPanel` (layout A) · `FitTypePlate` · `FitDateBlock` | `FitProfileHeader` | 10 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
@@ -122,6 +123,13 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 ### A queue of work has one attention panel, not many badges
 
 The self-paced hub stacks three panels and only the first — *To set up*, the work the coach owes someone who already paid — wears `FitPanel(attention = true)`: the yellow tint plus a yellow-600 hairline. The other two are plain. A tint on every section would say everything is urgent, which is the same as saying nothing is; and a per-row badge inside a tinted panel double-counts the signal. The exception is a row whose own state contradicts its panel — an overdue workout inside the plain *Sent* panel — and that is what `FitStatusBadge` beside the name is for.
+
+### The type plate belongs to the type, not to the card
+
+What kind of session this is reads as colour before it reads as a word, so the plate lives in
+`FitTypePlate` rather than inside the session card that first needed it. The next-session card,
+the rows that stand in for calendar tiles and the card itself all take it from there — three
+places that would otherwise be free to disagree about what "group" looks like.
 
 ### Restyled is a skin, not a rewrite
 

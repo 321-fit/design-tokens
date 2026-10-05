@@ -69,6 +69,12 @@ object FitV3Geometry {
     val clipGap = 10.dp
     val progressBarHeight = 4.dp
 
+    val typePlate = 46.dp
+    val typePlateRadius = 13.dp
+    val typePlateSmall = 40.dp
+    val typePlateSmallRadius = 12.dp
+    val identityPanelAvatar = 60.dp
+
     val identityAvatar = 84.dp
     val identityStack = 56.dp
     val profileAvatar = 72.dp

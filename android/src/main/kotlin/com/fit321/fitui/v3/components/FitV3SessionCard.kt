@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
 import com.fit321.fitui.tokens.FitColors
@@ -35,6 +36,41 @@ import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
 
 enum class FitSessionType { Personal, Group, SelfPaced }
+
+/**
+ * The type plate: what kind of session this is, as colour before it is read as a word. Shared by
+ * the session card, the next-session card and the rows that stand in for calendar tiles, so the
+ * three cannot disagree about what "group" looks like.
+ */
+@Composable
+fun FitTypePlate(
+    type: FitSessionType,
+    modifier: Modifier = Modifier,
+    size: Dp = FitV3Geometry.typePlate,
+    radius: Dp = FitV3Geometry.typePlateRadius,
+    icon: @Composable () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .background(type.plateBrush(), RoundedCornerShape(radius)),
+        contentAlignment = Alignment.Center,
+    ) {
+        CompositionLocalProvider(LocalContentColor provides type.plateInk()) { icon() }
+    }
+}
+
+fun FitSessionType.plateBrush(): Brush = when (this) {
+    FitSessionType.Personal -> FitColors.personalTypeGradient
+    FitSessionType.Group -> FitColors.groupTypeGradient
+    FitSessionType.SelfPaced -> FitColors.selfPacedTypeGradient
+}
+
+fun FitSessionType.plateInk(): Color = when (this) {
+    FitSessionType.Personal -> FitColors.Teal.t500
+    FitSessionType.Group -> FitColors.Blue.b500
+    FitSessionType.SelfPaced -> FitColors.Violet.v400
+}
 
 @Composable
 fun FitSessionCard(
@@ -51,16 +87,8 @@ fun FitSessionCard(
 ) {
     val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.sessionCardRadius)
-    val plate: Brush = when (type) {
-        FitSessionType.Personal -> FitColors.personalTypeGradient
-        FitSessionType.Group -> FitColors.groupTypeGradient
-        FitSessionType.SelfPaced -> FitColors.selfPacedTypeGradient
-    }
-    val plateInk = when (type) {
-        FitSessionType.Personal -> FitColors.Teal.t500
-        FitSessionType.Group -> FitColors.Blue.b500
-        FitSessionType.SelfPaced -> FitColors.Violet.v400
-    }
+    val plate: Brush = type.plateBrush()
+    val plateInk = type.plateInk()
     Column(
         modifier = modifier
             .fillMaxWidth()
