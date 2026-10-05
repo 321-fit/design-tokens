@@ -36,6 +36,9 @@ import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.ui.unit.sp
 
 data class FitDayBar(
     val label: String,
@@ -207,7 +210,17 @@ private fun FitDaySide(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (value != null) {
-            Text(text = value, style = FitV3Type.compactName, color = palette.textPrimary)
+            // The side figure is money, and money can be long — a currency with cents split
+            // "$22.82" across two lines mid-number. It shrinks to fit rather than wrapping.
+            BasicText(
+                text = value,
+                style = FitV3Type.compactName.copy(color = palette.textPrimary),
+                maxLines = 1,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = 14.sp,
+                    maxFontSize = FitV3Type.compactName.fontSize,
+                ),
+            )
         }
         if (label != null) {
             Text(

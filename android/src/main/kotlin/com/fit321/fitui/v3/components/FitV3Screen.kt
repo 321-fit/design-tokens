@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -106,19 +107,30 @@ fun FitV3Header(
 fun FitV3HeaderCircle(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    badge: String? = null,
     content: @Composable () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
-    Box(
-        modifier = modifier
-            .size(FitV3Geometry.leadingPlate)
-            .clip(CircleShape)
-            .background(palette.headerCircleFill, CircleShape)
-            .border(1.dp, palette.headerCircleBorder, CircleShape)
-            .clickable { onClick() },
-        contentAlignment = Alignment.Center,
-    ) {
-        CompositionLocalProvider(LocalContentColor provides palette.textPrimary) { content() }
+    Box(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .size(FitV3Geometry.leadingPlate)
+                .clip(CircleShape)
+                .background(palette.headerCircleFill, CircleShape)
+                .border(1.dp, palette.headerCircleBorder, CircleShape)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center,
+        ) {
+            CompositionLocalProvider(LocalContentColor provides palette.textPrimary) { content() }
+        }
+        if (badge != null) {
+            // Sits proud of the circle, as `.cd-d-hbn` does — a count clipped to the plate
+            // reads as part of the glyph.
+            FitCountBadge(
+                text = badge,
+                modifier = Modifier.align(Alignment.TopEnd).offset(x = 3.dp, y = (-3).dp),
+            )
+        }
     }
 }
 

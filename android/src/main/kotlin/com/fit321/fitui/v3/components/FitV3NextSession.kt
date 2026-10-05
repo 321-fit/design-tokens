@@ -35,6 +35,7 @@ fun FitNextSessionCard(
     whatLine: String? = null,
     state: FitNextSessionState = FitNextSessionState.Planned,
     leading: (@Composable () -> Unit)? = null,
+    badge: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
@@ -81,13 +82,20 @@ fun FitNextSessionCard(
     ) {
         leading?.invoke()
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = whenLine,
-                style = FitV3Type.nextWhen,
-                color = palette.textPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = whenLine,
+                    style = FitV3Type.nextWhen,
+                    color = palette.textPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+                badge?.invoke()
+            }
             if (whatLine != null) {
                 Text(
                     text = whatLine,

@@ -109,6 +109,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
 | `FitInput(leading)` — the search field's glyph | `FitSearchField` | 8 | ✅ built |
 | `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
+| `FitCountBadge` · `FitV3HeaderCircle(badge)` · `FitNextSessionCard(badge)` · `FitV3Tone.Attention` | `FitBadge` | 9 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
@@ -127,6 +128,10 @@ The self-paced hub stacks three panels and only the first — *To set up*, the w
 A **redrawn** screen is rebuilt from the v3 components. A **restyled** one already has the right layout, so rebuilding it would be a rewrite with nothing to show for it: `FitV3Skin` swaps the canvas and the palette underneath it instead, and the screen goes on calling `FitTheme`, `FitScreen`, `FitCard` and the rest. The check sits inside `FitTheme`, because a nested `FitTheme(isDark = …)` — which is how the role picks dark or light on a hundred screens — must not undo the skin.
 
 Only the colours a surface is made of are mapped; brand, status tints and the calendar washes carry meaning rather than depth and stay as they are. Two answers have no token to travel in and ride along with the skin: the **primary CTA**, which is a brush and stops being the brand gradient on a teal canvas, and the **sheet**, which is the sharper split — `screenBg` is both a screen's background and a sheet's container, and the rework needs the screen to let the gradient through while the sheet must not.
+
+### A perimeter says "act", a word says what
+
+The next-session card draws a request with the calendar's yellow perimeter, and that is only half the sentence: a yellow outline on its own reads as a booking someone highlighted. The card carries a **badge** beside the time — "Request", "Awaiting" — in the same `Attention` tone as the perimeter. The card still has no buttons: the tap opens the drawer where the request is answered.
 
 ### Light or dark is asked, never guessed
 

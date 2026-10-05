@@ -33,7 +33,7 @@ import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Type
 
-enum class FitV3Tone { Neutral, Muted, Income, Info, Danger }
+enum class FitV3Tone { Neutral, Muted, Income, Info, Danger, Attention }
 
 fun FitV3Tone.fill(palette: FitV3Palette): Color = when (this) {
     FitV3Tone.Neutral -> palette.raised
@@ -41,6 +41,7 @@ fun FitV3Tone.fill(palette: FitV3Palette): Color = when (this) {
     FitV3Tone.Income -> palette.txnIncomeFill
     FitV3Tone.Info -> palette.txnInfoFill
     FitV3Tone.Danger -> palette.txnDangerFill
+    FitV3Tone.Attention -> palette.attentionTint
 }
 
 fun FitV3Tone.ink(palette: FitV3Palette): Color = when (this) {
@@ -49,6 +50,7 @@ fun FitV3Tone.ink(palette: FitV3Palette): Color = when (this) {
     FitV3Tone.Income -> palette.txnIncomeInk
     FitV3Tone.Info -> palette.txnInfoInk
     FitV3Tone.Danger -> palette.textError
+    FitV3Tone.Attention -> palette.perimeterAttention
 }
 
 @Composable

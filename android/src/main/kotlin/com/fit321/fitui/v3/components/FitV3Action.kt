@@ -110,7 +110,7 @@ fun FitActionCircle(
                 CompositionLocalProvider(LocalContentColor provides ink) { icon() }
             }
             if (badge != null) {
-                FitActionBadge(
+                FitCountBadge(
                     text = badge,
                     tone = badgeTone,
                     modifier = Modifier
@@ -129,11 +129,12 @@ fun FitActionCircle(
     }
 }
 
+/** The count pill a circle wears — shared by the action circles and the header's own. */
 @Composable
-private fun FitActionBadge(
+fun FitCountBadge(
     text: String,
-    tone: FitActionBadgeTone,
     modifier: Modifier = Modifier,
+    tone: FitActionBadgeTone = FitActionBadgeTone.Money,
 ) {
     val palette = LocalFitV3Palette.current
     val background = when (tone) {
