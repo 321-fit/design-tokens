@@ -484,6 +484,24 @@
       },
       "sheetBottom": {
         "value": 28
+      },
+      "clipCardWidth": {
+        "value": 172
+      },
+      "clipPosterHeight": {
+        "value": 112
+      },
+      "clipPosterRadius": {
+        "value": 16
+      },
+      "clipPlay": {
+        "value": 40
+      },
+      "clipGap": {
+        "value": 10
+      },
+      "progressBarHeight": {
+        "value": 4
       }
     },
     "txn": {
@@ -520,6 +538,24 @@
       },
       "handle-light": {
         "value": "{color.gray.200}"
+      }
+    },
+    "clip": {
+      "comment": "The review strip's poster. The scrim is what keeps a white duration legible over an unknown frame, so it belongs to the component and not to the image.",
+      "poster-tinted": {
+        "value": "rgba(0,0,0,0.28)"
+      },
+      "poster-light": {
+        "value": "{color.gray.white}"
+      },
+      "scrim": {
+        "value": "rgba(0,0,0,0.45)"
+      },
+      "play-fill": {
+        "value": "rgba(255,255,255,0.92)"
+      },
+      "play-ink": {
+        "value": "#12161A"
       }
     }
   }

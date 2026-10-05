@@ -44,6 +44,7 @@ fun FitRow(
     subtitle: String? = null,
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
+    titleBadge: (@Composable () -> Unit)? = null,
     muted: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
@@ -68,13 +69,20 @@ fun FitRow(
     ) {
         leading?.invoke()
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = FitV3Type.rowTitle,
-                color = if (muted) palette.textSecondary else palette.textPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Text(
+                    text = title,
+                    style = FitV3Type.rowTitle,
+                    color = if (muted) palette.textSecondary else palette.textPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+                titleBadge?.invoke()
+            }
             if (subtitle != null) {
                 Text(
                     text = subtitle,
@@ -118,6 +126,44 @@ fun FitRowChevron(modifier: Modifier = Modifier) {
         tint = LocalFitV3Palette.current.textTertiary,
         modifier = modifier.size(16.dp),
     )
+}
+
+@Composable
+fun FitStatusBadge(
+    text: String,
+    modifier: Modifier = Modifier,
+    tone: FitV3Tone = FitV3Tone.Danger,
+) {
+    val palette = LocalFitV3Palette.current
+    Text(
+        text = text,
+        style = FitV3Type.rowValueSub,
+        color = tone.ink(palette),
+        modifier = modifier
+            .background(tone.fill(palette), RoundedCornerShape(percent = 50))
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+    )
+}
+
+@Composable
+fun FitRowGo(
+    label: String,
+    modifier: Modifier = Modifier,
+) {
+    val palette = LocalFitV3Palette.current
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(text = label, style = FitV3Type.compactStats, color = palette.textPrimary)
+        Icon(
+            painter = painterResource(R.drawable.ic_fit_chevron_right),
+            contentDescription = null,
+            tint = palette.textPrimary,
+            modifier = Modifier.size(16.dp),
+        )
+    }
 }
 
 @Composable

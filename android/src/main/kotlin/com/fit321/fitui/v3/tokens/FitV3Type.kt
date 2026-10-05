@@ -55,6 +55,8 @@ object FitV3Type {
     val detailHeroSub = style(14, FontWeight.Normal, 20)
     val sheetTitle = style(18, FontWeight.Medium, 23)
 
+    val clipDuration = style(12, FontWeight.SemiBold, 16)
+
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     val moneyHero = style(48, FontWeight.Bold, 54)
     val moneyHeroCurrency = style(28, FontWeight.SemiBold, 34)

@@ -21,13 +21,20 @@ import com.fit321.fitui.v3.tokens.FitV3Type
 @Composable
 fun FitPanel(
     modifier: Modifier = Modifier,
+    attention: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.panelRadius)
+    val surface = if (attention) {
+        Modifier.fitV3Surface(shape, fill = palette.attentionTint, hairline = palette.perimeterAttention)
+    } else {
+        Modifier.fitV3Surface(shape)
+    }
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .fitV3Surface(shape)
+            .then(surface)
             .clip(shape)
             .padding(FitV3Geometry.panelPadding),
         content = content,

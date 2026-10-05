@@ -71,6 +71,7 @@ data class FitV3Palette(
     val txnInfoInk: Color,
     val txnDangerFill: Color,
     val sheetHandle: Color,
+    val clipPoster: Color,
 )
 
 object FitV3Colors {
@@ -151,6 +152,7 @@ object FitV3Colors {
         txnInfoInk = FitColors.Blue.b500,
         txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
         sheetHandle = Color(0x38FFFFFF),
+        clipPoster = Color(0x47000000),
     )
 
     val light = FitV3Palette(
@@ -230,9 +232,14 @@ object FitV3Colors {
         txnInfoInk = FitColors.Blue.b700,
         txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
         sheetHandle = FitColors.Gray.g200,
+        clipPoster = FitColors.Gray.white,
     )
 
     val pickTick = Color(0xFF06251F)
+
+    val clipScrim = Color(0x73000000)
+    val clipPlayFill = Color(0xEBFFFFFF)
+    val clipPlayInk = Color(0xFF12161A)
 
     fun of(look: FitV3Look): FitV3Palette = when (look) {
         FitV3Look.Tinted -> tinted

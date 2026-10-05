@@ -62,6 +62,13 @@ object FitV3Geometry {
     val sheetSide = 16.dp
     val sheetBottom = 28.dp
 
+    val clipCardWidth = 172.dp
+    val clipPosterHeight = 112.dp
+    val clipPosterRadius = 16.dp
+    val clipPlay = 40.dp
+    val clipGap = 10.dp
+    val progressBarHeight = 4.dp
+
     val identityAvatar = 84.dp
     val identityStack = 56.dp
     val profileAvatar = 72.dp

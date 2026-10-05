@@ -105,6 +105,8 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitAccentBadge` | `FitBadge` | 6 | ✅ built |
 | `FitDetailHero` · `FitTxnGroup` · `FitTxnRow` · `FitTxnPlate` · `FitTxnDivider` + `FitV3Tone` | `LedgerRow` kit | 7 | ✅ built |
 | `FitV3Sheet` · `FitSheetTitle` · `FitSheetActionRow` · `FitSheetCloseButton` | `FitSheet`, `FitSheetActionItem` | 7 | ✅ built |
+| `FitClipStrip` · `FitClipCard` (poster slot, duration, no-clip face) | — | 8 | ✅ built |
+| `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
@@ -113,6 +115,10 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 ### A ledger row is not a `FitRow`
 
 `FitRow` is the panel row — 16 px title, a 40 × 12 plate, rounded on its own. `FitTxnRow` is the money row from `.fit-txn`: a 36 px **circle** carrying a tone, a 15 px title, up to two sub-lines (the second is the age, in its own tone) and an amount that takes its colour from the same tone. They stack inside `FitTxnGroup` — one radius-14 surface, hairlines between the rows, the light look's card lift on the group rather than on each row.
+
+### A queue of work has one attention panel, not many badges
+
+The self-paced hub stacks three panels and only the first — *To set up*, the work the coach owes someone who already paid — wears `FitPanel(attention = true)`: the yellow tint plus a yellow-600 hairline. The other two are plain. A tint on every section would say everything is urgent, which is the same as saying nothing is; and a per-row badge inside a tinted panel double-counts the signal. The exception is a row whose own state contradicts its panel — an overdue workout inside the plain *Sent* panel — and that is what `FitStatusBadge` beside the name is for.
 
 ### The sheet carries the blur Android cannot draw
 
