@@ -35,6 +35,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.fit321.designtokens.R
 
 @Composable
@@ -234,6 +236,8 @@ fun FitSelectField(
 ) {
     val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.fieldRadius)
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
     Column(modifier = modifier.fillMaxWidth()) {
         if (label != null) {
             Row(
@@ -257,7 +261,14 @@ fun FitSelectField(
                 .heightIn(min = FitV3Geometry.fieldHeight)
                 .fitV3Surface(shape = shape, hairline = palette.surfaceHairline)
                 .clip(shape)
-                .clickable { onClick() }
+                .clickable {
+                    // The keyboard goes before whatever this opens arrives: a sheet sliding up
+                    // while the IME inset is still collapsing is the jump you see, and a field
+                    // that kept focus pops the keyboard straight back on dismiss.
+                    keyboard?.hide()
+                    focus.clearFocus()
+                    onClick()
+                }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
