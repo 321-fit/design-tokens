@@ -82,6 +82,8 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitRowValue(inline)` — "3 of 10" reads as one fact, so it does not stack | — | 1 | ✅ built |
 | `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | ✅ built |
 | `FitSectionTitleRow` — the same bar when the left side is a control ("Select all"), not a label | — | 1 | ✅ built |
+| `FitSelectField` — a form field that opens a picker instead of taking typing | `FitSelectRow` | 1 | ✅ built |
+| `FitV3Menu` + `FitV3MenuItem` — the short list a "⋯" hangs off | `FitContextMenu` | 1 | ✅ built |
 | `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
 | `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
 | `FitIdentity` (centred, avatar 84, name 28/700) · `FitIdentityCompact` (22/700 + stats 15/600) | `FitProfileHero` | 2 | ✅ built |

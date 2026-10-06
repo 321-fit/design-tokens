@@ -59,6 +59,7 @@ object FitV3Type {
     val detailHero = style(32, FontWeight.SemiBold, 38, (-0.5).sp)
     val detailHeroSub = style(14, FontWeight.Normal, 20)
     val sheetTitle = style(18, FontWeight.Medium, 23)
+    val menuItem = style(15, FontWeight.Normal, 20)
 
     val clipDuration = style(12, FontWeight.SemiBold, 16)
 

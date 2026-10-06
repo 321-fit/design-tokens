@@ -33,6 +33,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import com.fit321.designtokens.R
 
 @Composable
@@ -208,6 +210,79 @@ fun FitSearchField(
                 modifier = Modifier
                     .size(16.dp)
                     .clickable { onValueChange("") },
+            )
+        }
+    }
+}
+
+/**
+ * A field that opens something instead of taking typing — `.cd-f-input.cd-f-row`. It wears the
+ * field's chrome rather than a row's, because in a form the thing the eye follows is the column
+ * of boxes: a picker that looked like a list row would break that column in half.
+ */
+@Composable
+fun FitSelectField(
+    value: String?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    label: String? = null,
+    optional: Boolean = false,
+    optionalLabel: String = "optional",
+    placeholder: String? = null,
+    hint: String? = null,
+    leading: (@Composable () -> Unit)? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(FitV3Geometry.fieldRadius)
+    Column(modifier = modifier.fillMaxWidth()) {
+        if (label != null) {
+            Row(
+                modifier = Modifier.padding(bottom = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = label, style = FitV3Type.fieldLabel, color = palette.textSecondary)
+                if (optional) {
+                    Text(
+                        text = optionalLabel,
+                        style = FitV3Type.fieldLabel,
+                        color = palette.textTertiary,
+                    )
+                }
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = FitV3Geometry.fieldHeight)
+                .fitV3Surface(shape = shape, hairline = palette.surfaceHairline)
+                .clip(shape)
+                .clickable { onClick() }
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            if (leading != null) {
+                CompositionLocalProvider(LocalContentColor provides palette.textTertiary) {
+                    leading()
+                }
+            }
+            Text(
+                text = value ?: placeholder.orEmpty(),
+                style = FitV3Type.fieldText,
+                color = if (value != null) palette.textPrimary else palette.textTertiary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            FitRowChevron()
+        }
+        if (hint != null) {
+            Text(
+                text = hint,
+                style = FitV3Type.fieldHint,
+                color = palette.textTertiary,
+                modifier = Modifier.padding(top = 6.dp),
             )
         }
     }
