@@ -85,7 +85,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitProfileHeader` (cover → row → stats) · `FitProfileCover` · `FitProfileStats` · `FitProfileCard` | `FitProfileHeader` | 2 | ✅ built |
 | `FitV3Avatar` (plate on canvas / on surface / brand) | `FitAvatar` | 2 | ✅ built |
 | `FitActionCircle` + `FitActionCircleRow` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | ✅ built |
-| `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting) | `FitChip` | 3 | ✅ built |
+| `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting; dotless + `selected` for a filter row) | `FitChip` | 3 | ✅ built |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
 | `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
 | `FitSessionCard` (radius 18, type in the plate, location strip) | — (app code today) | 4 | ✅ built |
@@ -107,7 +107,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitV3Sheet` · `FitSheetTitle` · `FitSheetActionRow` · `FitSheetCloseButton` | `FitSheet`, `FitSheetActionItem` | 7 | ✅ built |
 | `FitClipStrip` · `FitClipCard` (poster slot, duration, no-clip face) | — | 8 | ✅ built |
 | `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
-| `FitInput(leading)` — the search field's glyph | `FitSearchField` | 8 | ✅ built |
+| `FitInput(leading)` — the search field's glyph · `FitSearchField` (search over a list, not a form field) | `FitSearchField` | 8 | ✅ built |
 | `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
 | `FitCountBadge` · `FitV3HeaderCircle(badge)` · `FitNextSessionCard(badge)` · `FitV3Tone.Attention` | `FitBadge` | 9 | ✅ built |
 | `FitIdentityPanel` (layout A) · `FitTypePlate` · `FitDateBlock` | `FitProfileHeader` | 10 | ✅ built |
@@ -183,6 +183,13 @@ A picker and a select list do not share a tick, and swapping them is easy to do 
 ### Icon slots carry no colour
 
 `FitActionCircle` and `FitRowPlate` take the glyph as a slot and provide `LocalContentColor` around it, so a Material `Icon` with its default tint comes out right in both looks — white-on-teal inside a filled circle, `#12161a` inside the white one. A call site that hardcodes a tint defeats it; pass the painter and let the component colour it.
+
+### A chip is a door or a choice, never both at once
+
+The needs chips and the filter chips are the same `FitNeedsChip`. One carries a coloured dot
+and opens something; the other carries no dot and says which of a few views the list is
+showing, drawn inverted. Giving the filter its own component would have left two chips in the
+app that must stay the same size, the same radius and the same word spacing forever.
 
 ### What v3 reuses from v2
 

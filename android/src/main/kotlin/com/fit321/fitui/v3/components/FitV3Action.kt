@@ -185,7 +185,14 @@ fun FitNeedsRow(
 fun FitNeedsChip(
     text: String,
     modifier: Modifier = Modifier,
-    tone: FitNeedsTone = FitNeedsTone.Waiting,
+    /** Null for a chip that names a filter rather than a thing waiting — no dot. */
+    tone: FitNeedsTone? = FitNeedsTone.Waiting,
+    /**
+     * The one chip in a row that is currently chosen, drawn inverted. A filter row and a
+     * needs row are the same chip: one is a set of doors, the other a set of choices, and
+     * only the chosen one needs saying.
+     */
+    selected: Boolean = false,
     onClick: () -> Unit = {},
 ) {
     val palette = LocalFitV3Palette.current
@@ -195,21 +202,36 @@ fun FitNeedsChip(
         FitNeedsTone.Question -> FitColors.brandPrimary
         FitNeedsTone.Review -> FitColors.Yellow.y400
         FitNeedsTone.Waiting -> FitColors.Gray.g500
+        null -> Color.Transparent
     }
     Row(
         modifier = modifier
-            .fitV3Surface(shape)
+            .then(
+                if (selected) {
+                    Modifier.background(palette.textPrimary, shape)
+                } else {
+                    Modifier.fitV3Surface(shape)
+                },
+            )
             .clip(shape)
             .clickable { onClick() }
             .padding(horizontal = FitV3Geometry.chipPaddingX, vertical = FitV3Geometry.chipPaddingY),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .size(FitV3Geometry.chipDot)
-                .background(dot, CircleShape),
+        if (tone != null) {
+            Box(
+                modifier = Modifier
+                    .size(FitV3Geometry.chipDot)
+                    .background(dot, CircleShape),
+            )
+        }
+        Text(
+            text = text,
+            style = FitV3Type.chip,
+            // The same ink the CTA uses: both sit on the brightest fill the look has.
+            color = if (selected) palette.ctaLabel else palette.textPrimary,
+            maxLines = 1,
         )
-        Text(text = text, style = FitV3Type.chip, color = palette.textPrimary, maxLines = 1)
     }
 }

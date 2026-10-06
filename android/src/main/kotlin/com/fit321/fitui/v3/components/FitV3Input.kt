@@ -29,6 +29,11 @@ import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import com.fit321.designtokens.R
 
 @Composable
 fun FitInput(
@@ -148,6 +153,62 @@ fun FitInput(
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * Search over a list — not a form field.
+ *
+ * Its own component rather than a short [FitInput]: the field in a form is a 56dp control the
+ * eye stops at, and this one sits above a list the reader is already looking at. Lower, quieter,
+ * and it never carries a label.
+ */
+@Composable
+fun FitSearchField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(FitV3Geometry.chipRadius)
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .fitV3Surface(shape)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_fit_search),
+            contentDescription = null,
+            tint = palette.textTertiary,
+            modifier = Modifier.size(16.dp),
+        )
+        Box(modifier = Modifier.weight(1f)) {
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                singleLine = true,
+                textStyle = FitV3Type.fieldText.copy(color = palette.textPrimary),
+                cursorBrush = SolidColor(FitColors.Teal.t600),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            if (value.isEmpty()) {
+                Text(text = placeholder, style = FitV3Type.fieldText, color = palette.textTertiary)
+            }
+        }
+        if (value.isNotEmpty()) {
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_close),
+                contentDescription = null,
+                tint = palette.textTertiary,
+                modifier = Modifier
+                    .size(16.dp)
+                    .clickable { onValueChange("") },
+            )
         }
     }
 }
