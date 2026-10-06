@@ -56,6 +56,8 @@ fun FitRow(
      * date beside a fixed action. Two by default: a sub-line is usually a sentence.
      */
     subtitleMaxLines: Int = 2,
+    /** Null for the usual tertiary. A sub-line only takes a colour when it *says* something. */
+    subtitleColor: Color? = null,
     muted: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
@@ -98,7 +100,7 @@ fun FitRow(
                 Text(
                     text = subtitle,
                     style = FitV3Type.rowSub,
-                    color = palette.textTertiary,
+                    color = subtitleColor ?: palette.textTertiary,
                     maxLines = subtitleMaxLines,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = FitV3Geometry.rowSubGap),
