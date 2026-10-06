@@ -23,6 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
@@ -83,6 +86,8 @@ fun FitFaceStack(
     initials: List<String>,
     modifier: Modifier = Modifier,
     size: Dp = FitV3Geometry.smallPlate,
+    /** Set alongside a larger [size]: the ink does not scale with the circle on its own. */
+    fontSize: TextUnit = 11.sp,
 ) {
     val palette = LocalFitV3Palette.current
     Row(
@@ -99,7 +104,10 @@ fun FitFaceStack(
             ) {
                 Text(
                     text = value,
-                    style = FitV3Type.rowValueSub,
+                    style = FitV3Type.statLabelSmall.copy(
+                        fontSize = fontSize,
+                        fontWeight = FontWeight.SemiBold,
+                    ),
                     color = palette.textSecondary,
                 )
             }

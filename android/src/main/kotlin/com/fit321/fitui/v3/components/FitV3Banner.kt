@@ -122,7 +122,7 @@ fun FitEmptyPanel(
             if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    style = FitV3Type.nextWhat,
+                    style = FitV3Type.panelEmpty,
                     color = palette.textTertiary,
                     textAlign = TextAlign.Center,
                 )

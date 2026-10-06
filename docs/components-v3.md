@@ -78,13 +78,16 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 |---|---|---|---|
 | `FitV3Theme` · `FitV3Colors` · `FitV3Geometry` · `FitV3Canvas` | — | 0 | ✅ built |
 | `FitPanel` · `FitRow` (+ `FitRowValue`, `FitRowChevron`, `FitRowPlate`) | `FitCard`, `FitSettingsCard`, `FitSelectRow` | 1 | ✅ built |
+| `FitRow(titleColor, titleStyle)` — a row whose words are the door, e.g. "See all 12 dates" | — | 1 | ✅ built |
+| `FitRowValue(inline)` — "3 of 10" reads as one fact, so it does not stack | — | 1 | ✅ built |
 | `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | ✅ built |
+| `FitSectionTitleRow` — the same bar when the left side is a control ("Select all"), not a label | — | 1 | ✅ built |
 | `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
 | `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
 | `FitIdentity` (centred, avatar 84, name 28/700) · `FitIdentityCompact` (22/700 + stats 15/600) | `FitProfileHero` | 2 | ✅ built |
 | `FitProfileHeader` (cover → row → stats) · `FitProfileCover` · `FitProfileStats` · `FitProfileCard` | `FitProfileHeader` | 2 | ✅ built |
 | `FitV3Avatar` (plate on canvas / on surface / brand) | `FitAvatar` | 2 | ✅ built |
-| `FitActionCircle` + `FitActionCircleRow` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | ✅ built |
+| `FitActionCircle` + `FitActionCircleRow(gap)` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | ✅ built |
 | `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting; dotless + `selected` for a filter row) | `FitChip` | 3 | ✅ built |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
 | `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
@@ -203,3 +206,10 @@ Three things, each deliberate:
 
 - **Sport chip icons.** The 33-sport set lives in the app (`ic_sport_v2_*.xml` + `SportV2Icons.kt`), not in this repo. The chip takes the icon as a slot rather than owning it — copying 35 vectors across repos guarantees two sets that drift. Revisit if the icons ever move here.
 - **Canvas hue per role** (teal for both, or indigo for the athlete) is still open in the spec; the tinted palette is written as one hue and the stacked-face fill is the only value that would have to follow it.
+
+### A badge is a rounded rectangle; a pill is a thing you press
+
+`FitStatusBadge` is 6dp-cornered, 12/500, because it *says* something about the row beside it —
+CRM, Blocked, One-off, €50 owed. `FitPillButton` is a pill, because it is pressed. Shape is the
+only thing telling the two apart at a glance, so a badge that borrowed the pill's radius read as
+a control that did nothing.

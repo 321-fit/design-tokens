@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -58,6 +59,13 @@ fun FitRow(
     subtitleMaxLines: Int = 2,
     /** Null for the usual tertiary. A sub-line only takes a colour when it *says* something. */
     subtitleColor: Color? = null,
+    /**
+     * Null for the usual ink. A title takes a colour when the row *is* a link — "See all 12
+     * dates" is the accent because the words are the door, not a label over one.
+     */
+    titleColor: Color? = null,
+    /** Null for [FitV3Type.rowTitle]. A row that reads as a link sits a notch smaller. */
+    titleStyle: TextStyle? = null,
     muted: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
@@ -88,8 +96,9 @@ fun FitRow(
             ) {
                 Text(
                     text = title,
-                    style = FitV3Type.rowTitle,
-                    color = if (muted) palette.textSecondary else palette.textPrimary,
+                    style = titleStyle ?: FitV3Type.rowTitle,
+                    color = titleColor
+                        ?: if (muted) palette.textSecondary else palette.textPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false),
@@ -119,10 +128,33 @@ fun FitRowValue(
     text: String,
     modifier: Modifier = Modifier,
     sub: String? = null,
+    /** Null for the usual ink. Money that is owed is red wherever it is read. */
+    color: Color? = null,
+    /**
+     * True where the sub belongs beside the value rather than under it — "3 of 10" is one
+     * reading, and stacking it makes the row claim two facts where it has one.
+     */
+    inline: Boolean = false,
 ) {
     val palette = LocalFitV3Palette.current
+    val value: @Composable () -> Unit = {
+        Text(text = text, style = FitV3Type.rowValue, color = color ?: palette.textPrimary)
+    }
+    if (inline) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+        ) {
+            value()
+            if (sub != null) {
+                Text(text = sub, style = FitV3Type.rowValueSub, color = palette.textTertiary)
+            }
+        }
+        return
+    }
     Column(modifier = modifier, horizontalAlignment = Alignment.End) {
-        Text(text = text, style = FitV3Type.rowValue, color = palette.textPrimary)
+        value()
         if (sub != null) {
             Text(
                 text = sub,
@@ -153,11 +185,13 @@ fun FitStatusBadge(
     val palette = LocalFitV3Palette.current
     Text(
         text = text,
-        style = FitV3Type.rowValueSub,
+        style = FitV3Type.badgeLabel,
         color = tone.ink(palette),
+        // A rounded rectangle, not a pill: a pill is a control you press, and this says
+        // something about the row beside it.
         modifier = modifier
-            .background(tone.fill(palette), RoundedCornerShape(percent = 50))
-            .padding(horizontal = 8.dp, vertical = 2.dp),
+            .background(tone.fill(palette), RoundedCornerShape(FitV3Geometry.badgeRadius))
+            .padding(horizontal = 10.dp, vertical = 3.dp),
     )
 }
 
@@ -198,7 +232,7 @@ fun FitDateBlock(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(text = day, style = FitV3Type.compactStats, color = palette.textPrimary, maxLines = 1)
+        Text(text = day, style = FitV3Type.dateBlockDay, color = palette.textPrimary, maxLines = 1)
         Text(text = weekday, style = FitV3Type.statLabelSmall, color = palette.textTertiary, maxLines = 1)
     }
 }

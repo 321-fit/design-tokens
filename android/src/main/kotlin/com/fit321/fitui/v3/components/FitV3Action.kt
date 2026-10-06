@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
@@ -44,13 +45,15 @@ enum class FitNeedsTone { Money, Question, Review, Waiting }
 @Composable
 fun FitActionCircleRow(
     modifier: Modifier = Modifier,
+    /** Wider where a short row would otherwise spread three circles across the screen. */
+    gap: Dp = 6.dp,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(gap),
         verticalAlignment = Alignment.Top,
         content = content,
     )
@@ -161,7 +164,7 @@ fun FitCountBadge(
             .padding(horizontal = 5.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = text, style = FitV3Type.rowValueSub, color = ink, maxLines = 1)
+        Text(text = text, style = FitV3Type.countBadge, color = ink, maxLines = 1)
     }
 }
 

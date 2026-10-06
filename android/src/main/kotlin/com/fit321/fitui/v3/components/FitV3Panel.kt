@@ -49,6 +49,27 @@ fun FitSectionTitle(
     trailing: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
+    FitSectionTitleRow(modifier = modifier, first = first) {
+        Text(
+            text = text,
+            style = FitV3Type.sectionTitle,
+            color = palette.textSecondary,
+            modifier = Modifier.weight(1f),
+        )
+        trailing?.invoke(this)
+    }
+}
+
+/**
+ * A section header whose left-hand side is a control rather than a label — "Select all" over a
+ * picker, where the header has nothing to name and everything to offer.
+ */
+@Composable
+fun FitSectionTitleRow(
+    modifier: Modifier = Modifier,
+    first: Boolean = false,
+    content: @Composable RowScope.() -> Unit,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -61,12 +82,6 @@ fun FitSectionTitle(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text(
-            text = text,
-            style = FitV3Type.sectionTitle,
-            color = palette.textSecondary,
-            modifier = Modifier.weight(1f),
-        )
-        trailing?.invoke(this)
+        content()
     }
 }

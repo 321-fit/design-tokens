@@ -41,9 +41,13 @@ object FitV3Type {
     val statValue = style(18, FontWeight.SemiBold, 23)
     val statLabel = style(12, FontWeight.Normal, 16)
 
-    val actionLabel = style(12, FontWeight.Normal, 16)
+    val actionLabel = style(12, FontWeight.SemiBold, 16)
     val chip = style(14, FontWeight.Medium, 19)
     val pillLabel = style(13, FontWeight.Medium, 18)
+    val badgeLabel = style(12, FontWeight.Medium, 16)
+    val countBadge = style(12, FontWeight.SemiBold, 16)
+    val dateBlockDay = style(18, FontWeight.Bold, 18)
+    val panelEmpty = style(14, FontWeight.Normal, 20)
 
     val nextWhen = style(17, FontWeight.SemiBold, 22)
     val nextWhat = style(13, FontWeight.Normal, 18)
