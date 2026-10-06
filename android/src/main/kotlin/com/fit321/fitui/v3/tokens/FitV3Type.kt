@@ -66,6 +66,7 @@ object FitV3Type {
     val selectionChip = style(16, FontWeight.Normal, 21)
     val coverCaption = style(11, FontWeight.SemiBold, 14, 0.8.sp)
     val roleChip = style(14, FontWeight.SemiBold, 19)
+    val stripeMark = style(16, FontWeight.Bold, 20)
 
     val clipDuration = style(12, FontWeight.SemiBold, 16)
 
