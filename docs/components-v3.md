@@ -88,6 +88,8 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitKeyValue` · `FitKeyValueGroup` — a fact and its number, for the end of a money screen | — | 4 | ✅ built |
 | `FitSelectionChip` · `FitSelectionRow` — one form answer of two or three, equal shares | `FitSelectionGroup` | 4 | ✅ built |
 | `FitStars` — a rating as whole stars | — | 4 | ✅ built |
+| `FitTileCard` — a tile whose content is its own, not a title with a sub | — | 4 | ✅ built |
+| `FitProfileCover(playable)` · `FitV3HeaderCircle(label)` — the video cover's badge, the role pill | — | 4 | ✅ built |
 | `FitMoneyHero(onAmountChange)` — the same hero with the amount typed into | — | 4 | ✅ built |
 | `FitSectionTitle(strong)` — 16/500 primary, for a screen's one subject | — | 4 | ✅ built |
 | `FitV3Menu` + `FitV3MenuItem` — the short list a "⋯" hangs off | `FitContextMenu` | 1 | ✅ built |

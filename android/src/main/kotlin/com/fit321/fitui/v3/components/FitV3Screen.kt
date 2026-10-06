@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -108,19 +109,42 @@ fun FitV3HeaderCircle(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     badge: String? = null,
+    /**
+     * A word beside the glyph turns the circle into a pill of the same height — `.cd-pr-role`,
+     * the role the coach is currently wearing. Null keeps it round.
+     */
+    label: String? = null,
     content: @Composable () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
     Box(modifier = modifier) {
-        Box(
+        Row(
             modifier = Modifier
-                .size(FitV3Geometry.leadingPlate)
+                .then(
+                    if (label == null) {
+                        Modifier.size(FitV3Geometry.leadingPlate)
+                    } else {
+                        Modifier
+                            .height(FitV3Geometry.leadingPlate)
+                    },
+                )
                 .clip(CircleShape)
                 .background(palette.headerCircleFill, CircleShape)
                 .border(1.dp, palette.headerCircleBorder, CircleShape)
-                .clickable { onClick() },
-            contentAlignment = Alignment.Center,
+                .clickable { onClick() }
+                .then(
+                    if (label == null) {
+                        Modifier
+                    } else {
+                        Modifier.padding(start = 14.dp, end = 12.dp)
+                    },
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
         ) {
+            if (label != null) {
+                Text(text = label, style = FitV3Type.roleChip, color = palette.textPrimary)
+            }
             CompositionLocalProvider(LocalContentColor provides palette.textPrimary) { content() }
         }
         if (badge != null) {

@@ -64,6 +64,8 @@ object FitV3Type {
     val kvLabel = style(14, FontWeight.Normal, 19)
     val kvValue = style(14, FontWeight.Medium, 19)
     val selectionChip = style(16, FontWeight.Normal, 21)
+    val coverCaption = style(11, FontWeight.SemiBold, 14, 0.8.sp)
+    val roleChip = style(14, FontWeight.SemiBold, 19)
 
     val clipDuration = style(12, FontWeight.SemiBold, 16)
 

@@ -1,5 +1,9 @@
 package com.fit321.fitui.v3.components
 
+import com.fit321.designtokens.R
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.res.painterResource
+import androidx.compose.material3.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -54,6 +58,8 @@ fun FitProfileCover(
     captionSub: String? = null,
     action: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
+    /** True where the cover is a video the coach can play — the badge sits dead centre. */
+    playable: Boolean = false,
     media: (@Composable BoxScope.() -> Unit)? = null,
 ) {
     Box(
@@ -75,6 +81,22 @@ fun FitProfileCover(
                     ),
                 ),
         )
+        if (playable) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(56.dp)
+                    .background(Color.White.copy(alpha = 0.92f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_fit_play),
+                    contentDescription = null,
+                    tint = Color(0xFF0B2A2F),
+                    modifier = Modifier.size(22.dp).padding(start = 3.dp),
+                )
+            }
+        }
         if (caption != null) {
             Column(
                 modifier = Modifier
@@ -82,8 +104,11 @@ fun FitProfileCover(
                     .padding(start = 16.dp, end = 64.dp, bottom = 12.dp),
             ) {
                 Text(
-                    text = caption,
-                    style = FitV3Type.statLabel,
+                    // Uppercased here rather than at the call site: it is the cover's own
+                    // treatment, and every caller spelling it in caps would put the shouting
+                    // into the string resources.
+                    text = caption.uppercase(),
+                    style = FitV3Type.coverCaption,
                     color = Color.White,
                 )
                 if (captionSub != null) {

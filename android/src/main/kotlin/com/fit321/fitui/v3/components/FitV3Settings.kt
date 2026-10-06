@@ -1,5 +1,8 @@
 package com.fit321.fitui.v3.components
 
+import com.fit321.designtokens.R
+import androidx.compose.ui.res.painterResource
+import androidx.compose.material3.Icon
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -221,10 +224,13 @@ fun FitStars(
         horizontalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         repeat(total) { index ->
-            Text(
-                text = "★",
-                style = FitV3Type.rowSub,
-                color = if (index < rating) FitColors.Yellow.y400 else palette.divider,
+            Icon(
+                painter = painterResource(
+                    if (index < rating) R.drawable.ic_fit_star_filled else R.drawable.ic_fit_star,
+                ),
+                contentDescription = null,
+                tint = if (index < rating) FitColors.Yellow.y400 else palette.divider,
+                modifier = Modifier.size(13.dp),
             )
         }
     }

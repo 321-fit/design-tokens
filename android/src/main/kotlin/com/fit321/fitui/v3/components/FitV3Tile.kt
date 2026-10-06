@@ -45,6 +45,27 @@ fun FitTileGrid(
     )
 }
 
+/**
+ * A tile whose content is its own — a review, where the name, the stars and the words are three
+ * different kinds of thing and none of them is a title with a subtitle under it.
+ */
+@Composable
+fun FitTileCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val shape = RoundedCornerShape(FitV3Geometry.tileRadius)
+    Column(
+        modifier = modifier
+            .fitV3Surface(shape)
+            .clip(shape)
+            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
+            .padding(FitV3Geometry.tilePadding),
+        content = content,
+    )
+}
+
 @Composable
 fun FitTile(
     title: String,
