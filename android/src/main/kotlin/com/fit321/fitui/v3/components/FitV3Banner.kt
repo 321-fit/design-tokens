@@ -55,10 +55,13 @@ fun FitStatusBanner(
             .clip(shape)
             .background(fill, shape)
             .then(
-                if (tone == FitBannerTone.Neutral) {
-                    Modifier.border(1.dp, palette.divider, shape)
-                } else {
-                    Modifier
+                when (tone) {
+                    // The prototype's `.fit-inline-error` carries a hairline of its own tint —
+                    // it has to read as a thing that went wrong, not as a tinted row.
+                    FitBannerTone.Error ->
+                        Modifier.border(1.dp, palette.textError.copy(alpha = 0.2f), shape)
+                    FitBannerTone.Neutral -> Modifier.border(1.dp, palette.divider, shape)
+                    FitBannerTone.Attention -> Modifier
                 },
             )
             .padding(horizontal = 14.dp, vertical = 12.dp),
@@ -70,7 +73,7 @@ fun FitStatusBanner(
         }
         Text(
             text = text,
-            style = FitV3Type.nextWhat,
+            style = FitV3Type.panelEmpty,
             color = ink,
             modifier = Modifier.weight(1f),
         )

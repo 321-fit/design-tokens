@@ -223,3 +223,11 @@ Every rework list shows `FitRowSkeleton` until its rows have arrived, and keeps 
 for the one case it is true of. "No clients yet" held for two seconds while the pages were still
 in flight is not a slow screen, it is a wrong one — and the coach it lies to is the one who just
 imported forty people.
+
+### The error banner says what did not happen
+
+`FitStatusBanner(tone = .Error)` is `fit-ui.css .fit-inline-error`: red tint, a hairline of the
+same red, an alert glyph, and Retry in the action slot. It sits *above* the content rather than
+replacing it, because a list that loaded yesterday is still worth reading today — and it never
+shares a screen with an empty panel, which would answer the same question twice with two
+different answers.
