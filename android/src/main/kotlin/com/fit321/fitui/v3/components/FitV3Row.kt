@@ -51,6 +51,11 @@ fun FitRow(
      * line of the row's own text — a progress bar beside the value would be a third column.
      */
     below: (@Composable () -> Unit)? = null,
+    /**
+     * One line where the sub-line is a fact that must not push the row taller — a state and a
+     * date beside a fixed action. Two by default: a sub-line is usually a sentence.
+     */
+    subtitleMaxLines: Int = 2,
     muted: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
@@ -94,7 +99,7 @@ fun FitRow(
                     text = subtitle,
                     style = FitV3Type.rowSub,
                     color = palette.textTertiary,
-                    maxLines = 2,
+                    maxLines = subtitleMaxLines,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = FitV3Geometry.rowSubGap),
                 )

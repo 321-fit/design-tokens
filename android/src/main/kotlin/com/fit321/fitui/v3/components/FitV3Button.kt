@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 enum class FitV3ButtonStyle { Primary, Secondary, Destructive }
 
@@ -100,5 +103,35 @@ fun FitButton(
                 }
             }
         }
+    }
+}
+
+/**
+ * One quiet action on a row — Restore, Unblock.
+ *
+ * Not a [FitButton]: a CTA is the thing the screen is for, and there is one of it. This is an
+ * action that belongs to the row it sits on, repeated down a list, and it has to read as
+ * smaller than the name beside it.
+ */
+@Composable
+fun FitPillButton(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(percent = 50)
+    Box(
+        modifier = modifier
+            .height(FitV3Geometry.pillHeight)
+            .clip(shape)
+            .border(1.dp, palette.divider, shape)
+            .then(if (enabled) Modifier.clickable { onClick() } else Modifier)
+            .alpha(if (enabled) 1f else 0.4f)
+            .padding(horizontal = 14.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = label, style = FitV3Type.pillLabel, color = palette.textPrimary, maxLines = 1)
     }
 }

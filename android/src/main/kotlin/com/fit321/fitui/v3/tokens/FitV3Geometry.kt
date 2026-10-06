@@ -42,6 +42,7 @@ object FitV3Geometry {
     val chipPaddingY = 10.dp
     val chipPaddingX = 14.dp
     val chipDot = 8.dp
+    val pillHeight = 32.dp
 
     val checkCircle = 22.dp
     val stepperButton = 40.dp

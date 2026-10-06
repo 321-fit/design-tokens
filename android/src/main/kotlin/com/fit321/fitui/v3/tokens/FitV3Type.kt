@@ -43,6 +43,7 @@ object FitV3Type {
 
     val actionLabel = style(12, FontWeight.Normal, 16)
     val chip = style(14, FontWeight.Medium, 19)
+    val pillLabel = style(13, FontWeight.Medium, 18)
 
     val nextWhen = style(17, FontWeight.SemiBold, 22)
     val nextWhat = style(13, FontWeight.Normal, 18)

@@ -106,7 +106,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitDetailHero` · `FitTxnGroup` · `FitTxnRow` · `FitTxnPlate` · `FitTxnDivider` + `FitV3Tone` | `LedgerRow` kit | 7 | ✅ built |
 | `FitV3Sheet` · `FitSheetTitle` · `FitSheetActionRow` · `FitSheetCloseButton` | `FitSheet`, `FitSheetActionItem` | 7 | ✅ built |
 | `FitClipStrip` · `FitClipCard` (poster slot, duration, no-clip face) | — | 8 | ✅ built |
-| `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
+| `FitThinProgress` · `FitStatusBadge` · `FitRowGo` · `FitPanel(attention)` · `FitPillButton` (one quiet action on a row) | `FitProgressBar`, `FitBadge` | 8 | ✅ built |
 | `FitInput(leading)` — the search field's glyph · `FitSearchField` (search over a list, not a form field) | `FitSearchField` | 8 | ✅ built |
 | `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
 | `FitCountBadge` · `FitV3HeaderCircle(badge)` · `FitNextSessionCard(badge)` · `FitV3Tone.Attention` | `FitBadge` | 9 | ✅ built |
