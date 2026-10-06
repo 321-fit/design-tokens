@@ -60,6 +60,10 @@ object FitV3Type {
     val detailHeroSub = style(14, FontWeight.Normal, 20)
     val sheetTitle = style(18, FontWeight.Medium, 23)
     val menuItem = style(15, FontWeight.Normal, 20)
+    val sectionTitleStrong = style(16, FontWeight.Medium, 21)
+    val kvLabel = style(14, FontWeight.Normal, 19)
+    val kvValue = style(14, FontWeight.Medium, 19)
+    val selectionChip = style(16, FontWeight.Normal, 21)
 
     val clipDuration = style(12, FontWeight.SemiBold, 16)
 

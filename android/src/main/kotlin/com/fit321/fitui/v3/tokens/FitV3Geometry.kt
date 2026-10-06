@@ -20,6 +20,10 @@ object FitV3Geometry {
 
     val fieldHeight = 56.dp
     val fieldRadius = 14.dp
+    val toggleWidth = 50.dp
+    val toggleHeight = 30.dp
+    val toggleKnob = 24.dp
+    val selectionChipHeight = 48.dp
 
     val footerCtaHeight = 50.dp
     val footerCtaSide = 20.dp

@@ -1,5 +1,13 @@
 package com.fit321.fitui.v3.components
 
+import com.fit321.fitui.tokens.FitColors
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -103,6 +111,13 @@ fun FitMoneyHero(
     currency: String? = null,
     label: String? = null,
     sub: String? = null,
+    /**
+     * Non-null turns the amount into the field the coach types into — Withdraw. The metrics are
+     * the same either way, so the number does not jump when the screen stops reading and starts
+     * asking.
+     */
+    onAmountChange: ((String) -> Unit)? = null,
+    amountPlaceholder: String? = null,
 ) {
     val palette = LocalFitV3Palette.current
     Column(
@@ -119,8 +134,9 @@ fun FitMoneyHero(
                 textAlign = TextAlign.Center,
             )
         }
+        // Baselines, not centres: the currency sits a third the height of the amount, and
+        // centring it floats the symbol in the middle of the digits.
         Row(
-            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.padding(top = 6.dp),
         ) {
@@ -129,13 +145,40 @@ fun FitMoneyHero(
                     text = currency,
                     style = FitV3Type.moneyHeroCurrency,
                     color = palette.textSecondary,
+                    modifier = Modifier.alignByBaseline(),
                 )
             }
-            Text(
-                text = amount,
-                style = FitV3Type.moneyHero,
-                color = palette.textPrimary,
-            )
+            if (onAmountChange == null) {
+                Text(
+                    text = amount,
+                    style = FitV3Type.moneyHero,
+                    color = palette.textPrimary,
+                    modifier = Modifier.alignByBaseline(),
+                )
+            } else {
+                BasicTextField(
+                    value = amount,
+                    onValueChange = onAmountChange,
+                    singleLine = true,
+                    textStyle = FitV3Type.moneyHero.copy(color = palette.textPrimary),
+                    cursorBrush = SolidColor(FitColors.Teal.t600),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier
+                        .width(IntrinsicSize.Min)
+                        .widthIn(min = 120.dp)
+                        .alignByBaseline(),
+                    decorationBox = { inner ->
+                        if (amount.isEmpty() && amountPlaceholder != null) {
+                            Text(
+                                text = amountPlaceholder,
+                                style = FitV3Type.moneyHero,
+                                color = palette.textTertiary,
+                            )
+                        }
+                        inner()
+                    },
+                )
+            }
         }
         if (sub != null) {
             Text(

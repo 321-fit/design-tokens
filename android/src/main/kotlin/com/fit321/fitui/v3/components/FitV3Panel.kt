@@ -46,14 +46,19 @@ fun FitSectionTitle(
     text: String,
     modifier: Modifier = Modifier,
     first: Boolean = false,
+    /**
+     * `fit-section-title--md`: 16/500 in the primary ink, for a heading that titles a screen's
+     * one subject rather than labelling one band among several.
+     */
+    strong: Boolean = false,
     trailing: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
     FitSectionTitleRow(modifier = modifier, first = first) {
         Text(
             text = text,
-            style = FitV3Type.sectionTitle,
-            color = palette.textSecondary,
+            style = if (strong) FitV3Type.sectionTitleStrong else FitV3Type.sectionTitle,
+            color = if (strong) palette.textPrimary else palette.textSecondary,
             modifier = Modifier.weight(1f),
         )
         trailing?.invoke(this)

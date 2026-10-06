@@ -84,6 +84,12 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSectionTitleRow` — the same bar when the left side is a control ("Select all"), not a label | — | 1 | ✅ built |
 | `FitSelectField` — a form field that opens a picker instead of taking typing | `FitSelectRow` | 1 | ✅ built |
 | `FitRowSkeleton` · `FitShimmer` — the shape of the rows that are coming | — | 1 | ✅ built |
+| `FitToggle` — a setting that is on or off, in a row's trailing slot | `FitSwitch` | 4 | ✅ built |
+| `FitKeyValue` · `FitKeyValueGroup` — a fact and its number, for the end of a money screen | — | 4 | ✅ built |
+| `FitSelectionChip` · `FitSelectionRow` — one form answer of two or three, equal shares | `FitSelectionGroup` | 4 | ✅ built |
+| `FitStars` — a rating as whole stars | — | 4 | ✅ built |
+| `FitMoneyHero(onAmountChange)` — the same hero with the amount typed into | — | 4 | ✅ built |
+| `FitSectionTitle(strong)` — 16/500 primary, for a screen's one subject | — | 4 | ✅ built |
 | `FitV3Menu` + `FitV3MenuItem` — the short list a "⋯" hangs off | `FitContextMenu` | 1 | ✅ built |
 | `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
 | `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
