@@ -83,6 +83,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSectionTitle` (15/600 secondary, padding 20/20/8) | `FitSectionTitle` | 1 | ✅ built |
 | `FitSectionTitleRow` — the same bar when the left side is a control ("Select all"), not a label | — | 1 | ✅ built |
 | `FitSelectField` — a form field that opens a picker instead of taking typing | `FitSelectRow` | 1 | ✅ built |
+| `FitRowSkeleton` · `FitShimmer` — the shape of the rows that are coming | — | 1 | ✅ built |
 | `FitV3Menu` + `FitV3MenuItem` — the short list a "⋯" hangs off | `FitContextMenu` | 1 | ✅ built |
 | `FitAddRow` (dashed panel, plate + title + sub) | — | 1 | ✅ built |
 | `FitInput` (56 / radius 14 / label above / hint + counter) | `FitInput` | 1 | ✅ built |
@@ -215,3 +216,10 @@ Three things, each deliberate:
 CRM, Blocked, One-off, €50 owed. `FitPillButton` is a pill, because it is pressed. Shape is the
 only thing telling the two apart at a glance, so a badge that borrowed the pill's radius read as
 a control that did nothing.
+
+### A list that is loading is not a list that is empty
+
+Every rework list shows `FitRowSkeleton` until its rows have arrived, and keeps its empty panel
+for the one case it is true of. "No clients yet" held for two seconds while the pages were still
+in flight is not a slow screen, it is a wrong one — and the coach it lies to is the one who just
+imported forty people.
