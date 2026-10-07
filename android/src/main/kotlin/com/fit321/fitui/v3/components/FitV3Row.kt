@@ -183,14 +183,20 @@ fun FitStatusBadge(
     tone: FitV3Tone = FitV3Tone.Danger,
 ) {
     val palette = LocalFitV3Palette.current
+    // `.fit-badge-neutral` is the one badge whose fill is a *surface* rather than a tinted
+    // accent: `background: var(--fit-surface-high)`, which under the rework is a translucent
+    // darkening. Laid on a panel made of the same darkening it compounds, so the badge reads
+    // as a notch deeper than the list — the txn-plate grey it used to borrow lightened instead.
+    val fill = if (tone == FitV3Tone.Muted) palette.surface else tone.fill(palette)
+    val ink = if (tone == FitV3Tone.Muted) palette.textTertiary else tone.ink(palette)
     Text(
         text = text,
         style = FitV3Type.badgeLabel,
-        color = tone.ink(palette),
+        color = ink,
         // A rounded rectangle, not a pill: a pill is a control you press, and this says
         // something about the row beside it.
         modifier = modifier
-            .background(tone.fill(palette), RoundedCornerShape(FitV3Geometry.badgeRadius))
+            .background(fill, RoundedCornerShape(FitV3Geometry.badgeRadius))
             .padding(horizontal = 10.dp, vertical = 3.dp),
     )
 }
