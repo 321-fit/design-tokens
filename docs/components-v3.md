@@ -99,7 +99,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitProfileHeader` (cover → row → stats) · `FitProfileCover` · `FitProfileStats` · `FitProfileCard` | `FitProfileHeader` | 2 | ✅ built |
 | `FitV3Avatar` (plate on canvas / on surface / brand) | `FitAvatar` | 2 | ✅ built |
 | `FitActionCircle` + `FitActionCircleRow(gap)` (52, badge, filled = the expected answer) | `FitActionCircle` | 3 | ✅ built |
-| `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting; dotless + `selected` for a filter row) | `FitChip` | 3 | ✅ built |
+| `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting; dotless + `selected` for a filter row; `centered` for a short set under a hero) | `FitChip` | 3 | ✅ built |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
 | `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
 | `FitSessionCard` (radius 18, type in the plate, location strip) | — (app code today) | 4 | ✅ built |

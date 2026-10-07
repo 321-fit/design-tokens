@@ -171,14 +171,24 @@ fun FitCountBadge(
 @Composable
 fun FitNeedsRow(
     modifier: Modifier = Modifier,
+    /**
+     * A short, fixed set of chips under a centred hero — `.cd-wd-chips` is
+     * `justify-content: center`. Centring and scrolling cannot both be true, so a centred row
+     * does not scroll: it is only ever used where the chips are known to fit.
+     */
+    centered: Boolean = false,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
+            .then(if (centered) Modifier else Modifier.horizontalScroll(rememberScrollState()))
             .padding(start = FitV3Geometry.screenInset, end = FitV3Geometry.screenInset, top = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = if (centered) {
+            Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        } else {
+            Arrangement.spacedBy(8.dp)
+        },
         verticalAlignment = Alignment.CenterVertically,
         content = content,
     )
