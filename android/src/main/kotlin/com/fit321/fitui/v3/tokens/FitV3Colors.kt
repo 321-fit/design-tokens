@@ -27,6 +27,8 @@ data class FitV3Palette(
     val surfaceLifted: Boolean,
     val raised: Color,
     val raisedOnCanvas: Color,
+    /** `rgba(255,255,255,0.07)` — a lift so faint it reads as "yours, but not now". */
+    val quietLift: Color,
     val stackedFace: Color,
     /** `box-shadow: 0 0 0 2px rgba(6,40,48,0.95)` — near-opaque, so stacked faces do not show through each other. */
     val stackedFaceRing: Color,
@@ -111,6 +113,7 @@ object FitV3Colors {
         surfaceLifted = false,
         raised = Color(0x24FFFFFF),
         raisedOnCanvas = Color(0x21FFFFFF),
+        quietLift = Color(0x12FFFFFF),
         stackedFace = Color(0xFF2B5F6A),
         stackedFaceRing = Color(0xF2062830),
         textPrimary = Color(0xFFFFFFFF),
@@ -193,6 +196,7 @@ object FitV3Colors {
         surfaceLifted = true,
         raised = FitColors.Gray.g100,
         raisedOnCanvas = Color(0xBFFFFFFF),
+        quietLift = Color(0x123C3C43),
         stackedFace = FitColors.Gray.g200,
         stackedFaceRing = FitColors.Gray.white,
         textPrimary = FitColors.Gray.g900,

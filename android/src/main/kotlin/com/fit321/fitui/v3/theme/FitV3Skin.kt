@@ -52,6 +52,9 @@ fun FitV3Skin(
             circle = palette.headerCircleFill,
             circleEdge = palette.headerCircleBorder,
             accent = palette.accentBadgeInk,
+            // A taken slot is the canvas's own darkening — the same one every surface uses.
+            calTaken = palette.surface,
+            calCrossRole = palette.quietLift,
             isLight = look == FitV3Look.Light,
         )
     }

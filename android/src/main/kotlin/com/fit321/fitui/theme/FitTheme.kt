@@ -59,6 +59,18 @@ data class FitSkin(
      * word in the middle of a teal page.
      */
     val accent: Color,
+    /**
+     * A calendar slot somebody already took — the other party's time, an external calendar,
+     * a travel buffer. The rework retired the diagonal hatch (2026-09-15): taken reads as a
+     * flat darkening, inset and rounded, while off-hours keeps the full-bleed band. Null
+     * outside the rework, where the shipped hatch and grey plate stay as they are.
+     */
+    val calTaken: Color,
+    /**
+     * Your own booking seen from the other role: a quiet translucent lift, no stripe — the
+     * role tag already says whose it is, and a dashed edge read as "awaiting".
+     */
+    val calCrossRole: Color,
     val isLight: Boolean,
 )
 
