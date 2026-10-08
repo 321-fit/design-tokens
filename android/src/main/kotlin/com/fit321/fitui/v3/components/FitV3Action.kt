@@ -38,7 +38,7 @@ import com.fit321.fitui.v3.tokens.FitV3Type
 
 enum class FitActionCircleStyle { Outline, Primary, Danger, Ask }
 
-enum class FitActionBadgeTone { Money, Review, Calm }
+enum class FitActionBadgeTone { Money, Review, Calm, Unread }
 
 enum class FitNeedsTone { Money, Question, Review, Waiting }
 
@@ -150,11 +150,13 @@ fun FitCountBadge(
         FitActionBadgeTone.Money -> palette.textError
         FitActionBadgeTone.Review -> palette.perimeterAttention
         FitActionBadgeTone.Calm -> palette.raised
+        FitActionBadgeTone.Unread -> palette.unreadFill
     }
     val ink = when (tone) {
         FitActionBadgeTone.Calm -> palette.textSecondary
         FitActionBadgeTone.Review -> palette.badgeReviewInk
         FitActionBadgeTone.Money -> FitColors.Gray.white
+        FitActionBadgeTone.Unread -> palette.unreadInk
     }
     Box(
         modifier = modifier

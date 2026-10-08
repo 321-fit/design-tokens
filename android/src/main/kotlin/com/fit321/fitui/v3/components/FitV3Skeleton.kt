@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -107,6 +108,32 @@ fun FitShimmer(
 }
 
 /** A shimmering line of a given height, for skeletons that are not rows. */
+/**
+ * The shape an identity block leaves behind while it loads — the face, the name, the line
+ * under it. Without it a screen that opens on an identity shows an empty canvas and then
+ * snaps the whole thing into place.
+ */
+@Composable
+fun FitIdentitySkeleton(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth().padding(top = 6.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        FitShimmer(modifier = Modifier.size(FitV3Geometry.identityAvatar), shape = CircleShape)
+        FitShimmerLine(
+            modifier = Modifier.padding(top = 14.dp).width(IDENTITY_NAME),
+            height = 20.dp,
+        )
+        FitShimmerLine(
+            modifier = Modifier.padding(top = 9.dp).width(IDENTITY_SUB),
+            height = 13.dp,
+        )
+    }
+}
+
+private val IDENTITY_NAME = 168.dp
+private val IDENTITY_SUB = 108.dp
+
 @Composable
 fun FitShimmerLine(
     modifier: Modifier = Modifier,

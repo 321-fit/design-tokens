@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 
-enum class FitV3ButtonStyle { Primary, Secondary, Destructive }
+enum class FitV3ButtonStyle { Primary, Secondary, Destructive, Text }
 
 @Composable
 fun FitButton(
@@ -47,16 +47,19 @@ fun FitButton(
         FitV3ButtonStyle.Primary -> Brush.verticalGradient(colorStops = palette.ctaStops.toTypedArray())
         FitV3ButtonStyle.Secondary -> SolidColor(palette.secondaryFill)
         FitV3ButtonStyle.Destructive -> SolidColor(palette.textError)
+        FitV3ButtonStyle.Text -> SolidColor(Color.Transparent)
     }
     val ink = when (style) {
         FitV3ButtonStyle.Primary -> palette.ctaLabel
         FitV3ButtonStyle.Secondary -> palette.textPrimary
         FitV3ButtonStyle.Destructive -> Color.White
+        FitV3ButtonStyle.Text -> palette.textSecondary
     }
     val edge = when (style) {
         FitV3ButtonStyle.Primary -> palette.ctaHighlight
         FitV3ButtonStyle.Secondary -> palette.secondaryBorder
         FitV3ButtonStyle.Destructive -> Color.Transparent
+        FitV3ButtonStyle.Text -> Color.Transparent
     }
     val lift = if (style == FitV3ButtonStyle.Primary) 12.dp else 0.dp
     Row(

@@ -113,14 +113,20 @@ fun FitFaceStack(
     val palette = LocalFitV3Palette.current
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy((-9).dp),
+        // The overlap is a quarter of the face, not a constant: `.cd-j-faces` shifts 9 of a
+        // 34px face and `.cd-gr-faces` 14 of a 56px one, so a fixed value leaves the big
+        // stack standing almost edge to edge.
+        horizontalArrangement = Arrangement.spacedBy(-size * FACE_OVERLAP),
     ) {
         initials.forEach { value ->
             Box(
                 modifier = Modifier
                     .size(size)
-                    .background(palette.stackedFace, CircleShape)
-                    .border(2.dp, palette.surface, CircleShape),
+                    // Ring outside the face, as `box-shadow` has it: a border would shrink the
+                    // circle instead and the overlap with its neighbour would close up.
+                    .background(palette.stackedFaceRing, CircleShape)
+                    .padding(2.dp)
+                    .background(palette.stackedFace, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -235,3 +241,5 @@ fun FitAccentBadge(
         Text(text = text, style = FitV3Type.rowValueSub, color = ink)
     }
 }
+
+private const val FACE_OVERLAP = 0.26f

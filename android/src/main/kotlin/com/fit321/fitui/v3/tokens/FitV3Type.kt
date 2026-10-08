@@ -25,6 +25,8 @@ object FitV3Type {
 
     val rowTitle = style(16, FontWeight.Medium, 21)
     val rowSub = style(13, FontWeight.Normal, 18)
+    val rowSubStrong = style(13, FontWeight.Medium, 18)
+    val sectionCount = style(13, FontWeight.Medium, 18)
     val rowValue = style(15, FontWeight.Medium, 20)
     val rowValueSub = style(12, FontWeight.Normal, 16)
 
@@ -71,6 +73,11 @@ object FitV3Type {
     val clipDuration = style(12, FontWeight.SemiBold, 16)
 
     val statLabelSmall = style(11, FontWeight.Normal, 14)
+    val rowTag = style(11, FontWeight.Medium, 14)
+    val bubble = style(15, FontWeight.Normal, 21)
+    val chatSeparator = style(12, FontWeight.Normal, 16)
+    val chatUnread = style(11, FontWeight.SemiBold, 14, 0.5.sp)
+    val senderName = style(11, FontWeight.Normal, 14)
 
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     val moneyHero = style(48, FontWeight.Bold, 54)

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Type
@@ -51,6 +52,10 @@ fun FitV3Menu(
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
+        // `.fit-context-menu--anchor-header` is `top: calc(100% - 6px)` on the header, so the
+        // sheet rides up over the lower half of the circle it belongs to instead of dropping
+        // clear of it. Anchored under a 40 circle, that is half its height back.
+        offset = DpOffset(0.dp, -MENU_RIDE),
         shape = RoundedCornerShape(14.dp),
         containerColor = palette.material,
         border = androidx.compose.foundation.BorderStroke(1.dp, palette.materialEdge),
@@ -93,3 +98,5 @@ private fun MenuRow(item: FitV3MenuItem, onDismiss: () -> Unit) {
         Text(text = item.label, style = FitV3Type.menuItem, color = ink)
     }
 }
+
+private val MENU_RIDE = 22.dp

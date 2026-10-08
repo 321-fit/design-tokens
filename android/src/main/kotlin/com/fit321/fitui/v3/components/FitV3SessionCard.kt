@@ -201,6 +201,7 @@ fun FitPickRow(
     checked: Boolean,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
+    subtitleMaxLines: Int = 1,
     leading: (@Composable () -> Unit)? = null,
     enabled: Boolean = true,
     reason: String? = null,
@@ -210,9 +211,19 @@ fun FitPickRow(
         title = title,
         modifier = modifier,
         subtitle = reason ?: subtitle,
-        leading = leading,
+        subtitleMaxLines = subtitleMaxLines,
+        leading = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(FitV3Geometry.pickCheckGap),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                FitCheckCircle(checked = checked, enabled = enabled)
+                Box(modifier = Modifier.alpha(if (enabled) 1f else PICK_LEADING_DIM)) {
+                    leading?.invoke()
+                }
+            }
+        },
         muted = !enabled,
-        trailing = { FitCheckCircle(checked = checked, enabled = enabled) },
         onClick = if (enabled && onCheckedChange != null) {
             { onCheckedChange(!checked) }
         } else {
@@ -250,3 +261,5 @@ fun FitCheckCircle(
         }
     }
 }
+
+private const val PICK_LEADING_DIM = 0.55f

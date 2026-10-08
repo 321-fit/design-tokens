@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -56,9 +57,11 @@ fun FitRow(
      * One line where the sub-line is a fact that must not push the row taller — a state and a
      * date beside a fixed action. Two by default: a sub-line is usually a sentence.
      */
+    titleMaxLines: Int = 1,
     subtitleMaxLines: Int = 2,
     /** Null for the usual tertiary. A sub-line only takes a colour when it *says* something. */
     subtitleColor: Color? = null,
+    subtitleStrong: Boolean = false,
     /**
      * Null for the usual ink. A title takes a colour when the row *is* a link — "See all 12
      * dates" is the accent because the words are the door, not a label over one.
@@ -67,6 +70,13 @@ fun FitRow(
     /** Null for [FitV3Type.rowTitle]. A row that reads as a link sits a notch smaller. */
     titleStyle: TextStyle? = null,
     muted: Boolean = false,
+    /** `.ms-row.muted` drops both the title and the sub-line to 0.6 — a chat that is quiet reads quiet. */
+    dimmed: Boolean = false,
+    /**
+     * `.ms-meta` sits at `align-self: flex-start`: a timestamp belongs on the title's line, not
+     * floating between the two lines of a row that happens to have a sub-line.
+     */
+    trailingAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
@@ -89,7 +99,7 @@ fun FitRow(
         horizontalArrangement = Arrangement.spacedBy(FitV3Geometry.rowGap),
     ) {
         leading?.invoke()
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.weight(1f).alpha(if (dimmed) ROW_DIM else 1f)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -99,7 +109,7 @@ fun FitRow(
                     style = titleStyle ?: FitV3Type.rowTitle,
                     color = titleColor
                         ?: if (muted) palette.textSecondary else palette.textPrimary,
-                    maxLines = 1,
+                    maxLines = titleMaxLines,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false),
                 )
@@ -108,7 +118,7 @@ fun FitRow(
             if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    style = FitV3Type.rowSub,
+                    style = if (subtitleStrong) FitV3Type.rowSubStrong else FitV3Type.rowSub,
                     color = subtitleColor ?: palette.textTertiary,
                     maxLines = subtitleMaxLines,
                     overflow = TextOverflow.Ellipsis,
@@ -119,7 +129,9 @@ fun FitRow(
                 Box(modifier = Modifier.padding(top = 7.dp)) { below() }
             }
         }
-        trailing?.invoke()
+        if (trailing != null) {
+            Box(modifier = Modifier.align(trailingAlignment)) { trailing() }
+        }
     }
 }
 
@@ -314,3 +326,5 @@ fun FitAddRow(
         }
     }
 }
+
+private const val ROW_DIM = 0.6f

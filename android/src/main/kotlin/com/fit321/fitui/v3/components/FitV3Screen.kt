@@ -27,9 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
@@ -61,8 +63,11 @@ fun FitV3Header(
     modifier: Modifier = Modifier,
     title: String? = null,
     onBack: (() -> Unit)? = null,
+    /** The kit has no strings of its own, so the screen names its own back button. */
+    backLabel: String? = null,
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable RowScope.() -> Unit)? = null,
+    center: (@Composable () -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
     Box(
@@ -80,13 +85,18 @@ fun FitV3Header(
                 FitV3HeaderCircle(onClick = onBack) {
                     Icon(
                         painter = painterResource(R.drawable.ic_fit_chevron_left),
-                        contentDescription = null,
+                        contentDescription = backLabel,
                         modifier = Modifier.size(18.dp),
                     )
                 }
             }
             leading?.invoke()
-            Box(modifier = Modifier.weight(1f))
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center,
+            ) {
+                center?.invoke()
+            }
             trailing?.invoke(this)
         }
         if (title != null) {
@@ -114,9 +124,13 @@ fun FitV3HeaderCircle(
      * the role the coach is currently wearing. Null keeps it round.
      */
     label: String? = null,
+    destructive: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
+    val fill = if (destructive) palette.destructiveTint else palette.headerCircleFill
+    val edge = if (destructive) palette.destructiveEdge else palette.headerCircleBorder
+    val ink = if (destructive) palette.textError else palette.textPrimary
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -129,8 +143,8 @@ fun FitV3HeaderCircle(
                     },
                 )
                 .clip(CircleShape)
-                .background(palette.headerCircleFill, CircleShape)
-                .border(1.dp, palette.headerCircleBorder, CircleShape)
+                .background(fill, CircleShape)
+                .border(1.dp, edge, CircleShape)
                 .clickable { onClick() }
                 .then(
                     if (label == null) {
@@ -143,9 +157,9 @@ fun FitV3HeaderCircle(
             horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
         ) {
             if (label != null) {
-                Text(text = label, style = FitV3Type.roleChip, color = palette.textPrimary)
+                Text(text = label, style = FitV3Type.roleChip, color = ink)
             }
-            CompositionLocalProvider(LocalContentColor provides palette.textPrimary) { content() }
+            CompositionLocalProvider(LocalContentColor provides ink) { content() }
         }
         if (badge != null) {
             // Sits proud of the circle, as `.cd-d-hbn` does — a count clipped to the plate

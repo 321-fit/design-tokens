@@ -50,6 +50,7 @@ object FitV3Geometry {
     val pillHeight = 32.dp
 
     val checkCircle = 22.dp
+    val pickCheckGap = 12.dp
     val stepperButton = 40.dp
 
     val leadingPlate = 40.dp
@@ -76,6 +77,10 @@ object FitV3Geometry {
     val progressBarHeight = 4.dp
 
     val typePlate = 46.dp
+    val composerHeight = 46.dp
+    val bubbleRadius = 18.dp
+    val bubbleTail = 6.dp
+    val senderFace = 26.dp
     val typePlateRadius = 13.dp
     val typePlateSmall = 40.dp
     val typePlateSmallRadius = 12.dp
