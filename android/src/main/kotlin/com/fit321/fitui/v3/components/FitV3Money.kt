@@ -25,8 +25,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Type
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.LocalContentColor
 
-data class FitMoneyFact(val value: String, val label: String)
+data class FitMoneyFact(
+    val value: String,
+    val label: String,
+    /** Money the person owes reads in the error ink, as the headline does when it is [due]. */
+    val due: Boolean = false,
+    /** A fact that opens its own list — owed, booked — instead of the widget's whole target. */
+    val onClick: (() -> Unit)? = null,
+)
 
 @Composable
 fun FitMoneyWidget(
@@ -37,6 +46,7 @@ fun FitMoneyWidget(
     due: Boolean = false,
     leading: (@Composable () -> Unit)? = null,
     facts: List<FitMoneyFact> = emptyList(),
+    trailing: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
@@ -74,6 +84,11 @@ fun FitMoneyWidget(
                     )
                 }
             }
+            if (trailing != null) {
+                Box(modifier = Modifier.padding(top = 8.dp)) {
+                    CompositionLocalProvider(LocalContentColor provides palette.textTertiary) { trailing() }
+                }
+            }
         }
         if (facts.isNotEmpty()) {
             Box(
@@ -85,11 +100,15 @@ fun FitMoneyWidget(
             )
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 facts.forEach { fact ->
-                    Column(modifier = Modifier.weight(1f)) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(if (fact.onClick != null) Modifier.clickable { fact.onClick.invoke() } else Modifier),
+                    ) {
                         Text(
                             text = fact.value,
                             style = FitV3Type.nextWhen,
-                            color = palette.textPrimary,
+                            color = if (fact.due) palette.textError else palette.textPrimary,
                         )
                         Text(
                             text = fact.label,

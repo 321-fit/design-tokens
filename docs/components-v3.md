@@ -102,7 +102,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitNeedsChip` + `FitNeedsRow` (red money · blue question · yellow review · grey waiting; dotless + `selected` for a filter row; `centered` for a short set under a hero) | `FitChip` | 3 | ✅ built |
 | `FitNextSessionCard` (planned / request / awaiting perimeters, no buttons) | — | 3 | ✅ built |
 | `FitMoneyWidget` · `FitMoneyHero` | `FitEarningsHero`, `FitStatTile` | 3 | ✅ built |
-| `FitSessionCard` (radius 18, type in the plate, location strip) | — (app code today) | 4 | ✅ built |
+| `FitSessionCard` (radius 18, type in the plate, price with an optional sub-line, location strip with an optional trailing meta, a bottom slot for card actions and rows, an optional live meta colour and outline) | — (app code today) | 4 | ✅ built |
 | `FitSportChip` (selection pill, icon slot) | `FitChip` | 4 | ✅ built |
 | `FitPickRow` + `FitCheckCircle` (22, **check first**, then the avatar; muted with the reason) | `FitCheckbox`, `FitSelectionGroup` | 4 | ✅ built |
 | `FitSegmented` (selected = light alpha) | `FitSegmented` | 5 | ✅ built |

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -79,11 +80,21 @@ fun FitSessionCard(
     type: FitSessionType = FitSessionType.Personal,
     meta: String? = null,
     price: String? = null,
+    /** Under the price, e.g. "per person" on a group session. */
+    priceSub: String? = null,
     location: String? = null,
     locationIcon: (@Composable () -> Unit)? = null,
+    /** A quiet word at the end of the location strip — the booking flow keeps the type there. */
+    locationMeta: String? = null,
+    /** The meta's ink when it says something live — seats left, the next date. Quiet by default. */
+    locationMetaColor: Color? = null,
+    /** A hairline around the card for one that is singled out — a special session in a catalog. */
+    outline: Color? = null,
     trailing: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
     icon: (@Composable () -> Unit)? = null,
+    /** Below the strip, inside the same surface: a card action or the rows a card carries. */
+    bottom: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
     val shape = RoundedCornerShape(FitV3Geometry.sessionCardRadius)
@@ -93,6 +104,7 @@ fun FitSessionCard(
         modifier = modifier
             .fillMaxWidth()
             .fitV3Surface(shape)
+            .then(if (outline != null) Modifier.border(1.dp, outline, shape) else Modifier)
             .clip(shape)
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
     ) {
@@ -133,11 +145,20 @@ fun FitSessionCard(
                 }
             }
             if (price != null) {
-                Text(
-                    text = price,
-                    style = FitV3Type.rowTitle.copy(fontWeight = FontWeight.SemiBold),
-                    color = palette.textPrimary,
-                )
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = price,
+                        style = FitV3Type.rowTitle.copy(fontWeight = FontWeight.SemiBold),
+                        color = palette.textPrimary,
+                    )
+                    if (priceSub != null) {
+                        Text(
+                            text = priceSub,
+                            style = FitV3Type.rowValueSub,
+                            color = palette.textSecondary,
+                        )
+                    }
+                }
             }
             trailing?.invoke()
         }
@@ -161,9 +182,23 @@ fun FitSessionCard(
                     color = palette.textTertiary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
                 )
+                if (locationMeta != null) {
+                    Text(
+                        text = locationMeta,
+                        style = if (locationMetaColor != null) {
+                            FitV3Type.rowValueSub.copy(fontWeight = FontWeight.Medium)
+                        } else {
+                            FitV3Type.rowValueSub
+                        },
+                        color = locationMetaColor ?: palette.textTertiary,
+                        maxLines = 1,
+                    )
+                }
             }
         }
+        bottom?.invoke(this)
     }
 }
 
