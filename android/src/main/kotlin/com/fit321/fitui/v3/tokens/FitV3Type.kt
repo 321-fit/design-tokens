@@ -67,6 +67,11 @@ object FitV3Type {
     val kvValue = style(14, FontWeight.Medium, 19)
     val selectionChip = style(16, FontWeight.Normal, 21)
     val coverCaption = style(11, FontWeight.SemiBold, 14, 0.8.sp)
+    /** `.cd-m-cover` — a card that is a picture with words on it. */
+    val coverKicker = style(11, FontWeight.SemiBold, 14, 1.4.sp)
+    val coverTitle = style(21, FontWeight.SemiBold, 26)
+    val coverSub = style(13, FontWeight.Normal, 18)
+    val coverGo = style(15, FontWeight.SemiBold, 20)
     val roleChip = style(14, FontWeight.SemiBold, 19)
     val stripeMark = style(16, FontWeight.Bold, 20)
 
