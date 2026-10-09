@@ -1,5 +1,8 @@
 package com.fit321.fitui.components
 
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,6 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.fit321.fitui.theme.fitAccent
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -92,7 +97,7 @@ fun FitSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = FitRadius.lg, topEnd = FitRadius.lg),
-        containerColor = theme.screenBg,
+        containerColor = LocalFitSkin.current?.overlay ?: theme.screenBg,
         contentColor = theme.textPrimary,
         tonalElevation = 0.dp,
         scrimColor = Color.Black.copy(alpha = 0.5f),
@@ -329,8 +334,13 @@ fun FitToast(
     val borderColor = when (type) {
         FitToastType.Success -> FitColors.Teal.t500
         FitToastType.Error -> FitColors.error
-        FitToastType.Info -> FitColors.brandPrimary
+        FitToastType.Info -> fitAccent()
     }
+    // A toast floats over a screen, so it takes the skin's own floating surface rather than the
+    // panel colour: under the rework a panel is translucent, and the header read straight
+    // through the message.
+    val skin = LocalFitSkin.current
+    val fill = skin?.overlay ?: theme.surfaceHigh
 
     AnimatedVisibility(
         visible = isVisible,
@@ -339,12 +349,15 @@ fun FitToast(
     ) {
         Row(
             modifier = Modifier
+                // Full width between the margins — `.fit-toast` is `left: 20px; right: 20px`.
+                // Hugging its text left the screen's own words showing beside the message.
+                .fillMaxWidth()
                 .padding(horizontal = FitSpacing.sp5)
                 .clip(RoundedCornerShape(FitRadius.md))
-                .background(theme.surfaceHigh)
+                .background(fill)
                 .border(
-                    width = 0.dp,
-                    color = Color.Transparent,
+                    width = if (skin == null) 0.dp else 1.dp,
+                    color = skin?.overlayEdge ?: Color.Transparent,
                     shape = RoundedCornerShape(FitRadius.md)
                 )
                 .drawLeftBorder(color = borderColor, widthDp = 3.dp)
@@ -358,10 +371,18 @@ fun FitToast(
 }
 
 // Helper: draw a solid colored left border (since Modifier.border is uniform)
+/**
+ * The toast's own edge — `fit-ui.css .fit-toast { border-left: 3px solid }`, the stripe that
+ * says at a glance whether this is good news or bad. It used to be painted at alpha 0, so the
+ * colour was computed and then thrown away; nothing had ever drawn it.
+ */
 private fun Modifier.drawLeftBorder(color: Color, widthDp: androidx.compose.ui.unit.Dp): Modifier =
-    this.then(
-        Modifier.padding(start = widthDp).background(color.copy(alpha = 0f))
-    )
+    this.drawBehind {
+        drawRect(
+            color = color,
+            size = Size(width = widthDp.toPx(), height = size.height),
+        )
+    }.padding(start = widthDp)
 
 // ============================================================================
 // FitEmptyState — illustration + title + subtitle + optional CTA

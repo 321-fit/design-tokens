@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitSize
@@ -79,7 +80,7 @@ fun <T> FitNavbar(
     modifier: Modifier = Modifier
 ) {
     val theme = LocalFitTheme.current
-    val isDark = theme === FitColors.Theme.dark
+    val isDark = !fitIsLight()
     val pill = RoundedCornerShape(percent = 50)
 
     Row(

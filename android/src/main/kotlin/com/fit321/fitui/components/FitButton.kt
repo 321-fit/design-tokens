@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -71,8 +72,9 @@ fun FitButton(
         FitButtonSize.Sm -> FitFont.body2
     }
 
+    val skinCta = LocalFitSkin.current?.cta
     val fg: Color = when (effectiveStyle) {
-        FitButtonStyle.Primary -> Color.White
+        FitButtonStyle.Primary -> skinCta?.ink ?: Color.White
         FitButtonStyle.Secondary -> theme.textPrimary
         FitButtonStyle.Destructive,
         FitButtonStyle.DestructiveLow,
@@ -83,7 +85,7 @@ fun FitButton(
 
     val bgModifier = when (effectiveStyle) {
         FitButtonStyle.Primary ->
-            Modifier.background(brush = FitColors.brandGradient, shape = CircleShape)
+            Modifier.background(brush = skinCta?.fill ?: FitColors.brandGradient, shape = CircleShape)
         FitButtonStyle.Secondary ->
             Modifier.background(brush = SolidColor(theme.surfaceHigh), shape = CircleShape)
         FitButtonStyle.Destructive ->
