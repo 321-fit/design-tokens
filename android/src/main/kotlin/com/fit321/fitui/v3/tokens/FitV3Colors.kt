@@ -201,10 +201,9 @@ object FitV3Colors {
         draftSlotEdge = Color(0x47FFFFFF),
         profileCardFill = Color(0x4D000000),
         profileCardEdge = Color(0x14FFFFFF),
-        // The web pill darkens 30% over a backdrop blur. Android has no backdrop blur, and 30%
-        // with nothing blurred behind it lets the scrolled content read straight through, so
-        // the pill takes the bar's near-opaque ink instead.
-        navbarFill = Color(0xE004161D),
+        // The web pill darkens 30% over a backdrop blur. Android has no backdrop blur, so any
+        // translucency lets the scrolled content read straight through: the pill is opaque.
+        navbarFill = Color(0xFF04161D),
         navbarEdge = Color(0x14FFFFFF),
         navbarShadow = Color(0x66000000),
         navbarIcon = FitColors.Gray.g300,
@@ -306,7 +305,7 @@ object FitV3Colors {
         draftSlotEdge = FitColors.Gray.g300,
         profileCardFill = FitColors.Gray.white,
         profileCardEdge = Color.Transparent,
-        navbarFill = Color(0xF2FFFFFF),
+        navbarFill = FitColors.Gray.white,
         navbarEdge = Color.Transparent,
         navbarShadow = Color(0x26000000),
         navbarIcon = FitColors.Gray.g400,
