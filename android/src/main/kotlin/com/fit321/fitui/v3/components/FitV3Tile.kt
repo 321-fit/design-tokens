@@ -135,7 +135,7 @@ fun FitFaceStack(
                         fontSize = fontSize,
                         fontWeight = FontWeight.SemiBold,
                     ),
-                    color = palette.textSecondary,
+                    color = palette.plateInk,
                 )
             }
         }

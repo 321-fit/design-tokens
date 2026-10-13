@@ -53,7 +53,9 @@ data class FitNavbarItem<T>(
     val tab: T,
     val icon: ImageVector,
     /** Unread count on this tab. Zero draws nothing. */
-    val badgeCount: Int = 0
+    val badgeCount: Int = 0,
+    /** What the tab is called. The bar draws icons only, so this is what a screen reader says. */
+    val label: String? = null,
 )
 
 /**
@@ -118,7 +120,7 @@ fun <T> FitNavbar(
                 ) {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = null,
+                        contentDescription = item.label,
                         tint = when {
                             isActive && isDark -> FitColors.Gray.white
                             isActive -> theme.textPrimary
@@ -145,7 +147,7 @@ fun <T> FitNavbar(
 }
 
 @Composable
-private fun FitNavbarBadge(count: Int, modifier: Modifier = Modifier) {
+internal fun FitNavbarBadge(count: Int, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .defaultMinSize(minWidth = 16.dp)

@@ -81,6 +81,28 @@ data class FitV3Palette(
     val txnDangerFill: Color,
     val sheetHandle: Color,
     val clipPoster: Color,
+    /** `.ob-return` — the "Setting up" strip on a real screen opened from onboarding. */
+    val setupStripFill: Color,
+    val setupStripEdge: Color,
+    /** `.cd-pf-focus` — the ring that breathes around the slot a setup step fills. */
+    val focusRing: Color,
+    /** `.ob-w-art::before` — the glow behind a welcome showcase. */
+    val showcaseGlow: Color,
+    val disabledCtaFill: Color,
+    val disabledCtaInk: Color,
+    /** `.cd-j-plate` ink — on tinted the glyph is full white, not the secondary grey. */
+    val plateInk: Color,
+    /** `.cd-pf-ph` — a card slot's dashes, a notch brighter than an add row's. */
+    val draftSlotEdge: Color,
+    /** `.cd-pf-card` — the athlete-facing card sits a shade deeper than a panel. */
+    val profileCardFill: Color,
+    val profileCardEdge: Color,
+    /** `.fit-navbar` on the rework canvas — a darkening pill with a hairline, floating. */
+    val navbarFill: Color,
+    val navbarEdge: Color,
+    val navbarShadow: Color,
+    val navbarIcon: Color,
+    val navbarIconActive: Color,
 )
 
 object FitV3Colors {
@@ -169,6 +191,24 @@ object FitV3Colors {
         txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
         sheetHandle = Color(0x38FFFFFF),
         clipPoster = Color(0x47000000),
+        setupStripFill = FitColors.Teal.t500.copy(alpha = 0.12f),
+        setupStripEdge = FitColors.Teal.t500.copy(alpha = 0.30f),
+        focusRing = FitColors.Teal.t500.copy(alpha = 0.28f),
+        showcaseGlow = FitColors.Teal.t500.copy(alpha = 0.22f),
+        disabledCtaFill = Color(0x24FFFFFF),
+        disabledCtaInk = Color(0x73FFFFFF),
+        plateInk = Color(0xFFFFFFFF),
+        draftSlotEdge = Color(0x47FFFFFF),
+        profileCardFill = Color(0x4D000000),
+        profileCardEdge = Color(0x14FFFFFF),
+        // The web pill darkens 30% over a backdrop blur. Android has no backdrop blur, and 30%
+        // with nothing blurred behind it lets the scrolled content read straight through, so
+        // the pill takes the bar's near-opaque ink instead.
+        navbarFill = Color(0xE004161D),
+        navbarEdge = Color(0x14FFFFFF),
+        navbarShadow = Color(0x66000000),
+        navbarIcon = FitColors.Gray.g300,
+        navbarIconActive = FitColors.Gray.white,
     )
 
     val light = FitV3Palette(
@@ -256,6 +296,21 @@ object FitV3Colors {
         txnDangerFill = FitColors.Red.r400.copy(alpha = 0.12f),
         sheetHandle = FitColors.Gray.g200,
         clipPoster = FitColors.Gray.white,
+        setupStripFill = FitColors.Teal.t500.copy(alpha = 0.10f),
+        setupStripEdge = FitColors.Teal.t500.copy(alpha = 0.35f),
+        focusRing = FitColors.Teal.t500.copy(alpha = 0.30f),
+        showcaseGlow = FitColors.Teal.t500.copy(alpha = 0.14f),
+        disabledCtaFill = FitColors.Gray.g200,
+        disabledCtaInk = FitColors.Gray.g400,
+        plateInk = FitColors.Gray.g600,
+        draftSlotEdge = FitColors.Gray.g300,
+        profileCardFill = FitColors.Gray.white,
+        profileCardEdge = Color.Transparent,
+        navbarFill = Color(0xF2FFFFFF),
+        navbarEdge = Color.Transparent,
+        navbarShadow = Color(0x26000000),
+        navbarIcon = FitColors.Gray.g400,
+        navbarIconActive = FitColors.Gray.g900,
     )
 
     val pickTick = Color(0xFF06251F)

@@ -90,4 +90,12 @@ object FitV3Geometry {
     val identityStack = 56.dp
     val profileAvatar = 72.dp
     val profileCompactAvatar = 68.dp
+    val profileCardRadius = 24.dp
+
+    val stepBack = 32.dp
+    val draftSlotHeight = 30.dp
+    val photoControl = 104.dp
+    val photoBadge = 32.dp
+    val cardPhotoBadge = 24.dp
+    val sportTileMinHeight = 56.dp
 }

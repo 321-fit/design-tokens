@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
@@ -254,36 +257,63 @@ fun FitProfileCard(
     placeIcon: (@Composable () -> Unit)? = null,
     priceLine: String? = null,
     sports: (@Composable ColumnScope.() -> Unit)? = null,
+    /** Replaces the plain avatar — a card being built makes it the photo control. */
+    avatar: (@Composable () -> Unit)? = null,
+    /**
+     * Replaces [place] with anything — a dashed slot while it is still empty. The line then
+     * keeps the slot's height either way, so the name above it never moves when it fills in.
+     */
+    placeContent: (@Composable () -> Unit)? = null,
+    /** Replaces [priceLine] below the divider with richer content. */
+    meta: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
-    val shape = RoundedCornerShape(FitV3Geometry.panelRadius)
+    val shape = RoundedCornerShape(FitV3Geometry.profileCardRadius)
+    // `.cd-pf-card`: the meta's top border runs edge to edge, so the sides are padded per band,
+    // not once around the whole card.
+    val side = Modifier.padding(horizontal = 20.dp)
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .fitV3Surface(shape)
+            .fitV3Surface(shape, fill = palette.profileCardFill, hairline = palette.profileCardEdge)
             .clip(shape)
-            .padding(20.dp),
+            .padding(top = 20.dp, bottom = if (meta != null || priceLine != null) 18.dp else 20.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = side.fillMaxWidth(),
         ) {
-            FitV3Avatar(
-                initials = initials,
-                size = FitV3Geometry.profileCompactAvatar,
-                imageUrl = avatarUrl,
-                plate = FitV3AvatarPlate.Brand,
-            )
+            if (avatar != null) {
+                avatar()
+            } else {
+                FitV3Avatar(
+                    initials = initials,
+                    size = FitV3Geometry.profileCompactAvatar,
+                    imageUrl = avatarUrl,
+                    plate = FitV3AvatarPlate.Brand,
+                )
+            }
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = name,
-                    style = FitV3Type.compactName,
+                    style = FitV3Type.compactName.copy(letterSpacing = (-0.3).sp),
                     color = palette.textPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                if (place != null) {
+                if (placeContent != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier
+                            .padding(top = 5.dp)
+                            .heightIn(min = FitV3Geometry.draftSlotHeight),
+                    ) {
+                        placeIcon?.invoke()
+                        placeContent()
+                    }
+                } else if (place != null) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -294,15 +324,31 @@ fun FitProfileCard(
                             text = place,
                             style = FitV3Type.identityContext,
                             color = palette.textSecondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
             }
         }
         if (sports != null) {
-            Column(modifier = Modifier.padding(top = 16.dp)) { sports() }
+            Column(modifier = side.padding(top = 16.dp)) { sports() }
         }
-        if (priceLine != null) {
+        if (meta != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .height(1.dp)
+                    .background(palette.divider),
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = side.padding(top = 14.dp),
+                content = meta,
+            )
+        } else if (priceLine != null) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -314,7 +360,7 @@ fun FitProfileCard(
                 text = priceLine,
                 style = FitV3Type.rowValue,
                 color = palette.textPrimary,
-                modifier = Modifier.padding(top = 14.dp),
+                modifier = side.padding(top = 14.dp),
             )
         }
     }

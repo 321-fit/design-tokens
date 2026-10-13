@@ -77,6 +77,11 @@ fun FitRow(
      * floating between the two lines of a row that happens to have a sub-line.
      */
     trailingAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    /**
+     * A label above the title, for a row that confirms a value rather than names a thing —
+     * "Country" over "Poland" (`.ob-basics`): the value is what the eye should land on.
+     */
+    overline: String? = null,
     onClick: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
@@ -100,6 +105,16 @@ fun FitRow(
     ) {
         leading?.invoke()
         Column(modifier = Modifier.weight(1f).alpha(if (dimmed) ROW_DIM else 1f)) {
+            if (overline != null) {
+                Text(
+                    text = overline,
+                    style = FitV3Type.rowSub,
+                    color = palette.textTertiary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 1.dp),
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -269,7 +284,7 @@ fun FitRowPlate(
             .background(palette.raised, RoundedCornerShape(radius)),
         contentAlignment = Alignment.Center,
     ) {
-        CompositionLocalProvider(LocalContentColor provides palette.textSecondary) { content() }
+        CompositionLocalProvider(LocalContentColor provides palette.plateInk) { content() }
     }
 }
 
@@ -279,6 +294,7 @@ fun FitAddRow(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     leading: (@Composable () -> Unit)? = null,
+    trailing: (@Composable () -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
@@ -323,6 +339,7 @@ fun FitAddRow(
                     )
                 }
             }
+            trailing?.invoke()
         }
     }
 }

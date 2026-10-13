@@ -129,6 +129,14 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitGroupFaces` (two faces diagonally in one person-sized slot) · `FitRowTag` · `FitCountBadge(Unread)` | `FitFaceStack`, `FitBadge` | 11 | ✅ built |
 | `FitRow(trailingAlignment)` — `.ms-meta` is `align-self: flex-start` · `FitV3Header(backLabel)` for the back button's a11y name | — | 11 | ✅ built |
 | `FitChatBubble` (mine right / theirs left, tail corner) · `FitChatSenderBubble` · `FitChatDateSeparator` · `FitChatUnreadDivider` · `FitChatHello` · `FitChatComposer` (field + CTA send circle) | — | 11 | ✅ built |
+| `FitStepProgress` (`.ob-prog`: back 32 · 4px track, white on tinted, brand gradient on light · `N of M` 12/600) · `FitStepQuestion` (`.ob-q` 24/700 + one `.ob-hint` 13 tertiary; `centered` for a finish) | — | 12 | ✅ built |
+| `FitDraftSlot` (`.cd-pf-ph`: a dashed 30px pill for a slot still empty; `focused` breathes the teal ring of `.cd-pf-focus`) | — | 12 | ✅ built |
+| `FitProfileCard(avatar, placeContent, meta)` — the card being built: the avatar can be the photo control, the place line keeps a 30px minimum so the name never moves, the meta below the divider is a slot | — | 12 | ✅ built |
+| `FitCardPhoto` (68 brand avatar + 24 white camera badge, `.ob-av-tap`) · `FitPhotoControl` (`.ob-av`: 104 surface circle, camera glyph or the photo, 32 white `+` badge) | — | 12 | ✅ built |
+| `FitSportTile` + `FitSportTileGrid` (`.sp-card`: min 56, radius 14, selected = selection wash + teal hairline; two columns, 10 apart) | — | 12 | ✅ built |
+| `FitSetupStrip` (`.ob-return`: teal 12% wash + 30% hairline, `Setting up · step N of M`, where it lives later, a "Back to setup" pill) | — | 12 | ✅ built |
+| `FitNearPill` (`.ob-w-near`: a count with a teal pin on a quiet pill) · `FitShowcase` (`.ob-w-art`: the sample card tilted −3° over two ghosts and a teal glow) | — | 12 | ✅ built |
+| `FitRow(overline)` — the label above the value for a row that confirms a value (`.ob-basics`: "Country" over "Poland") · `FitAddRow(trailing)` | — | 12 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
@@ -243,3 +251,10 @@ same red, an alert glyph, and Retry in the action slot. It sits *above* the cont
 replacing it, because a list that loaded yesterday is still worth reading today — and it never
 shares a screen with an empty panel, which would answer the same question twice with two
 different answers.
+
+### A card being built is the same card, with its gaps showing
+
+Onboarding does not draw its own card: it is `FitProfileCard` with three slots filled differently
+while the coach answers. An empty slot is a `FitDraftSlot`, and the one the current step fills
+breathes. The place line keeps the slot's 30px whether it holds the slot or the place, so the name
+above it never moves between steps — a guessed city used to resize the header (spec 2026-10-09).

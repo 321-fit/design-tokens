@@ -202,3 +202,17 @@ fun FitTxnRow(
         }
     }
 }
+
+/** `.fit-txn-date` — the date a run of ledger rows falls on: quieter than a section title. */
+@Composable
+fun FitTxnDate(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = text,
+        style = FitV3Type.rowSub,
+        color = LocalFitV3Palette.current.textTertiary,
+        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 6.dp),
+    )
+}

@@ -108,13 +108,14 @@ fun FitKeyValue(
             text = label,
             style = FitV3Type.kvLabel,
             color = palette.textSecondary,
-            modifier = Modifier.weight(1f),
+            maxLines = 1,
         )
         Text(
             text = value,
             style = FitV3Type.kvValue,
             color = if (muted) palette.textTertiary else palette.textPrimary,
             textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f),
         )
     }
 }

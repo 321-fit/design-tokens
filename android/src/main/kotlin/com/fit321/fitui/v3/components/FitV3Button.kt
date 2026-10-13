@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
+import com.fit321.fitui.v3.tokens.FitV3Look
 import com.fit321.fitui.v3.tokens.FitV3Type
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -61,12 +62,18 @@ fun FitButton(
         FitV3ButtonStyle.Destructive -> Color.Transparent
         FitV3ButtonStyle.Text -> Color.Transparent
     }
-    val lift = if (style == FitV3ButtonStyle.Primary) 12.dp else 0.dp
+    // Tinted spells a disabled CTA out as a glass plate (`.k-cta-white .fit-btn-primary:disabled`):
+    // the white button faded to 40% read as a grey slab with a dark label, i.e. still a button.
+    val glassDisabled = !enabled && style == FitV3ButtonStyle.Primary && palette.look == FitV3Look.Tinted
+    val fillNow = if (glassDisabled) SolidColor(palette.disabledCtaFill) else fill
+    val inkNow = if (glassDisabled) palette.disabledCtaInk else ink
+    val edgeNow = if (glassDisabled) Color.Transparent else edge
+    val lift = if (style == FitV3ButtonStyle.Primary && !glassDisabled) 12.dp else 0.dp
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(FitV3Geometry.footerCtaHeight)
-            .alpha(if (enabled) 1f else 0.4f)
+            .alpha(if (enabled || glassDisabled) 1f else 0.4f)
             .then(
                 if (lift > 0.dp) {
                     Modifier.shadow(
@@ -81,9 +88,9 @@ fun FitButton(
                 },
             )
             .clip(CircleShape)
-            .background(fill, CircleShape)
+            .background(fillNow, CircleShape)
             .then(
-                if (edge == Color.Transparent) Modifier else Modifier.border(1.dp, edge, CircleShape),
+                if (edgeNow == Color.Transparent) Modifier else Modifier.border(1.dp, edgeNow, CircleShape),
             )
             .clickable(enabled = enabled && !loading) { onClick() },
         verticalAlignment = Alignment.CenterVertically,
@@ -92,17 +99,17 @@ fun FitButton(
         if (loading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(20.dp),
-                color = ink,
+                color = inkNow,
                 strokeWidth = 2.dp,
             )
         } else {
-            CompositionLocalProvider(LocalContentColor provides ink) {
+            CompositionLocalProvider(LocalContentColor provides inkNow) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     leading?.invoke()
-                    Text(text = title, style = FitV3Type.rowTitle, color = ink, maxLines = 1)
+                    Text(text = title, style = FitV3Type.rowTitle, color = inkNow, maxLines = 1)
                 }
             }
         }

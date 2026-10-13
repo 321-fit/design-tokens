@@ -206,24 +206,26 @@ fun FitSessionCard(
 fun FitSportChip(
     name: String,
     modifier: Modifier = Modifier,
+    /** `.cd-pf-card .fit-sport-chip`: 14px words and a 20px glyph, for a card rather than a header. */
+    compact: Boolean = false,
     icon: (@Composable () -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
     Row(
         modifier = modifier
             .background(FitColors.selectionGradient, RoundedCornerShape(percent = 50))
-            .padding(start = 8.dp, end = 14.dp, top = 6.dp, bottom = 6.dp),
+            .padding(start = 8.dp, end = if (compact) 12.dp else 14.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         if (icon != null) {
             CompositionLocalProvider(LocalContentColor provides palette.onBrandInk) {
-                Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) { icon() }
+                Box(modifier = Modifier.size(if (compact) 20.dp else 24.dp), contentAlignment = Alignment.Center) { icon() }
             }
         }
         Text(
             text = name,
-            style = FitV3Type.fieldText,
+            style = if (compact) FitV3Type.chip else FitV3Type.fieldText,
             color = palette.onBrandInk,
             maxLines = 1,
         )

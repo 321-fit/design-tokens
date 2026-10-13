@@ -248,6 +248,8 @@ fun FitChatComposer(
     onSend: () -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
+    /** Before the field — the assistant's "talk instead" circle. */
+    leading: (@Composable () -> Unit)? = null,
     sendIcon: @Composable () -> Unit,
 ) {
     val palette = LocalFitV3Palette.current
@@ -263,6 +265,7 @@ fun FitChatComposer(
         horizontalArrangement = Arrangement.spacedBy(COMPOSER_GAP),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        leading?.invoke()
         Box(
             modifier = Modifier
                 .weight(1f)

@@ -31,6 +31,8 @@ object FitV3Type {
     val rowValueSub = style(12, FontWeight.Normal, 16)
 
     val fieldLabel = style(13, FontWeight.SemiBold, 18)
+    /** `.cd-f-label span` — "optional", "needed for review": a note beside the label. */
+    val fieldLabelNote = style(13, FontWeight.Normal, 18)
     val fieldText = style(16, FontWeight.Normal, 21)
     val fieldHint = style(12, FontWeight.Normal, 16)
 
@@ -87,4 +89,18 @@ object FitV3Type {
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     val moneyHero = style(48, FontWeight.Bold, 54)
     val moneyHeroCurrency = style(28, FontWeight.SemiBold, 34)
+
+    /** `.ob-q` — the one question a setup step asks. */
+    val stepQuestion = style(24, FontWeight.Bold, 29, (-0.4).sp)
+    /** `.ob-hint` — why we ask, at most one line of it per step. */
+    val stepHint = style(13, FontWeight.Normal, 19)
+    val stepCount = style(12, FontWeight.SemiBold, 16)
+    val welcomeTitle = style(28, FontWeight.Bold, 32, (-0.5).sp)
+    val welcomeLead = style(17, FontWeight.Normal, 25)
+    val draftSlot = style(12, FontWeight.Medium, 16)
+    val link = style(14, FontWeight.SemiBold, 19)
+    val stripTitle = style(12, FontWeight.SemiBold, 16)
+    val stripSub = style(12, FontWeight.Normal, 16)
+    /** `.sp-card-label` — 14px at the regular weight: a choice, not a heading. */
+    val tileLabel = style(14, FontWeight.Normal, 17)
 }

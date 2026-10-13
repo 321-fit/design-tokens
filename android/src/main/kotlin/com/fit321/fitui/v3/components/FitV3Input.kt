@@ -70,7 +70,7 @@ fun FitInput(
     Column(modifier = modifier.fillMaxWidth()) {
         if (label != null) {
             Row(
-                modifier = Modifier.padding(bottom = 6.dp),
+                modifier = Modifier.padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -78,7 +78,7 @@ fun FitInput(
                 if (optional) {
                     Text(
                         text = optionalLabel,
-                        style = FitV3Type.fieldLabel,
+                        style = FitV3Type.fieldLabelNote,
                         color = palette.textTertiary,
                     )
                 }
@@ -241,7 +241,7 @@ fun FitSelectField(
     Column(modifier = modifier.fillMaxWidth()) {
         if (label != null) {
             Row(
-                modifier = Modifier.padding(bottom = 6.dp),
+                modifier = Modifier.padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -249,7 +249,7 @@ fun FitSelectField(
                 if (optional) {
                     Text(
                         text = optionalLabel,
-                        style = FitV3Type.fieldLabel,
+                        style = FitV3Type.fieldLabelNote,
                         color = palette.textTertiary,
                     )
                 }
