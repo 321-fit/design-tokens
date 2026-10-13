@@ -2,8 +2,10 @@ package com.fit321.fitui.theme
 
 import androidx.compose.foundation.text.LocalAutofillHighlightColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.fit321.fitui.tokens.FitColors
 
@@ -23,12 +25,82 @@ import com.fit321.fitui.tokens.FitColors
  */
 val LocalFitTheme = compositionLocalOf { FitColors.Theme.dark }
 
+/**
+ * What a screen wears instead of its own look. [FitV3Skin] sets it so that a shipped screen
+ * keeps its layout and its components and still renders in the rework look — the screens that
+ * are *restyled* rather than redrawn. A nested `FitTheme(isDark = …)` must not undo that, which
+ * is why the check lives in [FitTheme] and not at each call site: those calls are spread over a
+ * hundred screens and are how the role picks dark or light in the first place.
+ *
+ * [cta] and [overlay] exist because two of the rework's answers have no token to travel in. The
+ * primary CTA is a brush, not a colour, and on the tinted canvas it stops being the brand
+ * gradient. The overlay is the sharper split: a sheet and a menu are layers *over* the screen,
+ * and the rework needs them opaque while the screen itself lets the gradient through — one
+ * `screenBg` cannot be both.
+ */
+val LocalFitSkin = compositionLocalOf<FitSkin?> { null }
+
+data class FitSkin(
+    val theme: FitColors.Theme,
+    val cta: FitSkinCta,
+    /** Sheets and menus: a layer over the screen, not a surface on it. */
+    val overlay: Color,
+    val overlayEdge: Color,
+    /**
+     * The round plate a header button sits on. Its own entry because the rework draws it as a
+     * wash with a hairline, and a theme can only carry the wash — a plate with no rim reads as
+     * a hole on the gradient.
+     */
+    val circle: Color,
+    val circleEdge: Color,
+    /**
+     * What a link or an inline action is coloured with. The shipped palette's brand is blue;
+     * the rework's is teal, and a screen worn under the skin would otherwise keep one blue
+     * word in the middle of a teal page.
+     */
+    val accent: Color,
+    /**
+     * A calendar slot somebody already took — the other party's time, an external calendar,
+     * a travel buffer. The rework retired the diagonal hatch (2026-09-15): taken reads as a
+     * flat darkening, inset and rounded, while off-hours keeps the full-bleed band. Null
+     * outside the rework, where the shipped hatch and grey plate stay as they are.
+     */
+    val calTaken: Color,
+    /**
+     * Your own booking seen from the other role: a quiet translucent lift, no stripe — the
+     * role tag already says whose it is, and a dashed edge read as "awaiting".
+     */
+    val calCrossRole: Color,
+    val isLight: Boolean,
+)
+
+data class FitSkinCta(val fill: Brush, val ink: Color)
+
+/**
+ * Light or dark, asked rather than guessed.
+ *
+ * Components used to infer it by comparing the theme against the two canonical instances —
+ * `theme === Theme.dark`, or `screenBg != gray.900`. A skinned screen breaks both: its theme is
+ * a copy, and its screen background is transparent so the gradient can show through. Every one
+ * of those checks then answered "light" on the darkest canvas in the app, which is how a card
+ * on the rework canvas grew a drop shadow it should never have.
+ */
+/** The accent a skinned screen wears, falling back to the shipped brand. */
+@Composable
+@ReadOnlyComposable
+fun fitAccent(): Color = LocalFitSkin.current?.accent ?: FitColors.brandPrimary
+
+@Composable
+@ReadOnlyComposable
+fun fitIsLight(): Boolean =
+    LocalFitSkin.current?.isLight ?: (LocalFitTheme.current.screenBg != FitColors.Gray.g900)
+
 @Composable
 fun FitTheme(
     isDark: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val theme = if (isDark) FitColors.Theme.dark else FitColors.Theme.light
+    val theme = LocalFitSkin.current?.theme ?: if (isDark) FitColors.Theme.dark else FitColors.Theme.light
     CompositionLocalProvider(
         LocalFitTheme provides theme,
         // Compose paints a translucent yellow plate over a field it has just autofilled. It

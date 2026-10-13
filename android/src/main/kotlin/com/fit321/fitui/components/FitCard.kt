@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.vectorResource
 import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitRadius
@@ -57,7 +58,7 @@ fun FitCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val theme = LocalFitTheme.current
-    val isLight = theme.screenBg != FitColors.Gray.g900
+    val isLight = fitIsLight()
 
     val clickableMod = if (onClick != null) Modifier.clickable { onClick() } else Modifier
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
 
@@ -39,7 +40,7 @@ fun FitInviteRow(
     trailing: (@Composable () -> Unit)? = null
 ) {
     val theme = LocalFitTheme.current
-    val isLight = theme.screenBg != FitColors.Gray.g900
+    val isLight = fitIsLight()
     val shape = RoundedCornerShape(12.dp)
 
     val containerModifier = modifier

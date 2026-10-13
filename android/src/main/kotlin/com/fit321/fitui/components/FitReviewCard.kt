@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.vectorResource
 import com.fit321.designtokens.R
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
 import com.fit321.fitui.tokens.FitSpacing
@@ -66,7 +67,7 @@ fun FitReviewCard(
 ) {
     val theme = LocalFitTheme.current
     val shape = RoundedCornerShape(14.dp)
-    val isLight = theme.screenBg != FitColors.Gray.g900
+    val isLight = fitIsLight()
 
     val container = modifier
         .width(280.dp)

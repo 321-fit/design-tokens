@@ -1,0 +1,212 @@
+package com.fit321.fitui.v3.components
+
+import com.fit321.fitui.tokens.FitColors
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.fit321.fitui.v3.theme.LocalFitV3Palette
+import com.fit321.fitui.v3.tokens.FitV3Type
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.LocalContentColor
+
+data class FitMoneyFact(
+    val value: String,
+    val label: String,
+    /** Money the person owes reads in the error ink, as the headline does when it is [due]. */
+    val due: Boolean = false,
+    /** A fact that opens its own list — owed, booked — instead of the widget's whole target. */
+    val onClick: (() -> Unit)? = null,
+)
+
+@Composable
+fun FitMoneyWidget(
+    amount: String,
+    modifier: Modifier = Modifier,
+    badge: (@Composable () -> Unit)? = null,
+    context: String? = null,
+    due: Boolean = false,
+    leading: (@Composable () -> Unit)? = null,
+    facts: List<FitMoneyFact> = emptyList(),
+    trailing: (@Composable () -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
+            .padding(20.dp),
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.Top,
+        ) {
+            if (leading != null) {
+                Box(modifier = Modifier.padding(top = 8.dp)) { leading() }
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = amount,
+                        style = FitV3Type.moneyHeadline,
+                        color = if (due) palette.textError else palette.textPrimary,
+                    )
+                    badge?.invoke()
+                }
+                if (context != null) {
+                    Text(
+                        text = context,
+                        style = FitV3Type.rowSub,
+                        color = palette.textTertiary,
+                        modifier = Modifier.padding(top = 2.dp),
+                    )
+                }
+            }
+            if (trailing != null) {
+                Box(modifier = Modifier.padding(top = 8.dp)) {
+                    CompositionLocalProvider(LocalContentColor provides palette.textTertiary) { trailing() }
+                }
+            }
+        }
+        if (facts.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp, bottom = 12.dp)
+                    .height(1.dp)
+                    .background(palette.divider),
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                facts.forEach { fact ->
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(if (fact.onClick != null) Modifier.clickable { fact.onClick.invoke() } else Modifier),
+                    ) {
+                        Text(
+                            text = fact.value,
+                            style = FitV3Type.nextWhen,
+                            color = if (fact.due) palette.textError else palette.textPrimary,
+                        )
+                        Text(
+                            text = fact.label,
+                            style = FitV3Type.rowSub,
+                            color = palette.textTertiary,
+                            modifier = Modifier.padding(top = 2.dp),
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FitMoneyHero(
+    amount: String,
+    modifier: Modifier = Modifier,
+    currency: String? = null,
+    label: String? = null,
+    sub: String? = null,
+    /**
+     * Non-null turns the amount into the field the coach types into — Withdraw. The metrics are
+     * the same either way, so the number does not jump when the screen stops reading and starts
+     * asking.
+     */
+    onAmountChange: ((String) -> Unit)? = null,
+    amountPlaceholder: String? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        if (label != null) {
+            Text(
+                text = label,
+                style = FitV3Type.rowSub,
+                color = palette.textTertiary,
+                textAlign = TextAlign.Center,
+            )
+        }
+        // Baselines, not centres: the currency sits a third the height of the amount, and
+        // centring it floats the symbol in the middle of the digits.
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(top = 6.dp),
+        ) {
+            if (currency != null) {
+                Text(
+                    text = currency,
+                    style = FitV3Type.moneyHeroCurrency,
+                    color = palette.textSecondary,
+                    modifier = Modifier.alignByBaseline(),
+                )
+            }
+            if (onAmountChange == null) {
+                Text(
+                    text = amount,
+                    style = FitV3Type.moneyHero,
+                    color = palette.textPrimary,
+                    modifier = Modifier.alignByBaseline(),
+                )
+            } else {
+                BasicTextField(
+                    value = amount,
+                    onValueChange = onAmountChange,
+                    singleLine = true,
+                    textStyle = FitV3Type.moneyHero.copy(color = palette.textPrimary),
+                    cursorBrush = SolidColor(FitColors.Teal.t600),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier
+                        .width(IntrinsicSize.Min)
+                        .widthIn(min = 120.dp)
+                        .alignByBaseline(),
+                    decorationBox = { inner ->
+                        if (amount.isEmpty() && amountPlaceholder != null) {
+                            Text(
+                                text = amountPlaceholder,
+                                style = FitV3Type.moneyHero,
+                                color = palette.textTertiary,
+                            )
+                        }
+                        inner()
+                    },
+                )
+            }
+        }
+        if (sub != null) {
+            Text(
+                text = sub,
+                style = FitV3Type.rowSub,
+                color = palette.textTertiary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 6.dp),
+            )
+        }
+    }
+}

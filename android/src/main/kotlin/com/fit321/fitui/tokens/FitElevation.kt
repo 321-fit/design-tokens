@@ -7,6 +7,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.fit321.fitui.theme.LocalFitTheme
+import com.fit321.fitui.theme.fitIsLight
 
 /**
  * Kotlin Compose mirror of design-tokens/tokens/elevation.json — same role as [FitColors] for
@@ -37,6 +38,6 @@ object FitElevation {
  */
 @Composable
 fun Modifier.fitCardElevation(shape: Shape = RoundedCornerShape(FitRadius.card)): Modifier {
-    val isLight = LocalFitTheme.current.screenBg != FitColors.Gray.g900
+    val isLight = fitIsLight()
     return with(FitElevation) { this@fitCardElevation.fitCardElevation(isLight, shape) }
 }

@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fit321.fitui.theme.LocalFitSkin
 import com.fit321.fitui.theme.LocalFitTheme
 import com.fit321.fitui.tokens.FitColors
 import com.fit321.fitui.tokens.FitFont
@@ -248,6 +249,8 @@ fun FitCalEvent(
     val theme = LocalFitTheme.current
     val tier = FitCalEventTier.from(height)
     val isCrossRole = type is FitCalEventType.CrossRole
+    val isExternal = type is FitCalEventType.External
+    val skin = LocalFitSkin.current
 
     // Two axes (event-statuses.md § 5b): fill/tint = TYPE (teal personal / blue group / neutral
     // surface = not-a-training), border = ACTION. Actionable/terminal statuses (request, review,
@@ -259,11 +262,15 @@ fun FitCalEvent(
         status == FitCalEventStatus.Missed   -> theme.bgErrorSubtle
         // Transparent in dark, 70% white in light — a tentative card, not a booked one.
         status == FitCalEventStatus.Awaiting -> theme.bgCalTentative
-        type is FitCalEventType.External     -> theme.surfaceHigher
+        // The rework reads a taken slot as a flat darkening; the shipped look keeps its grey
+        // plate. Same for the cross-role tile below — `calTaken`/`calCrossRole` are null
+        // outside the rework, so v2 renders exactly as it always did.
+        type is FitCalEventType.External     -> skin?.calTaken ?: theme.surfaceHigher
         type is FitCalEventType.Group        -> theme.bgInfoSubtle
         type is FitCalEventType.Personal     -> theme.bgBrandSubtle
         type is FitCalEventType.SelfPaced    -> FitColors.Violet.v500.copy(alpha = 0.16f)
-        else                                 -> theme.surfaceHigh   // custom / cross-role = not-a-training
+        type is FitCalEventType.CrossRole    -> skin?.calCrossRole ?: theme.surfaceHigh
+        else                                 -> theme.surfaceHigh   // custom = not-a-training
     }
     // The left stripe follows the ACTION when there is one — an actionable/terminal status paints
     // the stripe its own colour (yellow / red) so the whole tile reads one signal, not a teal
@@ -321,7 +328,11 @@ fun FitCalEvent(
                         // `border-left: 3px` + `border-radius`. Drawn as the left slice of a
                         // rounded-rect stroke: a plain 3dp rectangle gets bitten off by the clip
                         // at both corners and reads as a bar pasted onto the tile.
-                        if (isCrossRole) Modifier else Modifier.leftAccentStripe(leftAccent, FitRadius.md)
+                        if (isCrossRole || (skin != null && isExternal)) {
+                            Modifier
+                        } else {
+                            Modifier.leftAccentStripe(leftAccent, FitRadius.md)
+                        }
                     )
                     .then(
                         when {
@@ -335,7 +346,7 @@ fun FitCalEvent(
             ) {
                 // Left stripe — cross-role keeps its dashed bar; every other type has the accent
                 // painted by leftAccentStripe above, so the row only reserves its width.
-                if (isCrossRole) {
+                if (isCrossRole && skin == null) {
                     DashedVerticalStripe(theme.textTertiary)
                 } else {
                     Spacer(modifier = Modifier.width(STRIPE_WIDTH))
