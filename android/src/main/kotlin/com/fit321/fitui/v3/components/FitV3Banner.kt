@@ -135,6 +135,7 @@ fun FitEmptyPanel(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     actions()

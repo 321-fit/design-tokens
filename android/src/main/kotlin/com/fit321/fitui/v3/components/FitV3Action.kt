@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -128,15 +130,20 @@ fun RowScope.FitActionCircle(
                 )
             }
         }
-        Text(
+        // One line that shrinks to fit, as on iOS, rather than cut "Reschedule" in a row of four.
+        BasicText(
             text = label,
-            style = FitV3Type.actionLabel,
-            color = labelColor,
-            textAlign = TextAlign.Center,
+            style = FitV3Type.actionLabel.merge(color = labelColor, textAlign = TextAlign.Center),
             maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = FitV3Type.actionLabel.fontSize * ACTION_LABEL_MIN_SCALE,
+                maxFontSize = FitV3Type.actionLabel.fontSize,
+            ),
         )
     }
 }
+
+private const val ACTION_LABEL_MIN_SCALE = 0.8f
 
 /** The count pill a circle wears — shared by the action circles and the header's own. */
 @Composable

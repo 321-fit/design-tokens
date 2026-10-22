@@ -1,6 +1,8 @@
 package com.fit321.fitui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fit321.fitui.theme.LocalFitTheme
@@ -122,7 +125,19 @@ fun RowScope.FitActionCircle(
         ) {
             Icon(imageVector = icon, contentDescription = null, tint = glyph, modifier = Modifier.size(30.dp))
         }
-        Text(text = label, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = caption)
+        // One line that shrinks to fit, as on iOS: four circles leave "Reschedule" too little
+        // room, and a wrapped label breaks mid-word.
+        BasicText(
+            text = label,
+            style = LocalTextStyle.current.merge(
+                fontSize = LABEL_SIZE,
+                fontWeight = FontWeight.SemiBold,
+                color = caption,
+                textAlign = TextAlign.Center,
+            ),
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(minFontSize = LABEL_SIZE * LABEL_MIN_SCALE, maxFontSize = LABEL_SIZE),
+        )
     }
 }
 
@@ -142,3 +157,6 @@ fun FitActionCircles(
         content = content,
     )
 }
+
+private val LABEL_SIZE = 13.sp
+private const val LABEL_MIN_SCALE = 0.8f
