@@ -1,5 +1,10 @@
 package com.fit321.fitui.v3.components
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxHeight
+import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.tokens.FitColors
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.graphics.SolidColor
@@ -206,6 +211,110 @@ fun FitMoneyHero(
                 color = palette.textTertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 6.dp),
+            )
+        }
+    }
+}
+
+/** One half of [FitMoneyCard]'s bottom row: `.cd-i-tl` label, `.cd-mc-v` amount, `.cd-mc-sub` line. */
+data class FitMoneyCell(
+    val label: String,
+    val value: String,
+    val sub: String? = null,
+    /** Money the person owes — the athlete's Owed — reads in the error ink. */
+    val due: Boolean = false,
+    val onClick: (() -> Unit)? = null,
+)
+
+/**
+ * `.cd-mc` (v2.5) — one full-width cell with the total, then two cells split by a hairline.
+ * Coach Home: This week | Cash · Card. Athlete Home: Available | Owed · Booked. The chevron
+ * shows only when the top cell is a door.
+ */
+@Composable
+fun FitMoneyCard(
+    label: String,
+    amount: String,
+    start: FitMoneyCell,
+    end: FitMoneyCell,
+    modifier: Modifier = Modifier,
+    badge: (@Composable () -> Unit)? = null,
+    sub: String? = null,
+    chevron: (@Composable () -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(FitV3Geometry.panelRadius)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fitV3Surface(shape)
+            .clip(shape),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = label, style = FitV3Type.rowSub, color = palette.textTertiary)
+                Row(
+                    modifier = Modifier.padding(top = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(text = amount, style = FitV3Type.moneyCardTotal, color = palette.textPrimary)
+                    badge?.invoke()
+                }
+                if (sub != null) {
+                    Text(
+                        text = sub,
+                        style = FitV3Type.rowSub,
+                        color = palette.textTertiary,
+                        modifier = Modifier.padding(top = 3.dp),
+                    )
+                }
+            }
+            if (chevron != null && onClick != null) {
+                Box(modifier = Modifier.size(18.dp), contentAlignment = Alignment.Center) {
+                    CompositionLocalProvider(LocalContentColor provides palette.textTertiary) { chevron() }
+                }
+            }
+        }
+        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(palette.divider))
+        Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+            MoneyCell(start, Modifier.weight(1f))
+            Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(palette.divider))
+            MoneyCell(end, Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun MoneyCell(cell: FitMoneyCell, modifier: Modifier) {
+    val palette = LocalFitV3Palette.current
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .then(if (cell.onClick != null) Modifier.clickable { cell.onClick.invoke() } else Modifier)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+    ) {
+        Text(text = cell.label, style = FitV3Type.rowSub, color = palette.textTertiary)
+        Text(
+            text = cell.value,
+            style = FitV3Type.moneyCardValue,
+            color = if (cell.due) palette.textError else palette.textPrimary,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        if (cell.sub != null) {
+            Text(
+                text = cell.sub,
+                style = FitV3Type.rowSub,
+                color = palette.textTertiary,
+                modifier = Modifier.padding(top = 3.dp),
             )
         }
     }

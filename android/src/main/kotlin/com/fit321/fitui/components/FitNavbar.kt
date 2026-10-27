@@ -54,6 +54,8 @@ data class FitNavbarItem<T>(
     val icon: ImageVector,
     /** Unread count on this tab. Zero draws nothing. */
     val badgeCount: Int = 0,
+    /** `.fit-navbar-dot` — something waits on this tab; no count, and only while it is inactive. */
+    val dot: Boolean = false,
     /** What the tab is called. The bar draws icons only, so this is what a screen reader says. */
     val label: String? = null,
 )

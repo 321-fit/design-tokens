@@ -103,6 +103,13 @@ data class FitV3Palette(
     val navbarShadow: Color,
     val navbarIcon: Color,
     val navbarIconActive: Color,
+    /** The ring that lifts `.fit-navbar-dot` off the icon under it. */
+    val navbarDotRing: Color,
+    /** `.fit-fab-scrim` — what the speed dial dims the screen with. */
+    val fabScrim: Color,
+    /** `.fit-fab-item` — a speed-dial pill: the ⋯ menu's glass on tinted, white on light. */
+    val fabItemFill: Color,
+    val fabItemEdge: Color,
 )
 
 object FitV3Colors {
@@ -208,6 +215,10 @@ object FitV3Colors {
         navbarShadow = Color(0x66000000),
         navbarIcon = FitColors.Gray.g300,
         navbarIconActive = FitColors.Gray.white,
+        navbarDotRing = Color(0x59000000),
+        fabScrim = Color(0x8C000000),
+        fabItemFill = Color(0xDB08242D),
+        fabItemEdge = Color(0x14FFFFFF),
     )
 
     val light = FitV3Palette(
@@ -310,6 +321,10 @@ object FitV3Colors {
         navbarShadow = Color(0x26000000),
         navbarIcon = FitColors.Gray.g400,
         navbarIconActive = FitColors.Gray.g900,
+        navbarDotRing = FitColors.Gray.white,
+        fabScrim = Color(0x59141E28),
+        fabItemFill = FitColors.Gray.white,
+        fabItemEdge = Color.Transparent,
     )
 
     val pickTick = Color(0xFF06251F)

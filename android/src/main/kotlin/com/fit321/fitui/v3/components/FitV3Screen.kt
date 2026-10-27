@@ -74,7 +74,8 @@ fun FitV3Header(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
-            .padding(horizontal = FitV3Geometry.screenInset, vertical = 8.dp),
+            // v2.5 `.cd-g-top` 2/6 on every header: the buttons sit at the same y on all tabs.
+            .padding(start = FitV3Geometry.screenInset, end = FitV3Geometry.screenInset, top = 2.dp, bottom = 6.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

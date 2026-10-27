@@ -55,6 +55,10 @@ object FitV3Type {
 
     val nextWhen = style(17, FontWeight.SemiBold, 22)
     val nextWhat = style(13, FontWeight.Normal, 18)
+    /** `.cd-i-next--hero .cd-i-when` — the hero card's time, 20 where the plain card is 17. */
+    val nextWhenHero = style(20, FontWeight.SemiBold, 25)
+    /** `.cd-i-loc` — the place line under the hero card's what. */
+    val nextPlace = style(14, FontWeight.Medium, 19)
 
     val ringValue = style(34, FontWeight.Bold, 36)
     val ringTotal = style(18, FontWeight.SemiBold, 24)
@@ -87,6 +91,12 @@ object FitV3Type {
     val senderName = style(11, FontWeight.Normal, 14)
 
     val moneyHeadline = style(24, FontWeight.Bold, 29)
+    /** `.cd-mc-big` — the money card's total. */
+    val moneyCardTotal = style(28, FontWeight.Bold, 34, (-0.5).sp)
+    /** `.cd-mc-v` — one split cell's amount. */
+    val moneyCardValue = style(20, FontWeight.Bold, 25, (-0.3).sp)
+    /** `.fit-fab-label` — a speed-dial action's word. */
+    val fabLabel = style(15, FontWeight.SemiBold, 20)
     val moneyHero = style(48, FontWeight.Bold, 54)
     val moneyHeroCurrency = style(28, FontWeight.SemiBold, 34)
 

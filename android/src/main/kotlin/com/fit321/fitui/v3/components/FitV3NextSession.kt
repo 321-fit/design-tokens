@@ -4,6 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.runtime.CompositionLocalProvider
+import com.fit321.fitui.tokens.FitColors
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +41,15 @@ fun FitNextSessionCard(
     state: FitNextSessionState = FitNextSessionState.Planned,
     leading: (@Composable () -> Unit)? = null,
     badge: (@Composable () -> Unit)? = null,
+    /**
+     * `.cd-i-next--hero` (v2.5): ~1.5× the plain card — 22/16 padding, 20 time, and the place on
+     * its own line. The lead keeps its own size, so a hero caller passes a 56 face or plate.
+     */
+    hero: Boolean = false,
+    /** `.cd-i-loc` — where it happens, in blue under the what. Read only by the hero. */
+    place: String? = null,
+    /** The pin before [place]; the kit carries no glyph of its own, the line tints it. */
+    placeIcon: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     val palette = LocalFitV3Palette.current
@@ -76,9 +90,15 @@ fun FitNextSessionCard(
                 },
             )
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
-            .padding(FitV3Geometry.rowPadding + FitV3Geometry.panelPadding),
+            .then(
+                if (hero) {
+                    Modifier.padding(horizontal = 16.dp, vertical = 22.dp)
+                } else {
+                    Modifier.padding(FitV3Geometry.rowPadding + FitV3Geometry.panelPadding)
+                },
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(FitV3Geometry.rowGap),
+        horizontalArrangement = Arrangement.spacedBy(if (hero) 14.dp else FitV3Geometry.rowGap),
     ) {
         leading?.invoke()
         Column(modifier = Modifier.weight(1f)) {
@@ -88,9 +108,10 @@ fun FitNextSessionCard(
             ) {
                 Text(
                     text = whenLine,
-                    style = FitV3Type.nextWhen,
+                    style = if (hero) FitV3Type.nextWhenHero else FitV3Type.nextWhen,
                     color = palette.textPrimary,
-                    maxLines = 1,
+                    // `.cd-i-when` wraps in the hero rather than losing the time to an ellipsis.
+                    maxLines = if (hero) 2 else 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false),
                 )
@@ -103,8 +124,28 @@ fun FitNextSessionCard(
                     color = palette.textTertiary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 3.dp),
+                    modifier = Modifier.padding(top = if (hero) 4.dp else 3.dp),
                 )
+            }
+            if (hero && place != null) {
+                Row(
+                    modifier = Modifier.padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    CompositionLocalProvider(LocalContentColor provides FitColors.Blue.b500) {
+                        if (placeIcon != null) {
+                            Box(modifier = Modifier.size(16.dp), contentAlignment = Alignment.Center) { placeIcon() }
+                        }
+                        Text(
+                            text = place,
+                            style = FitV3Type.nextPlace,
+                            color = FitColors.Blue.b500,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
             }
         }
     }

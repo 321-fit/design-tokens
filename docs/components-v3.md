@@ -137,6 +137,11 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitSetupStrip` (`.ob-return`: teal 12% wash + 30% hairline, `Setting up · step N of M`, where it lives later, a "Back to setup" pill) | — | 12 | ✅ built |
 | `FitNearPill` (`.ob-w-near`: a count with a teal pin on a quiet pill) · `FitShowcase` (`.ob-w-art`: the sample card tilted −3° over two ghosts and a teal glow) | — | 12 | ✅ built |
 | `FitRow(overline)` — the label above the value for a row that confirms a value (`.ob-basics`: "Country" over "Poland") · `FitAddRow(trailing)` | — | 12 | ✅ built |
+| `FitFabDial` + `FitFabDialItem` (`.fit-fab-dial`: white 56 FAB, `+` turns to `×` in 180 ms, a scrim, pills 44 high that rise 30 ms apart — the ⋯ menu's glass on tinted, white on light) | `FitFab` + action sheet | 13 | ✅ built |
+| `FitNavbarItem(dot)` (`.fit-navbar-dot`: 8 red, ringed, on an inactive tab only — something waits, no count) | — | 13 | ✅ built |
+| `FitNextSessionCard(hero, place, placeIcon)` (`.cd-i-next--hero` + `.cd-i-loc`: 22/16 padding, 20 time, the place in blue on its own line; the caller's lead is 56) | — | 13 | ✅ built |
+| `FitMoneyCard` + `FitMoneyCell` (`.cd-mc`: the total on top, two cells split by hairlines) | `FitMoneyWidget` on Home | 13 | ✅ built |
+| `FitV3Header` row 2/6 (`.cd-g-top`) — one header geometry, so the buttons sit at the same y on every tab | — | 13 | ✅ built |
 
 ### One tone set for rows and sheet actions
 
