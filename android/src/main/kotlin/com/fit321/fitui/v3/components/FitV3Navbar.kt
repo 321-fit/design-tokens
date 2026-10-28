@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -72,6 +73,18 @@ fun <T> FitV3Navbar(
                         contentDescription = item.label,
                         tint = if (active) palette.navbarIconActive else palette.navbarIcon,
                         modifier = Modifier.size(24.dp),
+                    )
+                }
+                if (item.dot && !active) {
+                    // `.fit-navbar-dot`: 8 at 14/14 inside the web's 56 square, i.e. 10/10 in our 48; the 2 ring sits outside it.
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(x = (-8).dp, y = 8.dp)
+                            .size(12.dp)
+                            .background(palette.navbarDotRing, CircleShape)
+                            .padding(2.dp)
+                            .background(FitColors.Red.r400, CircleShape),
                     )
                 }
                 if (item.badgeCount > 0) {

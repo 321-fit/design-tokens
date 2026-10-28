@@ -1,5 +1,10 @@
 package com.fit321.fitui.v3.components
 
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -60,7 +65,7 @@ fun FitCoverCard(
             .fillMaxWidth()
             .height(if (empty) COVER_EMPTY_HEIGHT else COVER_HEIGHT)
             .clip(shape)
-            .background(if (empty) coverEmptyWash else coverStandIn)
+            .then(if (empty) Modifier.background(coverEmptyWash) else Modifier.drawBehind { drawCoverStandIn() })
             .then(
                 when {
                     attention -> Modifier.border(1.dp, palette.perimeterAttention, shape)
@@ -123,7 +128,59 @@ private val COVER_HEIGHT = 178.dp
 private val COVER_EMPTY_HEIGHT = 160.dp
 
 // `--cd-img-gym`: the prototype's stand-in picture, two stops of its gradient.
-private val coverStandIn = Brush.linearGradient(listOf(Color(0xFF2A1A24), Color(0xFF5C2B25)))
+/**
+ * `--cd-img-tennis`, the prototype's stand-in picture: a teal diagonal under four soft blobs
+ * (`feGaussianBlur 16` at 0.9). Drawn in its own 320×180 box and stretched, as `cover` does.
+ */
+private fun DrawScope.drawCoverStandIn() {
+    // `center/cover`: one scale for both axes, large enough to fill, the overflow centred away.
+    val k = maxOf(size.width / 320f, size.height / 180f)
+    val dx = (size.width - 320f * k) / 2f
+    val dy = (size.height - 180f * k) / 2f
+    drawRect(
+        Brush.linearGradient(
+            listOf(Color(0xFF0D3B46), Color(0xFF0A6F6A)),
+            start = Offset.Zero,
+            end = Offset(size.width, size.height),
+        ),
+    )
+    translate(dx, dy) { scale(k, k, pivot = Offset.Zero) {
+        blob(Offset(70f, 40f), 70f, 50f, Color(0xFF18C9A3), 0.55f)
+        blob(Offset(250f, 140f), 80f, 80f, Color(0xFF0A3550), 1f)
+        blob(Offset(190f, 55f), 95f, 38f, Color(0xFFA8F0DD), 0.28f)
+        blob(Offset(120f, 150f), 45f, 45f, Color(0xFF063B3F), 0.8f)
+    } }
+}
+
+/**
+ * A blurred ellipse: a disc under a Gaussian blur fades along the error function, from full
+ * ink two sigmas inside its edge to nothing two sigmas outside — so there is no rim to see.
+ */
+private fun DrawScope.blob(center: Offset, rx: Float, ry: Float, color: Color, alpha: Float) {
+    val ink = color.copy(alpha = alpha * BLOB_OPACITY)
+    val outer = rx + 2 * BLOB_BLUR
+    val stop = { r: Float -> (r / outer).coerceIn(0f, 1f) }
+    scale(1f, ry / rx, pivot = center) {
+        drawCircle(
+            brush = Brush.radialGradient(
+                0f to ink,
+                stop(rx - 2 * BLOB_BLUR) to ink,
+                stop(rx - BLOB_BLUR) to ink.copy(alpha = ink.alpha * 0.84f),
+                stop(rx) to ink.copy(alpha = ink.alpha * 0.5f),
+                stop(rx + BLOB_BLUR) to ink.copy(alpha = ink.alpha * 0.16f),
+                1f to ink.copy(alpha = 0f),
+                center = center,
+                radius = outer,
+            ),
+            radius = outer,
+            center = center,
+        )
+    }
+}
+
+// Wider than the SVG's 16: a gradient spread reads harder than a real blur at the same width.
+private const val BLOB_BLUR = 24f
+private const val BLOB_OPACITY = 0.9f
 
 // `.cd-m-scrim` — keeps the words readable on whatever picture is under them.
 private val coverScrim = Brush.verticalGradient(
