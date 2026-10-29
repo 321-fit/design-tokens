@@ -230,16 +230,22 @@ data class FitMoneyCell(
  * `.cd-mc` (v2.5) — one full-width cell with the total, then two cells split by a hairline.
  * Coach Home: This week | Cash · Card. Athlete Home: Available | Owed · Booked. The chevron
  * shows only when the top cell is a door.
+ *
+ * The self-paced week reads the same card as a count: [amount] "5" [of] "of 8", a [progress]
+ * bar under the line, and the split only where there is one — the athlete's week has none.
  */
 @Composable
 fun FitMoneyCard(
     label: String,
     amount: String,
-    start: FitMoneyCell,
-    end: FitMoneyCell,
+    start: FitMoneyCell?,
+    end: FitMoneyCell?,
     modifier: Modifier = Modifier,
     badge: (@Composable () -> Unit)? = null,
     sub: String? = null,
+    of: String? = null,
+    progress: Float? = null,
+    progressTone: FitV3Tone = FitV3Tone.Income,
     chevron: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
@@ -266,7 +272,17 @@ fun FitMoneyCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(text = amount, style = FitV3Type.moneyCardTotal, color = palette.textPrimary)
+                    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(text = amount, style = FitV3Type.moneyCardTotal, color = palette.textPrimary)
+                        if (of != null) {
+                            Text(
+                                text = of,
+                                style = FitV3Type.moneyCardOf,
+                                color = palette.textSecondary,
+                                modifier = Modifier.padding(bottom = 3.dp),
+                            )
+                        }
+                    }
                     badge?.invoke()
                 }
                 if (sub != null) {
@@ -277,6 +293,13 @@ fun FitMoneyCard(
                         modifier = Modifier.padding(top = 3.dp),
                     )
                 }
+                if (progress != null) {
+                    FitThinProgress(
+                        fraction = progress,
+                        tone = progressTone,
+                        modifier = Modifier.padding(top = 12.dp),
+                    )
+                }
             }
             if (chevron != null && onClick != null) {
                 Box(modifier = Modifier.size(18.dp), contentAlignment = Alignment.Center) {
@@ -284,6 +307,7 @@ fun FitMoneyCard(
                 }
             }
         }
+        if (start == null || end == null) return@Column
         Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(palette.divider))
         Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
             MoneyCell(start, Modifier.weight(1f))

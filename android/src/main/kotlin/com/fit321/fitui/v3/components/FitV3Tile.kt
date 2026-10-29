@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.Dp
@@ -96,6 +97,62 @@ fun FitTile(
                 text = subtitle,
                 style = FitV3Type.rowSub,
                 color = palette.textTertiary,
+                modifier = Modifier.padding(top = 3.dp),
+            )
+        }
+    }
+}
+
+/**
+ * `.cd-i-tile` with `.cd-sp-tile-n` — a door to a list, led by how many are in it: "2 · To set
+ * up ›" over "Paid requests · next due Thu".
+ */
+@Composable
+fun FitCountTile(
+    count: String,
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(FitV3Geometry.tileRadius)
+    Column(
+        modifier = modifier
+            .fitV3Surface(shape)
+            .clip(shape)
+            .clickable { onClick() }
+            .padding(FitV3Geometry.tilePadding),
+    ) {
+        Text(
+            text = count,
+            style = FitV3Type.countTile,
+            color = palette.textPrimary,
+            modifier = Modifier.padding(bottom = 10.dp),
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = title,
+                style = FitV3Type.rowValue,
+                color = palette.textPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_chevron_right),
+                contentDescription = null,
+                tint = palette.textTertiary,
+                modifier = Modifier.size(14.dp),
+            )
+        }
+        if (subtitle != null) {
+            Text(
+                text = subtitle,
+                style = FitV3Type.rowSub,
+                color = palette.textTertiary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 3.dp),
             )
         }

@@ -142,6 +142,11 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitNextSessionCard(hero, place, placeIcon)` (`.cd-i-next--hero` + `.cd-i-loc`: 22/16 padding, 20 time, the place in blue on its own line; the caller's lead is 56) | — | 13 | ✅ built |
 | `FitMoneyCard` + `FitMoneyCell` (`.cd-mc`: the total on top, two cells split by hairlines) | `FitMoneyWidget` on Home | 13 | ✅ built |
 | `FitV3Header` row 2/6 (`.cd-g-top`) — one header geometry, so the buttons sit at the same y on every tab | — | 13 | ✅ built |
+| `FitMoneyCard(of, progress)` with `start`/`end` optional — the self-paced week as a count: "5" "of 8", a bar under the line, the split only where there is one | — | 14 | ✅ built |
+| `FitCountTile` (`.cd-i-tile` + `.cd-sp-tile-n`: a 30 count, the title with a chevron, one line under it) | `FitTile(head)` | 14 | ✅ built |
+| `FitPanel(kicker, dashed)` (`.cd-sp-urgent-k` over an attention panel; a dashed edge for something still on its way) | — | 14 | ✅ built |
+| `FitClipThumb` (`.cd-sp-thumb`: 56, radius 12, play glyph on the poster; a check tile when no clip came) · `FitStepBadge` (`.cd-sp-step`: 32, teal ring) | `FitClipCard` | 14 | ✅ built |
+| `FitRow(richSubtitle)` — one word of the sub-line in its own ink · `FitCoverCard(action = null)` — a cover that introduces, the buttons under it | — | 14 | ✅ built |
 
 ### One tone set for rows and sheet actions
 

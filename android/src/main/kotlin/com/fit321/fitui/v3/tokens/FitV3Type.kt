@@ -93,8 +93,16 @@ object FitV3Type {
     val moneyHeadline = style(24, FontWeight.Bold, 29)
     /** `.cd-mc-big` — the money card's total. */
     val moneyCardTotal = style(28, FontWeight.Bold, 34, (-0.5).sp)
+    /** `.cd-mc-big` "of 8" — the whole the total is counted against. */
+    val moneyCardOf = style(17, FontWeight.SemiBold, 22)
     /** `.cd-mc-v` — one split cell's amount. */
     val moneyCardValue = style(20, FontWeight.Bold, 25, (-0.3).sp)
+    /** `.cd-sp-tile-n` — a count tile's number, line height 1 as the prototype sets it. */
+    val countTile = style(30, FontWeight.Bold, 30, (-0.6).sp)
+    /** `.cd-sp-urgent-k` — the warning line over a panel that is late. */
+    val panelKicker = style(12, FontWeight.SemiBold, 16, 0.4.sp)
+    /** `.cd-sp-step` — the number in a how-it-works step. */
+    val stepBadge = style(14, FontWeight.Bold, 18)
     /** `.fit-fab-label` — a speed-dial action's word. */
     val fabLabel = style(15, FontWeight.SemiBold, 20)
     val moneyHero = style(48, FontWeight.Bold, 54)

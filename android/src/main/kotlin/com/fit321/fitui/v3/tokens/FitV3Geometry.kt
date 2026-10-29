@@ -75,6 +75,8 @@ object FitV3Geometry {
     val clipPlay = 40.dp
     val clipGap = 10.dp
     val progressBarHeight = 4.dp
+    val clipThumb = 56.dp
+    val stepBadge = 32.dp
 
     val typePlate = 46.dp
     val composerHeight = 46.dp

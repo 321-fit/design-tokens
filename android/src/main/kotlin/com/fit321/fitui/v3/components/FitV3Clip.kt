@@ -177,3 +177,42 @@ fun FitThinProgress(
         )
     }
 }
+
+/**
+ * `.cd-sp-thumb` — a row's 56px picture of the clip the athlete sent, the play glyph on it. With
+ * no clip ([hasClip] false) the athlete only marked it done, and the tile says so with a check.
+ */
+@Composable
+fun FitClipThumb(
+    hasClip: Boolean,
+    modifier: Modifier = Modifier,
+    poster: (@Composable () -> Unit)? = null,
+) {
+    val palette = LocalFitV3Palette.current
+    val shape = RoundedCornerShape(FitV3Geometry.leadingPlateRadius)
+    Box(
+        modifier = modifier
+            .size(FitV3Geometry.clipThumb)
+            .clip(shape)
+            .background(if (hasClip) palette.clipPoster else palette.raised, shape),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (!hasClip) {
+            Icon(
+                painter = painterResource(R.drawable.ic_fit_check),
+                contentDescription = null,
+                tint = palette.textTertiary,
+                modifier = Modifier.size(18.dp),
+            )
+            return@Box
+        }
+        poster?.invoke()
+        Box(modifier = Modifier.fillMaxSize().background(FitV3Colors.clipThumbScrim))
+        Icon(
+            painter = painterResource(R.drawable.ic_fit_play),
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(18.dp),
+        )
+    }
+}
