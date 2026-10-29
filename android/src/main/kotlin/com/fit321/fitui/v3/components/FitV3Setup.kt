@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fit321.designtokens.R
 import com.fit321.fitui.tokens.FitColors
+import com.fit321.fitui.v3.tokens.FitV3Colors
 import com.fit321.fitui.v3.tokens.FitV3Look
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
@@ -496,5 +497,18 @@ private fun Modifier.fitBreathing(on: Boolean, shape: androidx.compose.ui.graphi
                 drawOutline(outline, color.copy(alpha = color.alpha * pulse), style = Stroke(width = ring))
             }
         }
+    }
+}
+
+/** `.cd-sp-step` — the number of one how-it-works step, a teal ring around it. */
+@Composable
+fun FitStepBadge(number: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(FitV3Geometry.stepBadge)
+            .border(1.5.dp, FitV3Colors.stepBadgeRing, CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = number.toString(), style = FitV3Type.stepBadge, color = FitColors.Teal.t500)
     }
 }

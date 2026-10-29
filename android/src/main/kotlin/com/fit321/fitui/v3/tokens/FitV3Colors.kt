@@ -330,6 +330,10 @@ object FitV3Colors {
     val pickTick = Color(0xFF06251F)
 
     val clipScrim = Color(0x73000000)
+    /** `.cd-sp-thumb` — just enough shade that the white play glyph reads on a pale frame. */
+    val clipThumbScrim = Color(0x1F000000)
+    /** `.cd-sp-step` — teal-500 at 50%, the step number's ring. */
+    val stepBadgeRing = Color(0x8005E0A6)
     val clipPlayFill = Color(0xEBFFFFFF)
     val clipPlayInk = Color(0xFF12161A)
 

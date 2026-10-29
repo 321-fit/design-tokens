@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -53,6 +54,11 @@ fun FitRow(
      * line of the row's own text — a progress bar beside the value would be a third column.
      */
     below: (@Composable () -> Unit)? = null,
+    /**
+     * In place of [subtitle] where one word of the line says something the rest does not — "just
+     * right" in teal and "too hard" in red inside "Lower-body · clip 0:38 · just right".
+     */
+    richSubtitle: AnnotatedString? = null,
     /**
      * One line where the sub-line is a fact that must not push the row taller — a state and a
      * date beside a fixed action. Two by default: a sub-line is usually a sentence.
@@ -130,7 +136,16 @@ fun FitRow(
                 )
                 titleBadge?.invoke()
             }
-            if (subtitle != null) {
+            if (richSubtitle != null) {
+                Text(
+                    text = richSubtitle,
+                    style = FitV3Type.rowSub,
+                    color = subtitleColor ?: palette.textTertiary,
+                    maxLines = subtitleMaxLines,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = FitV3Geometry.rowSubGap),
+                )
+            } else if (subtitle != null) {
                 Text(
                     text = subtitle,
                     style = if (subtitleStrong) FitV3Type.rowSubStrong else FitV3Type.rowSub,

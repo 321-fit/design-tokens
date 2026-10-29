@@ -44,13 +44,14 @@ import com.fit321.fitui.v3.tokens.FitV3Type
  * (`.cd-s-hero-empty`): a pale wash with a hairline, shorter, no picture.
  *
  * With no [media] the cover shows the prototype's stand-in picture, for things that carry no
- * image of their own.
+ * image of their own. With no [action] it is an introduction rather than a door — the buttons
+ * that act on it sit under it.
  */
 @Composable
 fun FitCoverCard(
     title: String,
-    action: String,
-    onClick: () -> Unit,
+    action: String?,
+    onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     kicker: String? = null,
     sub: String? = null,
@@ -73,7 +74,7 @@ fun FitCoverCard(
                     else -> Modifier
                 },
             )
-            .clickable(onClick = onClick),
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
     ) {
         if (!empty) {
             media?.invoke(this)
@@ -106,7 +107,7 @@ fun FitCoverCard(
                 )
             }
         }
-        Row(
+        if (action != null) Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 16.dp, bottom = 14.dp),
