@@ -209,6 +209,9 @@ fun FitSportChip(
     /** `.cd-pf-card .fit-sport-chip`: 14px words and a 20px glyph, for a card rather than a header. */
     compact: Boolean = false,
     icon: (@Composable () -> Unit)? = null,
+    /** `svg.i-sm` on a profile's chips: a 14px glyph with 4px after it, so the chip runs narrower. */
+    iconSize: Dp = if (compact) 20.dp else 24.dp,
+    iconGap: Dp = 8.dp,
 ) {
     val palette = LocalFitV3Palette.current
     Row(
@@ -216,11 +219,11 @@ fun FitSportChip(
             .background(FitColors.selectionGradient, RoundedCornerShape(percent = 50))
             .padding(start = 8.dp, end = if (compact) 12.dp else 14.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(iconGap),
     ) {
         if (icon != null) {
             CompositionLocalProvider(LocalContentColor provides palette.onBrandInk) {
-                Box(modifier = Modifier.size(if (compact) 20.dp else 24.dp), contentAlignment = Alignment.Center) { icon() }
+                Box(modifier = Modifier.size(iconSize), contentAlignment = Alignment.Center) { icon() }
             }
         }
         Text(

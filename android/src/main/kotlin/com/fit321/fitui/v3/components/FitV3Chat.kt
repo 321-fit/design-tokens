@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fit321.fitui.components.FitAvatar
 import com.fit321.fitui.v3.theme.LocalFitV3Palette
 import com.fit321.fitui.v3.tokens.FitV3Geometry
 import com.fit321.fitui.v3.tokens.FitV3Type
@@ -44,12 +45,15 @@ fun FitGroupFaces(
     initials: List<String>,
     modifier: Modifier = Modifier,
     size: Dp = FitV3Geometry.leadingPlate,
+    /** Photos in the order of [initials]; a face without one, or whose photo fails, keeps its initials. */
+    imageUrls: List<String?> = emptyList(),
 ) {
     val palette = LocalFitV3Palette.current
     val face = size * FACE_RATIO
     val fontSize = (face.value * FACE_INK_RATIO).sp
     Box(modifier = modifier.size(size)) {
         initials.take(2).forEachIndexed { index, value ->
+            val imageUrl = imageUrls.getOrNull(index)?.takeIf { it.isNotBlank() }
             // The ring is `box-shadow: 0 0 0 2px`, which sits *outside* the face — a Compose
             // border would eat into it instead, shrinking the circle until the two stop
             // overlapping. Hence a ring-coloured plate with the face drawn inside it.
@@ -62,15 +66,27 @@ fun FitGroupFaces(
                     .background(palette.stackedFace, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = value,
-                    style = FitV3Type.statLabelSmall.copy(
+                if (imageUrl != null) {
+                    FitAvatar(
+                        initials = value,
+                        size = face,
+                        bg = SolidColor(palette.stackedFace),
+                        imageUrl = imageUrl,
+                        textColor = palette.textPrimary,
                         fontSize = fontSize,
                         fontWeight = FontWeight.SemiBold,
-                    ),
-                    color = palette.textPrimary,
-                    maxLines = 1,
-                )
+                    )
+                } else {
+                    Text(
+                        text = value,
+                        style = FitV3Type.statLabelSmall.copy(
+                            fontSize = fontSize,
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        color = palette.textPrimary,
+                        maxLines = 1,
+                    )
+                }
             }
         }
     }
