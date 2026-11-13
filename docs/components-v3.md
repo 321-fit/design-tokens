@@ -126,7 +126,7 @@ The gallery is in the app (`321fit_android_new`, `ui/preview/v3/FitV3Gallery.kt`
 | `FitV3Skin` + `LocalFitSkin` — the rework look worn by a screen that keeps its layout | — | 9 | ✅ built |
 | `FitCountBadge` · `FitV3HeaderCircle(badge)` · `FitNextSessionCard(badge)` · `FitV3Tone.Attention` | `FitBadge` | 9 | ✅ built |
 | `FitIdentityPanel` (layout A) · `FitTypePlate` · `FitDateBlock` | `FitProfileHeader` | 10 | ✅ built |
-| `FitGroupFaces` (two faces diagonally in one person-sized slot) · `FitRowTag` · `FitCountBadge(Unread)` | `FitFaceStack`, `FitBadge` | 11 | ✅ built |
+| `FitGroupFaces` (two faces diagonally in one person-sized slot; photos via `imageUrls`, initials where a face has none) · `FitRowTag` · `FitCountBadge(Unread)` | `FitFaceStack`, `FitBadge` | 11 | ✅ built |
 | `FitRow(trailingAlignment)` — `.ms-meta` is `align-self: flex-start` · `FitV3Header(backLabel)` for the back button's a11y name | — | 11 | ✅ built |
 | `FitChatBubble` (mine right / theirs left, tail corner) · `FitChatSenderBubble` · `FitChatDateSeparator` · `FitChatUnreadDivider` · `FitChatHello` · `FitChatComposer` (field + CTA send circle) | — | 11 | ✅ built |
 | `FitStepProgress` (`.ob-prog`: back 32 · 4px track, white on tinted, brand gradient on light · `N of M` 12/600) · `FitStepQuestion` (`.ob-q` 24/700 + one `.ob-hint` 13 tertiary; `centered` for a finish) | — | 12 | ✅ built |
